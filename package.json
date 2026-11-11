@@ -18,10 +18,12 @@
     "db:rollback": "dotenv -- turbo run db:rollback",
     "db:seed": "dotenv -- turbo run db:seed",
     "packages:install": "pnpm install --filter \"./packages/**\"",
-    "apps:install": "pnpm install --filter \"./apps/**\""
+    "apps:install": "pnpm install --filter \"./apps/**\"",
+    "prepare": "husky"
   },
   "devDependencies": {
     "dotenv-cli": "^11.0.0",
+    "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "turbo": "^2.7.2",
     "typescript": "5.9.2"
