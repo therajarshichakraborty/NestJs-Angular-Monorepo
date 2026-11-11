@@ -2,6 +2,10 @@
   "printWidth": 100,
   "singleQuote": false,
   "trailingComma": "all",
+  "arrowParens": "always",
+  "jsxSingleQuote": false,
+  "sem": true,
+  "tabWidth": 2,
   "overrides": [
     {
       "files": "*.html",

@@ -1,0 +1,27 @@
+{
+  "name": "nestjs-angular-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "dotenv -- turbo build",
+    "dev": "dotenv -- turbo dev",
+    "db:generate": "dotenv -- turbo db:generate",
+    "db:migrate": "dotenv -- turbo db:migrate",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.7.2",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
+  },
+  "dependencies": {
+    "dotenv-cli": "^11.0.0"
+  }
+}

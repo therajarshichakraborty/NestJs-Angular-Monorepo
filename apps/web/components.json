@@ -1,0 +1,20 @@
+{
+  "$schema": "https://zardui.com/schema.json",
+  "style": "css",
+  "icons": "lucide",
+  "rtl": false,
+  "projectType": "angular",
+  "appConfigFile": "src/app/app.config.ts",
+  "packageManager": "pnpm",
+  "tailwind": {
+    "css": "src/styles.css",
+    "baseColor": "neutral"
+  },
+   "baseUrl": "../../packages/ui/src",
+  "aliases": {
+    "components": "@repo/ui/components",
+    "utils": "@repo/ui/utils",
+    "core": "@repo/ui/core",
+    "services": "@repo/ui/services"
+  }
+}
