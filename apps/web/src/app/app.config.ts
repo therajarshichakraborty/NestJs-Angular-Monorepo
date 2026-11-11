@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideZard } from '@/shared/core/provider/providezard';
+import { provideZard } from '@repo/ui/core/provider/providezard';
 
 export const appConfig: ApplicationConfig = {
   providers: [

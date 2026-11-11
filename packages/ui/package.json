@@ -1,5 +1,71 @@
 {
   "name": "@repo/ui",
   "version": "1.0.0",
-  "private": true
+  "description": "Shared Angular component library built on ZardUI, Angular CDK and Tailwind CSS",
+  "author": "Rajarshi Chakraborty",
+  "license": "MIT",
+  "private": true,
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./components/*": "./components/*",
+    "./utils/*": "./utils/*",
+    "./core/*": "./core/*",
+    "./services/*": "./services/*",
+    "./*": "./*"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit -p tsconfig.json",
+    "clean": "rimraf .turbo"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^22.0.0",
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@ng-icons/core": "^36.0.0",
+    "@ng-icons/lucide": "^36.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "rxjs": "^7.8.0",
+    "tailwind-merge": "^3.0.0"
+  },
+  "devDependencies": {
+    "@angular/cdk": "^22.2.6",
+    "@angular/common": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "@ng-icons/core": "^36.1.0",
+    "@ng-icons/lucide": "^36.1.0",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^22.12.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "echarts": "^6.1.0",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-angular": "^22.0.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-class-names": "^8.6.0",
+    "embla-carousel-wheel-gestures": "^8.1.0",
+    "eslint": "10.14.0",
+    "maplibre-gl": "^6.17.0",
+    "ng-mapcn": "22.0.0-beta.9",
+    "ngx-echarts": "^22.0.0",
+    "ngx-sonner": "^3.1.0",
+    "rimraf": "6.1.3",
+    "rxjs": "~7.8.0",
+    "tailwind-merge": "^3.7.0",
+    "terra-draw": "^1.39.0",
+    "terra-draw-maplibre-gl-adapter": "^1.5.0",
+    "tslib": "^2.3.0",
+    "typescript": "~6.0.2"
+  }
 }

@@ -1,0 +1,40 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "1.0.0",
+  "description": "Shared ESLint flat configurations for TypeScript libraries, NestJS and Angular",
+  "author": "Rajarshi Chakraborty",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "files": [
+    "base.js",
+    "node.js",
+    "nest.js",
+    "angular.js"
+  ],
+  "exports": {
+    "./base": "./base.js",
+    "./node": "./node.js",
+    "./nest": "./nest.js",
+    "./angular": "./angular.js"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "check-types": "node --check base.js && node --check node.js && node --check nest.js && node --check angular.js"
+  },
+  "dependencies": {
+    "@eslint/js": "10.0.1",
+    "angular-eslint": "22.6.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
+    "typescript-eslint": "8.71.2"
+  },
+  "devDependencies": {
+    "eslint": "10.14.0",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=5.9.0"
+  }
+}

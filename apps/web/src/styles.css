@@ -1,7 +1,13 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import './app/shared/core/css/zard';
+@import '@repo/ui/core/css/zard.css';
+@import './typeset.css';
+@import './utilities.css';
+@import 'maplibre-gl/dist/maplibre-gl.css';
+@import '@repo/ui/components/map/map.css';
 @plugin "tailwindcss-animate";
+
+@source '../../../packages/ui';
 
 @custom-variant dark (&:is(.dark *));
 

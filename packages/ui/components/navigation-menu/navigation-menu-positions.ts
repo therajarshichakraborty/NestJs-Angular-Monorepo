@@ -1,0 +1,235 @@
+import type { ConnectedPosition } from '@angular/cdk/overlay';
+
+export const NAVIGATION_MENU_POSITIONS_MAP: { [key: string]: ConnectedPosition[] } = {
+  bottomLeft: [
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  bottomCenter: [
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  bottomRight: [
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  topLeft: [
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  topCenter: [
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  topRight: [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  leftTop: [
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetX: 8,
+    },
+  ],
+  leftCenter: [
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
+  ],
+  leftBottom: [
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetX: 8,
+    },
+  ],
+  rightTop: [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -8,
+    },
+  ],
+  rightCenter: [
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
+  ],
+  rightBottom: [
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetX: -8,
+    },
+  ],
+};
+
+export type ZardNavigationMenuPlacement =
+  | 'bottomLeft'
+  | 'bottomCenter'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topCenter'
+  | 'topRight'
+  | 'leftTop'
+  | 'leftCenter'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'rightCenter'
+  | 'rightBottom';
+
+const SWAP_X = { start: 'end', end: 'start', center: 'center' } as const;
+
+/**
+ * Resolves the connected positions of a placement for the given direction.
+ *
+ * `top*` and `bottom*` placements align to the trigger's inline edges (`Left` is the inline-start edge, `Right` the
+ * inline-end edge), so CDK `start`/`end` already do the right thing in both directions. `left*` and `right*` place the
+ * popup on a physical side of the trigger: CDK resolves `start`/`end` through the overlay direction, so in RTL the
+ * origin and overlay edges swap while the signed `offsetX` (always physical) keeps pointing away from the trigger.
+ */
+export function getNavigationMenuPositions(placement: ZardNavigationMenuPlacement, rtl: boolean): ConnectedPosition[] {
+  const positions = NAVIGATION_MENU_POSITIONS_MAP[placement] ?? NAVIGATION_MENU_POSITIONS_MAP['bottomLeft'];
+  const physicalSide = placement.startsWith('left') || placement.startsWith('right');
+
+  if (!rtl || !physicalSide) {
+    return positions;
+  }
+
+  return positions.map(position => ({
+    ...position,
+    originX: SWAP_X[position.originX],
+    overlayX: SWAP_X[position.overlayX],
+  }));
+}

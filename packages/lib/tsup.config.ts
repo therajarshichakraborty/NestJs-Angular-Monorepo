@@ -1,14 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["./src/index.ts"],
-  noExternal: ["@nestjs-angular-monorepo"],
-  splitting: false,
-  bundle: true,
-  outDir: "./dist",
+  entry: ["src/index.ts"],
+  format: ["esm", "cjs"],
+  dts: true,
+  sourcemap: true,
   clean: true,
-  env: { IS_SERVER_BUILD: "true" },
-  loader: { ".json": "copy" },
-  minify: true,
-  sourcemap: false,
+  target: "es2023",
 });

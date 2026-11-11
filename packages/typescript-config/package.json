@@ -1,3 +1,24 @@
 {
-  "name": "@typescript-config"
+  "name": "@repo/typescript-config",
+  "version": "1.0.0",
+  "description": "Shared TypeScript compiler configurations for every app and package in the monorepo",
+  "author": "Rajarshi Chakraborty",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "base.json",
+    "library.json",
+    "nestjs.json",
+    "angular.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./library.json": "./library.json",
+    "./nestjs.json": "./nestjs.json",
+    "./angular.json": "./angular.json"
+  },
+  "scripts": {
+    "lint": "node --eval \"['base','library','nestjs','angular'].forEach((name) => JSON.parse(require('node:fs').readFileSync(name + '.json', 'utf8')))\"",
+    "check-types": "pnpm run lint"
+  }
 }
