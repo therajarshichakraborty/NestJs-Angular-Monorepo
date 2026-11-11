@@ -57,4 +57,5 @@ blob-report/
 test-results/
 
 logs/
+!packages/logs/
 *.log

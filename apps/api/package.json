@@ -5,6 +5,9 @@
   "author": "Rajarshi Chakraborty",
   "private": true,
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "nest build",
     "dev": "nest start --watch",

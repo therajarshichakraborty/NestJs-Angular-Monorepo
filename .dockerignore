@@ -33,6 +33,7 @@ coverage
 *.log
 logs
 **/logs
+!packages/logs
 
 .cache
 **/.cache
