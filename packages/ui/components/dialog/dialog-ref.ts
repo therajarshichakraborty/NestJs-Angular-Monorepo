@@ -1,9 +1,9 @@
-import type { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from "@angular/cdk/overlay";
 
-import { ZardOverlayRefBase } from '@repo/ui/core';
+import { ZardOverlayRefBase } from "@repo/ui/core";
 
-import type { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
-import { DIALOG_DURATION } from './dialog-panel.component';
+import type { ZardDialogContainerComponent, ZardDialogOptions } from "./dialog-container.component";
+import { DIALOG_DURATION } from "./dialog-panel.component";
 
 /**
  * Reference to a dialog opened via {@link ZardDialogService}.

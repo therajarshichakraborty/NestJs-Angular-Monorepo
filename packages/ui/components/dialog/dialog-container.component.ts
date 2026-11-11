@@ -4,7 +4,7 @@ import {
   type ComponentPortal,
   PortalModule,
   type TemplatePortal,
-} from '@angular/cdk/portal';
+} from "@angular/cdk/portal";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,23 +23,23 @@ import {
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { ZardDialogHost } from './dialog-host';
-import { DIALOG_DURATION, ZardDialogPanelComponent } from './dialog-panel.component';
-import type { ZardDialogRef } from './dialog-ref';
+import { ZardDialogHost } from "./dialog-host";
+import { DIALOG_DURATION, ZardDialogPanelComponent } from "./dialog-panel.component";
+import type { ZardDialogRef } from "./dialog-ref";
 import {
   ZardDialogDescriptionComponent,
   ZardDialogFooterComponent,
   ZardDialogHeaderComponent,
   ZardDialogTitleComponent,
-} from './dialog.component';
+} from "./dialog.component";
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -78,7 +78,7 @@ export class ZardDialogOptions<T, U> {
  * @internal Open dialogs through the service; compose `z-dialog` for the declarative form.
  */
 @Component({
-  selector: 'z-dialog-container',
+  selector: "z-dialog-container",
   imports: [
     PortalModule,
     NgIcon,
@@ -106,7 +106,10 @@ export class ZardDialogOptions<T, U> {
             <z-dialog-title data-testid="z-title" [zTitle]="config.zTitle" />
           }
           @if (config.zDescription) {
-            <z-dialog-description data-testid="z-description" [zDescription]="config.zDescription" />
+            <z-dialog-description
+              data-testid="z-description"
+              [zDescription]="config.zDescription"
+            />
           }
         </z-dialog-header>
       }
@@ -139,7 +142,7 @@ export class ZardDialogOptions<T, U> {
                   <ng-icon [name]="config.zCancelIcon" class="size-4!" />
                 }
               }
-              {{ config.zCancelText ?? 'Cancel' }}
+              {{ config.zCancelText ?? "Cancel" }}
             </button>
           }
 
@@ -159,7 +162,7 @@ export class ZardDialogOptions<T, U> {
                   <ng-icon [name]="config.zOkIcon" class="size-4!" />
                 }
               }
-              {{ config.zOkText ?? 'OK' }}
+              {{ config.zOkText ?? "OK" }}
             </button>
           }
         </z-dialog-footer>
@@ -172,7 +175,7 @@ export class ZardDialogOptions<T, U> {
   // gap utility on the host still wins.
   styles: `
     @layer components {
-      :where(z-dialog-container [data-slot='dialog-body']) {
+      :where(z-dialog-container [data-slot="dialog-body"]) {
         display: grid;
         gap: calc(var(--spacing, 0.25rem) * 4);
       }
@@ -181,11 +184,13 @@ export class ZardDialogOptions<T, U> {
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardDialogContainerComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardDialogHost, useExisting: forwardRef(() => ZardDialogContainerComponent) }],
+  providers: [
+    { provide: ZardDialogHost, useExisting: forwardRef(() => ZardDialogContainerComponent) },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zDialogContainer',
+  host: { style: "display: contents" },
+  exportAs: "zDialogContainer",
 })
 export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet implements ZardDialogHost {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -202,9 +207,9 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
   protected readonly duration = computed(() => this.config.zDuration ?? DIALOG_DURATION);
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === "string");
 
   dialogRef?: ZardDialogRef<T>;
 
@@ -218,7 +223,7 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
 
   /** Plays the exit transition. The ref disposes the overlay once it finishes. */
   leave(): void {
-    this.state.set('closed');
+    this.state.set("closed");
   }
 
   getNativeElement(): HTMLElement {
@@ -227,12 +232,12 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
 
   attachComponentPortal<C>(portal: ComponentPortal<C>): ComponentRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
+      throw new Error("Attempting to attach modal content after content is already attached");
     }
     const componentRef = this.portalOutlet().attachComponentPortal(portal);
     const contentHost = componentRef.location.nativeElement as HTMLElement;
-    if (!contentHost.hasAttribute('data-slot')) {
-      contentHost.setAttribute('data-slot', 'dialog-body');
+    if (!contentHost.hasAttribute("data-slot")) {
+      contentHost.setAttribute("data-slot", "dialog-body");
     }
 
     return componentRef;
@@ -240,7 +245,7 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
+      throw new Error("Attempting to attach modal content after content is already attached");
     }
     return this.portalOutlet().attachTemplatePortal(portal);
   }

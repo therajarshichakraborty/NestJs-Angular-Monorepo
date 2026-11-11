@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   type AfterContentInit,
   afterNextRender,
@@ -16,22 +16,26 @@ import {
   signal,
   ViewEncapsulation,
   viewChildren,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZARD_INPUT_OTP_SLOT, type ZardInputOtpSlotApi } from './input-otp.tokens';
-import { isInputElement, isInputEvent } from './input-otp.utils';
-import { inputOtpSlotVariants, inputOtpVariants, type ZardInputOtpSize } from './input-otp.variants';
+import { ZARD_INPUT_OTP_SLOT, type ZardInputOtpSlotApi } from "./input-otp.tokens";
+import { isInputElement, isInputEvent } from "./input-otp.utils";
+import {
+  inputOtpSlotVariants,
+  inputOtpVariants,
+  type ZardInputOtpSize,
+} from "./input-otp.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
 
 @Component({
-  selector: 'z-input-otp, [z-input-otp]',
+  selector: "z-input-otp, [z-input-otp]",
   template: `
     <div [class]="classes()" [attr.data-input-otp-container]="''">
       @if (!hasSlots()) {
@@ -70,24 +74,24 @@ type OnChangeType = (value: string) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-slot]': '"input-otp"',
-    '[attr.data-disabled]': 'disabled() ? "" : null',
-    '(copy)': 'onCopy($event)',
-    '(cut)': 'onCut($event)',
-    '(mousedown)': 'clearSelectAll()',
+    "[attr.data-slot]": '"input-otp"',
+    "[attr.data-disabled]": 'disabled() ? "" : null',
+    "(copy)": "onCopy($event)",
+    "(cut)": "onCut($event)",
+    "(mousedown)": "clearSelectAll()",
   },
-  exportAs: 'zInputOtp',
+  exportAs: "zInputOtp",
 })
 export class ZardInputOtpComponent implements ControlValueAccessor, AfterContentInit {
-  readonly inputs = viewChildren<ElementRef<HTMLInputElement>>('otpInput');
+  readonly inputs = viewChildren<ElementRef<HTMLInputElement>>("otpInput");
 
   readonly zMaxLength = input<number | undefined>(undefined);
-  readonly zPattern = input<string>('[0-9]');
-  readonly class = input<ClassValue>('');
+  readonly zPattern = input<string>("[0-9]");
+  readonly class = input<ClassValue>("");
   readonly zReadonly = input(false, { transform: booleanAttribute });
   readonly zIntegerOnly = input(true, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardInputOtpSize>('default');
+  readonly zSize = input<ZardInputOtpSize>("default");
 
   zValueChange = output<string>();
   zComplete = output<string>();
@@ -100,12 +104,16 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   /** Set by Ctrl/Cmd+A: every slot reads as selected so a copy takes the whole value. */
   readonly allSelected = signal<boolean>(false);
   readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.class()));
-  readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
+  readonly inputMode = computed(() => (this.zIntegerOnly() ? "numeric" : "text"));
   readonly patternRegex = computed(() => new RegExp(this.zPattern()));
 
   readonly hasSlots = signal(false);
-  readonly effectiveMaxLength = computed(() => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6));
-  readonly range = computed(() => Array.from({ length: this.effectiveMaxLength() }, (_, index) => index + 1));
+  readonly effectiveMaxLength = computed(
+    () => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6),
+  );
+  readonly range = computed(() =>
+    Array.from({ length: this.effectiveMaxLength() }, (_, index) => index + 1),
+  );
 
   private onTouched: OnTouchedType = () => {
     /* empty */
@@ -138,11 +146,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-s-lg border-s');
+      extras.push("rounded-s-lg border-s");
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-e-lg');
+      extras.push("rounded-e-lg");
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);
@@ -150,7 +158,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
   writeValue(value: string): void {
     if (value) {
-      this.tokens.set(value.split('').slice(0, this.effectiveMaxLength()));
+      this.tokens.set(value.split("").slice(0, this.effectiveMaxLength()));
     } else {
       this.tokens.set([]);
     }
@@ -186,27 +194,27 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const regex = this.patternRegex();
 
     if (value && !regex.test(value)) {
-      input.value = this.tokens()[index] || '';
+      input.value = this.tokens()[index] || "";
       return;
     }
 
-    this.tokens.update(prev => {
+    this.tokens.update((prev) => {
       const next = prev.slice();
       next[index] = value;
       return next;
     });
     this.updateModel();
 
-    const inputType = isInputEvent(event) ? event.inputType : '';
-    if (inputType === 'deleteContentBackward') {
+    const inputType = isInputEvent(event) ? event.inputType : "";
+    if (inputType === "deleteContentBackward") {
       this.moveToPrev(event);
-    } else if (inputType === 'insertText' || inputType === 'deleteContentForward') {
+    } else if (inputType === "insertText" || inputType === "deleteContentForward") {
       this.moveToNext(event);
     }
   }
 
   updateModel(): void {
-    const newValue = this.tokens().join('');
+    const newValue = this.tokens().join("");
     this.emitValue(newValue);
     this.zValueChange.emit(newValue);
 
@@ -255,7 +263,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     }
 
     event.preventDefault();
-    event.clipboardData?.setData('text/plain', this.tokens().join(''));
+    event.clipboardData?.setData("text/plain", this.tokens().join(""));
   }
 
   onCut(event: ClipboardEvent): void {
@@ -279,8 +287,8 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return;
     }
 
-    const paste = event.clipboardData?.getData('text');
-    if (paste && paste.length) {
+    const paste = event.clipboardData?.getData("text");
+    if (paste?.length) {
       this.handlePaste(paste);
     }
 
@@ -291,11 +299,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const regex = this.patternRegex();
     const pastedCode = paste
       .substring(0, this.effectiveMaxLength())
-      .split('')
-      .filter(char => regex.test(char))
-      .join('');
+      .split("")
+      .filter((char) => regex.test(char))
+      .join("");
 
-    this.tokens.set(pastedCode.split(''));
+    this.tokens.set(pastedCode.split(""));
     this.updateModel();
 
     this.focusSlotAt(this.tokens().length);
@@ -330,7 +338,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
     // With every slot selected, the next keystroke acts on the whole value.
     if (this.allSelected()) {
-      if (event.key === 'Backspace' || event.key === 'Delete') {
+      if (event.key === "Backspace" || event.key === "Delete") {
         event.preventDefault();
         if (!this.zReadonly()) {
           this.clearValue();
@@ -356,7 +364,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     }
 
     switch (event.key) {
-      case 'ArrowLeft':
+      case "ArrowLeft":
         // slots are laid out in reading order, so in RTL the left arrow moves forward
         if (this.isRtl()) {
           this.moveToNext(event);
@@ -366,22 +374,22 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         event.preventDefault();
         break;
 
-      case 'ArrowUp':
-      case 'ArrowDown':
+      case "ArrowUp":
+      case "ArrowDown":
         event.preventDefault();
         break;
 
-      case 'Backspace':
+      case "Backspace":
         if (input.value.length === 0) {
           this.moveToPrev(event);
           event.preventDefault();
         }
         break;
 
-      case 'Delete':
+      case "Delete":
         break;
 
-      case 'ArrowRight':
+      case "ArrowRight":
         if (this.isRtl()) {
           this.moveToPrev(event);
         } else {
@@ -410,21 +418,21 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   private isRtl(): boolean {
-    return this.directionality?.value === 'rtl';
+    return this.directionality?.value === "rtl";
   }
 
   /** Handles the modifier shortcuts the component owns; everything else falls through to the browser. */
   private onShortcut(event: KeyboardEvent): void {
     const key = event.key.toLowerCase();
 
-    if ((event.ctrlKey || event.metaKey) && key === 'a') {
+    if ((event.ctrlKey || event.metaKey) && key === "a") {
       event.preventDefault();
       this.selectAll();
       return;
     }
 
     // Keep the selection alive for copy/cut, drop it for anything else.
-    if (key !== 'c' && key !== 'x') {
+    if (key !== "c" && key !== "x") {
       this.clearSelectAll();
     }
   }
@@ -452,7 +460,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   findNextInput(element: HTMLElement): HTMLInputElement | null {
-    if (element.hasAttribute('data-input-otp-container')) {
+    if (element.hasAttribute("data-input-otp-container")) {
       return null;
     }
 
@@ -469,7 +477,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return nextElement;
     }
 
-    const inputInside = nextElement.querySelector('input');
+    const inputInside = nextElement.querySelector("input");
     if (inputInside) {
       return inputInside;
     }
@@ -478,7 +486,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   findPrevInput(element: HTMLElement): HTMLInputElement | null {
-    if (element.hasAttribute('data-input-otp-container')) {
+    if (element.hasAttribute("data-input-otp-container")) {
       return null;
     }
 
@@ -495,7 +503,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return prevElement;
     }
 
-    const inputs = prevElement.querySelectorAll('input');
+    const inputs = prevElement.querySelectorAll("input");
     if (inputs.length) {
       return inputs[inputs.length - 1];
     }
@@ -512,7 +520,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const tokens = this.tokens();
     const all = this.allSelected();
     for (let i = 0; i < slotsArray.length; i++) {
-      const char = tokens[i] || '';
+      const char = tokens[i] || "";
       const isActive = all || i === focused;
       slotsArray[i].updateState(char, isActive, !all && isActive && !char);
     }

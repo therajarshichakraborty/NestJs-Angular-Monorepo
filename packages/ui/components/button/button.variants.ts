@@ -1,6 +1,6 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 export const buttonVariants = cva(
   mergeClasses(
@@ -9,47 +9,49 @@ export const buttonVariants = cva(
   {
     variants: {
       zType: {
-        default: 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
         destructive:
-          'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         outline:
-          'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
-          'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       zSize: {
-        default: 'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
+        default:
+          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
-        icon: 'size-8',
-        'icon-xs':
+        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
+        icon: "size-8",
+        "icon-xs":
           "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-        'icon-sm': 'size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg',
-        'icon-lg': 'size-9',
+        "icon-sm":
+          "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
+        "icon-lg": "size-9",
       },
       zShape: {
-        default: 'rounded-md',
-        circle: 'rounded-full',
-        square: 'rounded-none',
+        default: "rounded-md",
+        circle: "rounded-full",
+        square: "rounded-none",
       },
       zLoading: {
-        true: 'pointer-events-none opacity-50',
+        true: "pointer-events-none opacity-50",
       },
       zDisabled: {
-        true: 'pointer-events-none opacity-50',
+        true: "pointer-events-none opacity-50",
       },
     },
     defaultVariants: {
-      zType: 'default',
-      zSize: 'default',
-      zShape: 'default',
+      zType: "default",
+      zSize: "default",
+      zShape: "default",
     },
   },
 );
-export type ZardButtonShapeVariants = NonNullable<VariantProps<typeof buttonVariants>['zShape']>;
-export type ZardButtonSizeVariants = NonNullable<VariantProps<typeof buttonVariants>['zSize']>;
-export type ZardButtonTypeVariants = NonNullable<VariantProps<typeof buttonVariants>['zType']>;
+export type ZardButtonShapeVariants = NonNullable<VariantProps<typeof buttonVariants>["zShape"]>;
+export type ZardButtonSizeVariants = NonNullable<VariantProps<typeof buttonVariants>["zSize"]>;
+export type ZardButtonTypeVariants = NonNullable<VariantProps<typeof buttonVariants>["zType"]>;

@@ -9,20 +9,20 @@ import {
   linkedSignal,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCheck } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
 import {
   selectItemIconVariants,
   selectItemStateVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
-} from '@repo/ui/components/select/select.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+} from "@repo/ui/components/select/select.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -32,7 +32,7 @@ interface SelectHost {
 }
 
 @Component({
-  selector: 'z-select-item, [z-select-item]',
+  selector: "z-select-item, [z-select-item]",
   imports: [NgIcon],
   template: `
     <span data-slot="select-item-indicator" [class]="iconClasses()">
@@ -54,47 +54,55 @@ interface SelectHost {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
-    role: 'option',
-    tabindex: '-1',
-    'data-slot': 'select-item',
-    '[class]': 'classes()',
-    '[attr.value]': 'zValue()',
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
-    '[attr.data-selected]': 'isSelected() ? "" : null',
-    '[attr.aria-disabled]': 'zDisabled()',
-    '[attr.aria-selected]': 'isSelected()',
-    '(click)': 'onClick()',
-    '(mouseenter)': 'onMouseEnter()',
-    '(keydown.{tab}.prevent)': 'noopFn',
+    role: "option",
+    tabindex: "-1",
+    "data-slot": "select-item",
+    "[class]": "classes()",
+    "[attr.value]": "zValue()",
+    "[attr.data-disabled]": 'zDisabled() ? "" : null',
+    "[attr.data-selected]": 'isSelected() ? "" : null',
+    "[attr.aria-disabled]": "zDisabled()",
+    "[attr.aria-selected]": "isSelected()",
+    "(click)": "onClick()",
+    "(mouseenter)": "onMouseEnter()",
+    "(keydown.{tab}.prevent)": "noopFn",
   },
-  exportAs: 'zSelectItem',
+  exportAs: "zSelectItem",
 })
 export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   private readonly select = signal<SelectHost | null>(null);
   noopFn = noopFn;
 
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef.nativeElement;
-    return (element.textContent ?? element.innerText)?.trim() ?? '';
+    return (element.textContent ?? element.innerText)?.trim() ?? "";
   });
 
-  readonly zMode = signal<ZardSelectItemModeVariants>('normal');
+  readonly zMode = signal<ZardSelectItemModeVariants>("normal");
 
   protected readonly classes = computed(() =>
-    mergeClasses(selectItemVariants({ zMode: this.zMode() }), selectItemStateVariants(), this.class()),
+    mergeClasses(
+      selectItemVariants({ zMode: this.zMode() }),
+      selectItemStateVariants(),
+      this.class(),
+    ),
   );
 
-  protected readonly iconClasses = computed(() => mergeClasses(selectItemIconVariants({ zMode: this.zMode() })));
+  protected readonly iconClasses = computed(() =>
+    mergeClasses(selectItemIconVariants({ zMode: this.zMode() })),
+  );
 
-  protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
+  protected readonly strokeWidth = computed(() => (this.zMode() === "compact" ? 3 : 2));
 
-  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()) ?? false);
+  protected readonly isSelected = computed(
+    () => this.select()?.selectedValue().includes(this.zValue()) ?? false,
+  );
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);

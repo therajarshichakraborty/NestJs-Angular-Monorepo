@@ -1,4 +1,4 @@
-import type { WritableSignal } from '@angular/core';
+import type { WritableSignal } from "@angular/core";
 
 let uid = 0;
 

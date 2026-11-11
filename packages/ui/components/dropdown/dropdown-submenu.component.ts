@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -19,18 +19,24 @@ import {
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronRight } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronRight } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardDropdownService } from './dropdown.service';
-import { dropdownSubContentVariants, dropdownSubTriggerVariants } from './dropdown.variants';
-import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+import { ZardDropdownService } from "./dropdown.service";
+import { dropdownSubContentVariants, dropdownSubTriggerVariants } from "./dropdown.variants";
+import {
+  findMenuItemByChar,
+  getMenuItems,
+  highlightMenuItem,
+  isTypeaheadKey,
+  nextMenuIndex,
+} from "./menu-keyboard";
 
 /** How long the pointer may sit between the trigger and the popup before the submenu closes. */
 const CLOSE_DELAY = 120;
@@ -40,7 +46,7 @@ const CLOSE_DELAY = 120;
  * declared — it hands a template to the sub-trigger, which opens it in its own overlay.
  */
 @Component({
-  selector: 'z-dropdown-menu-sub-content, [z-dropdown-menu-sub-content]',
+  selector: "z-dropdown-menu-sub-content, [z-dropdown-menu-sub-content]",
   template: `
     <ng-template #contentTemplate>
       <div
@@ -58,18 +64,20 @@ const CLOSE_DELAY = 120;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[style.display]': '"none"',
+    "[style.display]": '"none"',
   },
-  exportAs: 'zDropdownMenuSubContent',
+  exportAs: "zDropdownMenuSubContent",
 })
 export class ZardDropdownMenuSubContentComponent {
   readonly viewContainerRef = inject(ViewContainerRef);
 
-  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>("contentTemplate");
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly contentClasses = computed(() => mergeClasses(dropdownSubContentVariants(), this.class()));
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(dropdownSubContentVariants(), this.class()),
+  );
 }
 
 /**
@@ -78,32 +86,36 @@ export class ZardDropdownMenuSubContentComponent {
  * `ArrowLeft` and `Escape` close it and hand the focus back to this row.
  */
 @Component({
-  selector: 'z-dropdown-menu-sub-trigger, [z-dropdown-menu-sub-trigger]',
+  selector: "z-dropdown-menu-sub-trigger, [z-dropdown-menu-sub-trigger]",
   imports: [NgIcon],
   template: `
     <ng-content />
-    <ng-icon name="lucideChevronRight" class="ms-auto size-4 shrink-0 rtl:rotate-180" aria-hidden="true" />
+    <ng-icon
+      name="lucideChevronRight"
+      class="ms-auto size-4 shrink-0 rtl:rotate-180"
+      aria-hidden="true"
+    />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronRight })],
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'dropdown-menu-sub-trigger',
-    role: 'menuitem',
-    tabindex: '-1',
-    'aria-haspopup': 'menu',
-    '[attr.aria-expanded]': 'isOpen()',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[attr.data-disabled]': 'zDisabled() || null',
-    '[attr.data-inset]': 'zInset() || null',
-    '[attr.aria-disabled]': 'zDisabled()',
-    '(click)': 'onClick($event)',
-    '(mouseenter)': 'onMouseEnter()',
-    '(mouseleave)': 'scheduleClose($event)',
-    '(keydown)': 'onKeydown($event)',
+    "[class]": "classes()",
+    "data-slot": "dropdown-menu-sub-trigger",
+    role: "menuitem",
+    tabindex: "-1",
+    "aria-haspopup": "menu",
+    "[attr.aria-expanded]": "isOpen()",
+    "[attr.data-state]": 'isOpen() ? "open" : "closed"',
+    "[attr.data-disabled]": "zDisabled() || null",
+    "[attr.data-inset]": "zInset() || null",
+    "[attr.aria-disabled]": "zDisabled()",
+    "(click)": "onClick($event)",
+    "(mouseenter)": "onMouseEnter()",
+    "(mouseleave)": "scheduleClose($event)",
+    "(keydown)": "onKeydown($event)",
   },
-  exportAs: 'zDropdownMenuSubTrigger',
+  exportAs: "zDropdownMenuSubTrigger",
 })
 export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly dropdownService = inject(ZardDropdownService);
@@ -118,13 +130,13 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
   private overlayRef?: OverlayRef;
   private closeTimeout?: ReturnType<typeof setTimeout>;
-  private readonly cleanups: Array<() => void> = [];
+  private readonly cleanups: (() => void)[] = [];
   private focusedIndex = -1;
 
   readonly zSubMenu = input.required<ZardDropdownMenuSubContentComponent | TemplateRef<unknown>>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInset = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly isOpen = signal(false);
 
@@ -148,7 +160,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     });
 
     // A `[dir]` switch while the submenu is open closes it: it reopens with the new direction.
-    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.close());
+    this.directionality?.change
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.close());
   }
 
   ngOnDestroy(): void {
@@ -216,7 +230,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
   protected onKeydown(event: KeyboardEvent): void {
     // The submenu opens on the inline-end side, so the arrow that opens it follows the direction.
-    if (event.key !== this.openKey() && event.key !== 'Enter' && event.key !== ' ') {
+    if (event.key !== this.openKey() && event.key !== "Enter" && event.key !== " ") {
       return;
     }
 
@@ -226,15 +240,15 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   private isRtl(): boolean {
-    return this.directionality?.value === 'rtl';
+    return this.directionality?.value === "rtl";
   }
 
   private openKey(): string {
-    return this.isRtl() ? 'ArrowLeft' : 'ArrowRight';
+    return this.isRtl() ? "ArrowLeft" : "ArrowRight";
   }
 
   private closeKey(): string {
-    return this.isRtl() ? 'ArrowRight' : 'ArrowLeft';
+    return this.isRtl() ? "ArrowRight" : "ArrowLeft";
   }
 
   protected onMouseEnter(): void {
@@ -259,7 +273,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     }
 
     return (
-      this.elementRef.nativeElement.contains(target) || (this.overlayRef?.overlayElement.contains(target) ?? false)
+      this.elementRef.nativeElement.contains(target) ||
+      (this.overlayRef?.overlayElement.contains(target) ?? false)
     );
   }
 
@@ -277,7 +292,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
   private resolveViewContainerRef(): ViewContainerRef {
     const menu = this.zSubMenu();
-    return menu instanceof ZardDropdownMenuSubContentComponent ? menu.viewContainerRef : this.viewContainerRef;
+    return menu instanceof ZardDropdownMenuSubContentComponent
+      ? menu.viewContainerRef
+      : this.viewContainerRef;
   }
 
   private createOverlay(): void {
@@ -288,17 +305,17 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.elementRef)
       .withPositions([
-        { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetY: -4 },
-        { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetY: -4 },
-        { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetY: 4 },
-        { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom', offsetY: 4 },
+        { originX: "end", originY: "top", overlayX: "start", overlayY: "top", offsetY: -4 },
+        { originX: "start", originY: "top", overlayX: "end", overlayY: "top", offsetY: -4 },
+        { originX: "end", originY: "bottom", overlayX: "start", overlayY: "bottom", offsetY: 4 },
+        { originX: "start", originY: "bottom", overlayX: "end", overlayY: "bottom", offsetY: 4 },
       ])
       .withFlexibleDimensions(false)
       .withPush(true);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
-      direction: this.directionality?.value ?? 'ltr',
+      direction: this.directionality?.value ?? "ltr",
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -318,14 +335,14 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     const onLeave = (event: Event) => this.scheduleClose(event as MouseEvent);
     const onKeydown = (event: Event) => this.onSubmenuKeydown(event as KeyboardEvent);
 
-    pane.addEventListener('mouseenter', onEnter);
-    pane.addEventListener('mouseleave', onLeave);
-    pane.addEventListener('keydown', onKeydown);
+    pane.addEventListener("mouseenter", onEnter);
+    pane.addEventListener("mouseleave", onLeave);
+    pane.addEventListener("keydown", onKeydown);
 
     this.cleanups.push(
-      () => pane.removeEventListener('mouseenter', onEnter),
-      () => pane.removeEventListener('mouseleave', onLeave),
-      () => pane.removeEventListener('keydown', onKeydown),
+      () => pane.removeEventListener("mouseenter", onEnter),
+      () => pane.removeEventListener("mouseleave", onLeave),
+      () => pane.removeEventListener("keydown", onKeydown),
     );
   }
 
@@ -333,33 +350,33 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     const items = this.submenuItems();
 
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
         this.focusItem(nextMenuIndex(items, this.focusedIndex, 1), items);
         return;
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault();
         this.focusItem(nextMenuIndex(items, this.focusedIndex, -1), items);
         return;
-      case 'Home':
+      case "Home":
         event.preventDefault();
         this.focusItem(0, items);
         return;
-      case 'End':
+      case "End":
         event.preventDefault();
         this.focusItem(items.length - 1, items);
         return;
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         event.preventDefault();
         items[this.focusedIndex]?.click();
         return;
-      case 'Escape':
+      case "Escape":
         event.preventDefault();
         event.stopPropagation();
         this.close(true);
         return;
-      case 'Tab':
+      case "Tab":
         this.dropdownService.close();
         return;
     }
@@ -399,7 +416,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   private runCleanups(): void {
-    this.cleanups.forEach(cleanup => cleanup());
+    this.cleanups.forEach((cleanup) => cleanup());
     this.cleanups.length = 0;
   }
 }

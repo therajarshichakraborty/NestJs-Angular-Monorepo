@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal, TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   inject,
   Injectable,
@@ -10,19 +10,19 @@ import {
   PLATFORM_ID,
   TemplateRef,
   type ViewContainerRef,
-} from '@angular/core';
+} from "@angular/core";
 
-import { takeUntil } from 'rxjs';
+import { takeUntil } from "rxjs";
 
-import { ZardDrawerContainerComponent, ZardDrawerOptions } from './drawer-container.component';
-import { ZardDrawerHost } from './drawer-host';
-import { ZardDrawerRef } from './drawer-ref';
-import { hasOpenDrawer } from './drawer-stack';
-import { DRAWER_BACKDROP_CLASSES } from './drawer.variants';
+import { ZardDrawerContainerComponent, ZardDrawerOptions } from "./drawer-container.component";
+import { ZardDrawerHost } from "./drawer-host";
+import { ZardDrawerRef } from "./drawer-ref";
+import { hasOpenDrawer } from "./drawer-stack";
+import { DRAWER_BACKDROP_CLASSES } from "./drawer.variants";
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 
-export const Z_DRAWER_DATA = new InjectionToken<unknown>('Z_DRAWER_DATA');
+export const Z_DRAWER_DATA = new InjectionToken<unknown>("Z_DRAWER_DATA");
 
 /**
  * Type-safe accessor for the data passed to a drawer via {@link ZardDrawerOptions.zData}.
@@ -37,7 +37,7 @@ export function injectDrawerData<T>(): T {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardDrawerService {
   private readonly overlay = inject(Overlay);
@@ -59,7 +59,12 @@ export class ZardDrawerService {
 
     const overlayRef = this.createOverlay(config);
     const container = this.attachContainer<T, U>(overlayRef, config);
-    const drawerRef = this.attachContent<T, U>(config.zContent as ContentType<T>, container, overlayRef, config);
+    const drawerRef = this.attachContent<T, U>(
+      config.zContent as ContentType<T>,
+      container,
+      overlayRef,
+      config,
+    );
 
     return drawerRef;
   }
@@ -73,11 +78,13 @@ export class ZardDrawerService {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: directionality?.value ?? 'ltr',
+        direction: directionality?.value ?? "ltr",
         hasBackdrop: modal,
-        backdropClass: nested ? ['bg-transparent'] : DRAWER_BACKDROP_CLASSES,
+        backdropClass: nested ? ["bg-transparent"] : DRAWER_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
-        scrollStrategy: modal ? this.overlay.scrollStrategies.block() : this.overlay.scrollStrategies.noop(),
+        scrollStrategy: modal
+          ? this.overlay.scrollStrategies.block()
+          : this.overlay.scrollStrategies.noop(),
         disposeOnNavigation: true,
       }),
     );
@@ -127,7 +134,11 @@ export class ZardDrawerService {
       const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
       const ctx = { drawerRef } as unknown as T;
       container.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
-    } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
+    } else if (
+      componentOrTemplateRef !== null &&
+      componentOrTemplateRef !== undefined &&
+      typeof componentOrTemplateRef !== "string"
+    ) {
       // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
       // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
       const injector = this.createInjector<T, U>(drawerRef, container, config);

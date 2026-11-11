@@ -1,2 +1,2 @@
-export * from './aspect-ratio.component';
-export * from './aspect-ratio.variants';
+export * from "./aspect-ratio.component";
+export * from "./aspect-ratio.variants";

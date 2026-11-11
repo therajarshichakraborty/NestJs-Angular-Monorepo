@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal, TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   inject,
   Injectable,
@@ -10,17 +10,17 @@ import {
   PLATFORM_ID,
   TemplateRef,
   type ViewContainerRef,
-} from '@angular/core';
+} from "@angular/core";
 
-import { takeUntil } from 'rxjs';
+import { takeUntil } from "rxjs";
 
-import { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
-import { ZardSheetRef } from './sheet-ref';
-import { SHEET_BACKDROP_CLASSES } from './sheet.variants';
+import { ZardSheetContainerComponent, ZardSheetOptions } from "./sheet-container.component";
+import { ZardSheetRef } from "./sheet-ref";
+import { SHEET_BACKDROP_CLASSES } from "./sheet.variants";
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 
-export const Z_SHEET_DATA = new InjectionToken<unknown>('Z_SHEET_DATA');
+export const Z_SHEET_DATA = new InjectionToken<unknown>("Z_SHEET_DATA");
 
 /**
  * Type-safe accessor for the data passed to a sheet via {@link ZardSheetOptions.zData}.
@@ -35,7 +35,7 @@ export function injectSheetData<T>(): T {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardSheetService {
   private readonly overlay = inject(Overlay);
@@ -73,7 +73,7 @@ export class ZardSheetService {
     const directionality = this.directionalityFor(config.zViewContainerRef);
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: directionality?.value ?? 'ltr',
+        direction: directionality?.value ?? "ltr",
         hasBackdrop: true,
         backdropClass: SHEET_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -126,7 +126,11 @@ export class ZardSheetService {
       const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
       const ctx = { sheetRef } as unknown as T;
       sheetContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
-    } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
+    } else if (
+      componentOrTemplateRef !== null &&
+      componentOrTemplateRef !== undefined &&
+      typeof componentOrTemplateRef !== "string"
+    ) {
       // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
       // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
       const injector = this.createInjector<T, U>(sheetRef, config, sheetContainer);

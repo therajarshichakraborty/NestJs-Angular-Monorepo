@@ -7,22 +7,25 @@ import {
   input,
   type Signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideLoaderCircle } from '@ng-icons/lucide';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideLoaderCircle } from "@ng-icons/lucide";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { buttonVariants, type ZardButtonTypeVariants } from '@repo/ui/components/button/button.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import {
+  buttonVariants,
+  type ZardButtonTypeVariants,
+} from "@repo/ui/components/button/button.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardQuestionnaireComponent } from './questionnaire.component';
+import { ZardQuestionnaireComponent } from "./questionnaire.component";
 import {
   questionnaireNextVariants,
   questionnairePreviousVariants,
   questionnaireSkipVariants,
   questionnaireSubmitVariants,
-} from './questionnaire.variants';
+} from "./questionnaire.variants";
 
 const NAVIGATION_BUTTON_TEMPLATE = `
   @if (zLoading()) {
@@ -42,17 +45,17 @@ const NAVIGATION_BUTTON_TEMPLATE = `
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    '[hidden]': '!available()',
-    '[attr.disabled]': 'disabledState() ? "" : null',
-    '[attr.aria-disabled]': 'disabledState() ? "true" : null',
-    '[attr.aria-busy]': 'zLoading() ? "true" : null',
-    '(click)': 'handleClick()',
+    "[hidden]": "!available()",
+    "[attr.disabled]": 'disabledState() ? "" : null',
+    "[attr.aria-disabled]": 'disabledState() ? "true" : null',
+    "[attr.aria-busy]": 'zLoading() ? "true" : null',
+    "(click)": "handleClick()",
   },
 })
 export abstract class ZardQuestionnaireNavigationButton extends ZardButtonComponent {
   protected readonly questionnaire = inject(ZardQuestionnaireComponent);
 
-  override readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
+  override readonly zDisabled = input(false, { alias: "disabled", transform: booleanAttribute });
   // These are always native buttons that own their disabled state. Turning this off keeps the inherited
   // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
   // overwrite the `[disabled]` binding above when `disabled` toggles while the action is still unavailable.
@@ -91,20 +94,20 @@ export abstract class ZardQuestionnaireNavigationButton extends ZardButtonCompon
 }
 
 @Component({
-  selector: 'button[z-questionnaire-previous]',
+  selector: "button[z-questionnaire-previous]",
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    type: 'button',
-    'data-slot': 'questionnaire-previous',
+    type: "button",
+    "data-slot": "questionnaire-previous",
   },
-  exportAs: 'zQuestionnairePrevious',
+  exportAs: "zQuestionnairePrevious",
 })
 export class ZardQuestionnairePreviousDirective extends ZardQuestionnaireNavigationButton {
-  override readonly zType = input<ZardButtonTypeVariants>('outline');
+  override readonly zType = input<ZardButtonTypeVariants>("outline");
   protected readonly available = this.questionnaire.canMoveBack;
   protected readonly slotVariants = questionnairePreviousVariants;
 
@@ -114,20 +117,20 @@ export class ZardQuestionnairePreviousDirective extends ZardQuestionnaireNavigat
 }
 
 @Component({
-  selector: 'button[z-questionnaire-skip]',
+  selector: "button[z-questionnaire-skip]",
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    type: 'button',
-    'data-slot': 'questionnaire-skip',
+    type: "button",
+    "data-slot": "questionnaire-skip",
   },
-  exportAs: 'zQuestionnaireSkip',
+  exportAs: "zQuestionnaireSkip",
 })
 export class ZardQuestionnaireSkipDirective extends ZardQuestionnaireNavigationButton {
-  override readonly zType = input<ZardButtonTypeVariants>('outline');
+  override readonly zType = input<ZardButtonTypeVariants>("outline");
   protected readonly available = this.questionnaire.canSkip;
   protected readonly slotVariants = questionnaireSkipVariants;
 
@@ -137,17 +140,17 @@ export class ZardQuestionnaireSkipDirective extends ZardQuestionnaireNavigationB
 }
 
 @Component({
-  selector: 'button[z-questionnaire-next]',
+  selector: "button[z-questionnaire-next]",
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    type: 'button',
-    'data-slot': 'questionnaire-next',
+    type: "button",
+    "data-slot": "questionnaire-next",
   },
-  exportAs: 'zQuestionnaireNext',
+  exportAs: "zQuestionnaireNext",
 })
 export class ZardQuestionnaireNextDirective extends ZardQuestionnaireNavigationButton {
   protected readonly available = this.questionnaire.canMoveNext;
@@ -159,17 +162,17 @@ export class ZardQuestionnaireNextDirective extends ZardQuestionnaireNavigationB
 }
 
 @Component({
-  selector: 'button[z-questionnaire-submit]',
+  selector: "button[z-questionnaire-submit]",
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    type: 'submit',
-    'data-slot': 'questionnaire-submit',
+    type: "submit",
+    "data-slot": "questionnaire-submit",
   },
-  exportAs: 'zQuestionnaireSubmit',
+  exportAs: "zQuestionnaireSubmit",
 })
 export class ZardQuestionnaireSubmitDirective extends ZardQuestionnaireNavigationButton {
   protected readonly available = this.questionnaire.canSubmit;

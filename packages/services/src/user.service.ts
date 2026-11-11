@@ -1,5 +1,13 @@
 import type { UserRepository } from "@repo/db";
-import { ApiError, createServiceLogger, createUserSchema, hashPassword, paginationQuerySchema, updateUserSchema, validate } from "@repo/lib";
+import {
+  ApiError,
+  createServiceLogger,
+  createUserSchema,
+  hashPassword,
+  paginationQuerySchema,
+  updateUserSchema,
+  validate,
+} from "@repo/lib";
 import { QUEUE_NAMES } from "@repo/queue";
 import type { RabbitMqClient } from "@repo/queue";
 import type { PaginatedResult, User, UserCreatedEvent } from "@repo/types";

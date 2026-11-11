@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal, TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   inject,
   Injectable,
@@ -10,17 +10,17 @@ import {
   PLATFORM_ID,
   TemplateRef,
   type ViewContainerRef,
-} from '@angular/core';
+} from "@angular/core";
 
-import { takeUntil } from 'rxjs';
+import { takeUntil } from "rxjs";
 
-import { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
-import { ZardDialogRef } from './dialog-ref';
-import { DIALOG_BACKDROP_CLASSES } from './dialog.variants';
+import { ZardDialogContainerComponent, ZardDialogOptions } from "./dialog-container.component";
+import { ZardDialogRef } from "./dialog-ref";
+import { DIALOG_BACKDROP_CLASSES } from "./dialog.variants";
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 
-export const Z_MODAL_DATA = new InjectionToken<unknown>('Z_MODAL_DATA');
+export const Z_MODAL_DATA = new InjectionToken<unknown>("Z_MODAL_DATA");
 
 /**
  * Type-safe accessor for the data passed to a dialog via {@link ZardDialogOptions.zData}.
@@ -35,7 +35,7 @@ export function injectDialogData<T>(): T {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardDialogService {
   private readonly overlay = inject(Overlay);
@@ -73,7 +73,7 @@ export class ZardDialogService {
     const directionality = this.directionalityFor(config.zViewContainerRef);
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: directionality?.value ?? 'ltr',
+        direction: directionality?.value ?? "ltr",
         hasBackdrop: true,
         backdropClass: DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -126,7 +126,11 @@ export class ZardDialogService {
       const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
       const ctx = { dialogRef } as unknown as T;
       dialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
-    } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
+    } else if (
+      componentOrTemplateRef !== null &&
+      componentOrTemplateRef !== undefined &&
+      typeof componentOrTemplateRef !== "string"
+    ) {
       // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
       // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
       const injector = this.createInjector<T, U>(dialogRef, config, dialogContainer);

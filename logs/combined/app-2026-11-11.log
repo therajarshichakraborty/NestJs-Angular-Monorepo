@@ -1,0 +1,7 @@
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","service":"app","timestamp":"2026-11-11T09:11:57.006Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","service":"app","timestamp":"2026-11-11T09:11:57.013Z"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","service":"app","timestamp":"2026-11-11T09:11:57.022Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/, GET} route","service":"app","timestamp":"2026-11-11T09:11:57.025Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","service":"app","timestamp":"2026-11-11T09:11:57.026Z"}
+{"level":"info","message":"API is listening on http://localhost:3998","service":"app","timestamp":"2026-11-11T09:11:57.029Z"}
+{"level":"info","message":"OpenAPI docs at http://localhost:3998/docs","service":"app","timestamp":"2026-11-11T09:11:57.029Z"}

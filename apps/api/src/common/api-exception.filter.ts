@@ -1,7 +1,7 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
-import { ApiError, ERROR_CODES, HTTP_STATUS, logger } from '@repo/lib';
-import type { ApiErrorResponse, ErrorCode } from '@repo/types';
-import type { Request, Response } from 'express';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from "@nestjs/common";
+import { ApiError, ERROR_CODES, HTTP_STATUS, logger } from "@repo/lib";
+import type { ApiErrorResponse, ErrorCode } from "@repo/types";
+import type { Request, Response } from "express";
 
 const ERROR_CODE_BY_STATUS: Record<number, ErrorCode> = {
   [HTTP_STATUS.BAD_REQUEST]: ERROR_CODES.BAD_REQUEST,

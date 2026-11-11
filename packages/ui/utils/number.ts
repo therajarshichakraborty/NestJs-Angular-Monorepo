@@ -4,8 +4,8 @@ function clamp(value: number, [min, max]: [number, number]): number {
 
 function getDecimalCount(value: number): number {
   // also handles exponent notation such as 1e-7
-  const [mantissa, exponent = '0'] = String(value).split('e');
-  return Math.max(0, (mantissa.split('.')[1] ?? '').length - Number(exponent));
+  const [mantissa, exponent = "0"] = String(value).split("e");
+  return Math.max(0, (mantissa.split(".")[1] ?? "").length - Number(exponent));
 }
 
 function roundToStep(value: number, min: number, step: number): number {

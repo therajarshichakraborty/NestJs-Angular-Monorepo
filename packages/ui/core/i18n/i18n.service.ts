@@ -1,13 +1,13 @@
-import { computed, inject, Injectable, LOCALE_ID, signal } from '@angular/core';
-import type { Signal } from '@angular/core';
+import { computed, inject, Injectable, LOCALE_ID, signal } from "@angular/core";
+import type { Signal } from "@angular/core";
 
-import { DEFAULT_LOCALE } from './i18n.constants';
-import { ZARD_I18N, ZARD_LOCALE } from './i18n.tokens';
-import type { ZardI18nInterface } from './i18n.types';
-import { getPresetLocale } from './locales/registry';
+import { DEFAULT_LOCALE } from "./i18n.constants";
+import { ZARD_I18N, ZARD_LOCALE } from "./i18n.tokens";
+import type { ZardI18nInterface } from "./i18n.types";
+import { getPresetLocale } from "./locales/registry";
 
 function isPlainObject(item: unknown): item is Record<string, unknown> {
-  return typeof item === 'object' && item !== null && !Array.isArray(item);
+  return typeof item === "object" && item !== null && !Array.isArray(item);
 }
 
 function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
@@ -24,7 +24,7 @@ function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardI18nService {
   private readonly injectedI18n = inject(ZARD_I18N, { optional: true });
@@ -38,7 +38,7 @@ export class ZardI18nService {
   readonly current: Signal<ZardI18nInterface> = this.state.asReadonly();
 
   setLocale(locale: ZardI18nInterface | string): void {
-    if (typeof locale !== 'string') {
+    if (typeof locale !== "string") {
       this.state.set(locale);
       return;
     }
@@ -49,8 +49,11 @@ export class ZardI18nService {
 
   setTranslation(translation: Partial<ZardI18nInterface>): void {
     this.state.update(
-      current =>
-        deepMerge(current as Record<string, unknown>, translation as Record<string, unknown>) as ZardI18nInterface,
+      (current) =>
+        deepMerge(
+          current as Record<string, unknown>,
+          translation as Record<string, unknown>,
+        ) as ZardI18nInterface,
     );
   }
 
@@ -75,7 +78,7 @@ export class ZardI18nService {
     }
     const resolvedLocale =
       this.injectedLocale ??
-      (typeof this.ngLocaleId === 'string' && this.ngLocaleId ? this.ngLocaleId : DEFAULT_LOCALE);
+      (typeof this.ngLocaleId === "string" && this.ngLocaleId ? this.ngLocaleId : DEFAULT_LOCALE);
 
     const preset = getPresetLocale(resolvedLocale);
     return { ...(preset ?? {}), locale: resolvedLocale };

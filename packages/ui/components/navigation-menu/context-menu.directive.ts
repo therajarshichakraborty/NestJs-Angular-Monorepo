@@ -5,4 +5,4 @@
  *
  * @deprecated Import from `@/shared/components/context-menu` instead.
  */
-export { ZardContextMenuDirective } from '@repo/ui/components/context-menu/context-menu.directive';
+export { ZardContextMenuDirective } from "@repo/ui/components/context-menu/context-menu.directive";

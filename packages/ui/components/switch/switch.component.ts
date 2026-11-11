@@ -8,25 +8,30 @@ import {
   model,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { switchVariants, type ZardSwitchSizeVariants } from './switch.variants';
+import { switchVariants, type ZardSwitchSizeVariants } from "./switch.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
-  selector: 'z-switch',
+  selector: "z-switch",
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
+    <span
+      class="flex items-center space-x-2"
+      zardId="switch"
+      #z="zardId"
+      [attr.data-checked]="zChecked() ? '' : null"
+    >
       <button
         [id]="zId() || z.id()"
         type="button"
@@ -63,23 +68,25 @@ type OnChangeType = (value: boolean) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'switch',
+    "data-slot": "switch",
   },
-  exportAs: 'zSwitch',
+  exportAs: "zSwitch",
 })
 export class ZardSwitchComponent implements ControlValueAccessor {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zChecked = model<boolean>(false);
-  readonly zId = input<string>('');
-  readonly zSize = input<ZardSwitchSizeVariants>('default');
+  readonly zId = input<string>("");
+  readonly zSize = input<ZardSwitchSizeVariants>("default");
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;
 
-  protected readonly status = computed(() => (this.zChecked() ? 'checked' : 'unchecked'));
-  protected readonly classes = computed(() => mergeClasses(switchVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly status = computed(() => (this.zChecked() ? "checked" : "unchecked"));
+  protected readonly classes = computed(() =>
+    mergeClasses(switchVariants({ zSize: this.zSize() }), this.class()),
+  );
 
   protected readonly formDisabled = signal(false);
 
@@ -100,7 +107,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
       return;
     }
 
-    this.zChecked.update(checked => !checked);
+    this.zChecked.update((checked) => !checked);
     this.onTouched();
     this.onChange(this.zChecked());
   }

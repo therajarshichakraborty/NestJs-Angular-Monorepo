@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,24 +12,27 @@ import {
   type TemplateRef,
   type ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { ZardAlertDialogHost } from './alert-dialog-host';
-import { ALERT_DIALOG_DURATION, ZardAlertDialogPanelComponent } from './alert-dialog-panel.component';
-import type { ZardAlertDialogRef } from './alert-dialog-ref';
+import { ZardAlertDialogHost } from "./alert-dialog-host";
+import {
+  ALERT_DIALOG_DURATION,
+  ZardAlertDialogPanelComponent,
+} from "./alert-dialog-panel.component";
+import type { ZardAlertDialogRef } from "./alert-dialog-ref";
 import {
   ZardAlertDialogDescriptionComponent,
   ZardAlertDialogFooterComponent,
   ZardAlertDialogHeaderComponent,
   ZardAlertDialogMediaComponent,
   ZardAlertDialogTitleComponent,
-} from './alert-dialog.component';
-import type { ZardAlertDialogSizeVariants } from './alert-dialog.variants';
+} from "./alert-dialog.component";
+import type { ZardAlertDialogSizeVariants } from "./alert-dialog.variants";
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -71,7 +74,7 @@ export class ZardAlertDialogOptions<T> {
  * @internal Open alert dialogs through the service; compose `z-alert-dialog` for the declarative form.
  */
 @Component({
-  selector: 'z-alert-dialog-container',
+  selector: "z-alert-dialog-container",
   imports: [
     NgTemplateOutlet,
     ZardButtonComponent,
@@ -122,7 +125,7 @@ export class ZardAlertDialogOptions<T> {
             zType="outline"
             (click)="cancelTriggered.emit()"
           >
-            {{ config.zCancelText || 'Cancel' }}
+            {{ config.zCancelText || "Cancel" }}
           </button>
         }
         @if (config.zOkText !== null) {
@@ -134,7 +137,7 @@ export class ZardAlertDialogOptions<T> {
             [zDisabled]="config.zOkDisabled"
             (click)="okTriggered.emit()"
           >
-            {{ config.zOkText || 'Continue' }}
+            {{ config.zOkText || "Continue" }}
           </button>
         }
       </z-alert-dialog-footer>
@@ -143,11 +146,16 @@ export class ZardAlertDialogOptions<T> {
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardAlertDialogContainerComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardAlertDialogHost, useExisting: forwardRef(() => ZardAlertDialogContainerComponent) }],
+  providers: [
+    {
+      provide: ZardAlertDialogHost,
+      useExisting: forwardRef(() => ZardAlertDialogContainerComponent),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zAlertDialogContainer',
+  host: { style: "display: contents" },
+  exportAs: "zAlertDialogContainer",
 })
 export class ZardAlertDialogContainerComponent<T> implements ZardAlertDialogHost {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -159,7 +167,7 @@ export class ZardAlertDialogContainerComponent<T> implements ZardAlertDialogHost
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
   protected readonly duration = computed(() => this.config.zDuration ?? ALERT_DIALOG_DURATION);
 
   alertDialogRef?: ZardAlertDialogRef<T>;
@@ -170,7 +178,7 @@ export class ZardAlertDialogContainerComponent<T> implements ZardAlertDialogHost
 
   /** Plays the exit transition. The ref disposes the overlay once it finishes. */
   leave(): void {
-    this.state.set('closed');
+    this.state.set("closed");
   }
 
   getNativeElement(): HTMLElement {

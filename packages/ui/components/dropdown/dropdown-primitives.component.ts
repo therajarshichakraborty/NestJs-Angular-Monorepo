@@ -11,82 +11,87 @@ import {
   input,
   model,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardDropdownService } from './dropdown.service';
-import { dropdownItemVariants, dropdownLabelVariants, type ZardDropdownItemTypeVariants } from './dropdown.variants';
+import { ZardDropdownService } from "./dropdown.service";
+import {
+  dropdownItemVariants,
+  dropdownLabelVariants,
+  type ZardDropdownItemTypeVariants,
+} from "./dropdown.variants";
 
 interface ZardDropdownRadioGroup {
   zValue(): string | undefined;
   select(value: string): void;
 }
 
-const ZARD_DROPDOWN_RADIO_GROUP = new InjectionToken<ZardDropdownRadioGroup>('ZARD_DROPDOWN_RADIO_GROUP');
+const ZARD_DROPDOWN_RADIO_GROUP = new InjectionToken<ZardDropdownRadioGroup>(
+  "ZARD_DROPDOWN_RADIO_GROUP",
+);
 
-const optionalBooleanAttribute = (value: unknown) => (value === undefined ? undefined : booleanAttribute(value));
+const optionalBooleanAttribute = (value: unknown) =>
+  value === undefined ? undefined : booleanAttribute(value);
 
 @Component({
-  selector: 'z-dropdown-menu-group, [z-dropdown-menu-group]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-dropdown-menu-group, [z-dropdown-menu-group]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'group',
-    'data-slot': 'dropdown-menu-group',
-    '[class]': 'classes()',
+    role: "group",
+    "data-slot": "dropdown-menu-group",
+    "[class]": "classes()",
   },
-  exportAs: 'zDropdownMenuGroup',
+  exportAs: "zDropdownMenuGroup",
 })
 export class ZardDropdownMenuGroupComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses('block', this.class()));
+  protected readonly classes = computed(() => mergeClasses("block", this.class()));
 }
 
 @Component({
-  selector: 'z-dropdown-menu-separator, [z-dropdown-menu-separator]',
+  selector: "z-dropdown-menu-separator, [z-dropdown-menu-separator]",
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'separator',
-    'aria-orientation': 'horizontal',
-    'data-slot': 'dropdown-menu-separator',
-    '[class]': 'classes()',
+    role: "separator",
+    "aria-orientation": "horizontal",
+    "data-slot": "dropdown-menu-separator",
+    "[class]": "classes()",
   },
-  exportAs: 'zDropdownMenuSeparator',
+  exportAs: "zDropdownMenuSeparator",
 })
 export class ZardDropdownMenuSeparatorComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   // `block` is not decoration: on the `z-dropdown-menu-separator` element form the default
   // `display: inline` swallows `h-px` and the negative margins, and the divider renders as a gap
   // with no line in it.
-  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 block h-px', this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses("bg-border -mx-1 my-1 block h-px", this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-dropdown-menu-label, [z-dropdown-menu-label]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'dropdown-menu-label',
-    '[class]': 'classes()',
-    '[attr.data-inset]': 'inset() || null',
+    "data-slot": "dropdown-menu-label",
+    "[class]": "classes()",
+    "[attr.data-inset]": "inset() || null",
   },
-  exportAs: 'zDropdownMenuLabel',
+  exportAs: "zDropdownMenuLabel",
 })
 export class ZardDropdownMenuLabelComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly inset = input(false, { transform: booleanAttribute });
 
   protected readonly classes = computed(() =>
@@ -95,29 +100,27 @@ export class ZardDropdownMenuLabelComponent {
 }
 
 @Component({
-  selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'aria-hidden': 'true',
-    'data-slot': 'dropdown-menu-shortcut',
-    '[class]': 'classes()',
+    "aria-hidden": "true",
+    "data-slot": "dropdown-menu-shortcut",
+    "[class]": "classes()",
   },
-  exportAs: 'zDropdownMenuShortcut',
+  exportAs: "zDropdownMenuShortcut",
 })
 export class ZardDropdownMenuShortcutComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
-    mergeClasses('text-muted-foreground ms-auto text-xs tracking-widest', this.class()),
+    mergeClasses("text-muted-foreground ms-auto text-xs tracking-widest", this.class()),
   );
 }
 
 @Component({
-  selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
+  selector: "z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]",
   template: `
     <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (zChecked()) {
@@ -131,18 +134,18 @@ export class ZardDropdownMenuShortcutComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    role: 'menuitemcheckbox',
-    tabindex: '-1',
-    'data-slot': 'dropdown-menu-checkbox-item',
-    '[attr.aria-checked]': 'zChecked()',
-    '[attr.aria-disabled]': 'isDisabled()',
-    '[attr.data-state]': 'zChecked() ? "checked" : "unchecked"',
-    '[attr.data-disabled]': 'isDisabled() || null',
-    '[attr.data-variant]': 'itemVariant()',
-    '(click.prevent-with-stop)': 'onClick()',
+    "[class]": "classes()",
+    role: "menuitemcheckbox",
+    tabindex: "-1",
+    "data-slot": "dropdown-menu-checkbox-item",
+    "[attr.aria-checked]": "zChecked()",
+    "[attr.aria-disabled]": "isDisabled()",
+    "[attr.data-state]": 'zChecked() ? "checked" : "unchecked"',
+    "[attr.data-disabled]": "isDisabled() || null",
+    "[attr.data-variant]": "itemVariant()",
+    "(click.prevent-with-stop)": "onClick()",
   },
-  exportAs: 'zDropdownMenuCheckboxItem',
+  exportAs: "zDropdownMenuCheckboxItem",
 })
 export class ZardDropdownMenuCheckboxItemComponent {
   private readonly injector = inject(Injector);
@@ -154,13 +157,15 @@ export class ZardDropdownMenuCheckboxItemComponent {
     transform: optionalBooleanAttribute,
   });
 
-  readonly variant = input<ZardDropdownItemTypeVariants>('default');
+  readonly variant = input<ZardDropdownItemTypeVariants>("default");
   readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
-  protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
+  protected readonly itemVariant = computed(
+    () => this.zType() ?? this.zVariant() ?? this.variant(),
+  );
   protected readonly classes = computed(() =>
     mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
   );
@@ -176,27 +181,28 @@ export class ZardDropdownMenuCheckboxItemComponent {
 }
 
 @Component({
-  selector: 'z-dropdown-menu-radio-group, [z-dropdown-menu-radio-group]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-dropdown-menu-radio-group, [z-dropdown-menu-radio-group]",
+  template: ` <ng-content /> `,
   providers: [
-    { provide: ZARD_DROPDOWN_RADIO_GROUP, useExisting: forwardRef(() => ZardDropdownMenuRadioGroupComponent) },
+    {
+      provide: ZARD_DROPDOWN_RADIO_GROUP,
+      useExisting: forwardRef(() => ZardDropdownMenuRadioGroupComponent),
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'group',
-    'data-slot': 'dropdown-menu-radio-group',
-    '[class]': 'classes()',
+    role: "group",
+    "data-slot": "dropdown-menu-radio-group",
+    "[class]": "classes()",
   },
-  exportAs: 'zDropdownMenuRadioGroup',
+  exportAs: "zDropdownMenuRadioGroup",
 })
 export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGroup {
   readonly zValue = model<string | undefined>(undefined);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses('block', this.class()));
+  protected readonly classes = computed(() => mergeClasses("block", this.class()));
 
   select(value: string) {
     this.zValue.set(value);
@@ -204,7 +210,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 }
 
 @Component({
-  selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+  selector: "z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]",
   template: `
     <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (isChecked()) {
@@ -216,18 +222,18 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    role: 'menuitemradio',
-    tabindex: '-1',
-    'data-slot': 'dropdown-menu-radio-item',
-    '[attr.aria-checked]': 'isChecked()',
-    '[attr.aria-disabled]': 'isDisabled()',
-    '[attr.data-state]': 'isChecked() ? "checked" : "unchecked"',
-    '[attr.data-disabled]': 'isDisabled() || null',
-    '[attr.data-variant]': 'itemVariant()',
-    '(click.prevent-with-stop)': 'onClick()',
+    "[class]": "classes()",
+    role: "menuitemradio",
+    tabindex: "-1",
+    "data-slot": "dropdown-menu-radio-item",
+    "[attr.aria-checked]": "isChecked()",
+    "[attr.aria-disabled]": "isDisabled()",
+    "[attr.data-state]": 'isChecked() ? "checked" : "unchecked"',
+    "[attr.data-disabled]": "isDisabled() || null",
+    "[attr.data-variant]": "itemVariant()",
+    "(click.prevent-with-stop)": "onClick()",
   },
-  exportAs: 'zDropdownMenuRadioItem',
+  exportAs: "zDropdownMenuRadioItem",
 })
 export class ZardDropdownMenuRadioItemComponent {
   private readonly injector = inject(Injector);
@@ -240,13 +246,15 @@ export class ZardDropdownMenuRadioItemComponent {
     transform: optionalBooleanAttribute,
   });
 
-  readonly variant = input<ZardDropdownItemTypeVariants>('default');
+  readonly variant = input<ZardDropdownItemTypeVariants>("default");
   readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
-  protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
+  protected readonly itemVariant = computed(
+    () => this.zType() ?? this.zVariant() ?? this.variant(),
+  );
   protected readonly isChecked = computed(() => this.radioGroup?.zValue() === this.zValue());
   protected readonly classes = computed(() =>
     mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),

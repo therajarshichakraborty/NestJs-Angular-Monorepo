@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { inputOtpGroupVariants } from './input-otp.variants';
+import { inputOtpGroupVariants } from "./input-otp.variants";
 
 @Component({
-  selector: 'z-input-otp-group, [z-input-otp-group]',
+  selector: "z-input-otp-group, [z-input-otp-group]",
   template: `
     <div [class]="classes()">
       <ng-content />
@@ -16,13 +22,13 @@ import { inputOtpGroupVariants } from './input-otp.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-slot]': '"input-otp-group"',
-    '[attr.data-input-otp-group]': '""',
+    "[attr.data-slot]": '"input-otp-group"',
+    "[attr.data-input-otp-group]": '""',
   },
-  exportAs: 'zInputOtpGroup',
+  exportAs: "zInputOtpGroup",
 })
 export class ZardInputOtpGroupComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly classes = computed(() => mergeClasses(inputOtpGroupVariants(), this.class()));
 }

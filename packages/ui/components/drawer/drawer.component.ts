@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayConfig, type OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -23,18 +23,18 @@ import {
   ViewContainerRef,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
-import { filter, takeUntil } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter, takeUntil } from "rxjs";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { nextDrawerId, ZardDrawerHost } from './drawer-host';
-import { ZardDrawerPanelComponent } from './drawer-panel.component';
-import { hasOpenDrawer } from './drawer-stack';
-import { DRAWER_DURATION, type ZardDrawerSnapPoint } from './drawer.utils';
+import { nextDrawerId, ZardDrawerHost } from "./drawer-host";
+import { ZardDrawerPanelComponent } from "./drawer-panel.component";
+import { hasOpenDrawer } from "./drawer-stack";
+import { DRAWER_DURATION, type ZardDrawerSnapPoint } from "./drawer.utils";
 import {
   DRAWER_BACKDROP_CLASSES,
   drawerDescriptionVariants,
@@ -42,9 +42,9 @@ import {
   drawerHeaderVariants,
   drawerTitleVariants,
   type ZardDrawerPlacement,
-} from './drawer.variants';
+} from "./drawer.variants";
 
-const ESCAPE_KEYS = ['Escape', 'Esc'];
+const ESCAPE_KEYS = ["Escape", "Esc"];
 
 /**
  * A floating panel that slides in from an edge of the screen and can be swiped — flick it
@@ -65,7 +65,7 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
  * ```
  */
 @Component({
-  selector: 'z-drawer',
+  selector: "z-drawer",
   imports: [ZardDrawerPanelComponent],
   template: `
     <ng-template #panel>
@@ -94,8 +94,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
   providers: [{ provide: ZardDrawerHost, useExisting: forwardRef(() => ZardDrawerComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zDrawer',
+  host: { style: "display: contents" },
+  exportAs: "zDrawer",
 })
 export class ZardDrawerComponent extends ZardDrawerHost {
   private readonly overlay = inject(Overlay);
@@ -105,12 +105,12 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly panel = viewChild.required<TemplateRef<void>>('panel');
+  private readonly panel = viewChild.required<TemplateRef<void>>("panel");
 
   /** Open state, two-way bound. */
   readonly zVisible = model(false);
   /** Edge of the screen the drawer slides from. */
-  readonly zPlacement = input<ZardDrawerPlacement>('bottom');
+  readonly zPlacement = input<ZardDrawerPlacement>("bottom");
   /** Snap sizes: `0–1` is a viewport fraction, above that pixels, strings keep their unit. */
   readonly zSnapPoints = input<readonly ZardDrawerSnapPoint[] | undefined>(undefined);
   /** Active snap point, two-way bound. Defaults to the first one. */
@@ -121,7 +121,7 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   readonly zHandle = input(false, { transform: booleanAttribute });
   /** Renders the mask and blocks the page behind. Set false for a non-modal drawer. */
   readonly zModal = input(true, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** Emitted once the drawer has finished its exit animation and is gone. */
   readonly zAfterClose = output<void>();
@@ -131,7 +131,7 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
   protected readonly duration = DRAWER_DURATION;
 
   private overlayRef: OverlayRef | null = null;
@@ -168,12 +168,12 @@ export class ZardDrawerComponent extends ZardDrawerHost {
     // Re-opening mid-exit: keep the same overlay and reverse the animation.
     if (this.overlayRef) {
       this.clearDisposeTimer();
-      this.state.set('open');
+      this.state.set("open");
       return;
     }
 
     this.previouslyFocused = document.activeElement as HTMLElement | null;
-    this.state.set('open');
+    this.state.set("open");
 
     const modal = this.zModal();
     // A drawer opening on top of another one gets a see-through mask: the drawer
@@ -182,11 +182,13 @@ export class ZardDrawerComponent extends ZardDrawerHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: this.directionality?.value ?? 'ltr',
+        direction: this.directionality?.value ?? "ltr",
         hasBackdrop: modal,
-        backdropClass: nested ? ['bg-transparent'] : DRAWER_BACKDROP_CLASSES,
+        backdropClass: nested ? ["bg-transparent"] : DRAWER_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
-        scrollStrategy: modal ? this.overlay.scrollStrategies.block() : this.overlay.scrollStrategies.noop(),
+        scrollStrategy: modal
+          ? this.overlay.scrollStrategies.block()
+          : this.overlay.scrollStrategies.noop(),
         disposeOnNavigation: true,
       }),
     );
@@ -195,15 +197,15 @@ export class ZardDrawerComponent extends ZardDrawerHost {
     // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
     this.directionality?.change
       .pipe(takeUntil(overlayRef.detachments()))
-      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? "ltr"));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
     overlayRef.backdropClick().subscribe(() => this.requestClose());
     overlayRef
       .keydownEvents()
-      .pipe(filter(event => ESCAPE_KEYS.includes(event.key)))
-      .subscribe(event => {
+      .pipe(filter((event) => ESCAPE_KEYS.includes(event.key)))
+      .subscribe((event) => {
         event.preventDefault();
         this.requestClose();
       });
@@ -216,7 +218,7 @@ export class ZardDrawerComponent extends ZardDrawerHost {
       return;
     }
 
-    this.state.set('closed');
+    this.state.set("closed");
     this.overlayRef.detachBackdrop();
     this.disposeTimer = setTimeout(() => this.dispose(), this.duration);
   }
@@ -252,26 +254,24 @@ export class ZardDrawerComponent extends ZardDrawerHost {
 }
 
 @Component({
-  selector: 'z-drawer-header, [z-drawer-header]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-drawer-header, [z-drawer-header]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'drawer-header',
-    '[class]': 'classes()',
+    "data-slot": "drawer-header",
+    "[class]": "classes()",
   },
-  exportAs: 'zDrawerHeader',
+  exportAs: "zDrawerHeader",
 })
 export class ZardDrawerHeaderComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(drawerHeaderVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-drawer-title, [z-drawer-title]',
+  selector: "z-drawer-title, [z-drawer-title]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let title = zTitle();
@@ -283,19 +283,19 @@ export class ZardDrawerHeaderComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'drawer-title',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "drawer-title",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zDrawerTitle',
+  exportAs: "zDrawerTitle",
 })
 export class ZardDrawerTitleComponent {
   private readonly drawer = inject(ZardDrawerHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextDrawerId('title');
+  protected readonly id = nextDrawerId("title");
   protected readonly classes = computed(() => mergeClasses(drawerTitleVariants(), this.class()));
 
   constructor() {
@@ -312,7 +312,7 @@ export class ZardDrawerTitleComponent {
 }
 
 @Component({
-  selector: 'z-drawer-description, [z-drawer-description]',
+  selector: "z-drawer-description, [z-drawer-description]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let description = zDescription();
@@ -324,20 +324,22 @@ export class ZardDrawerTitleComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'drawer-description',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "drawer-description",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zDrawerDescription',
+  exportAs: "zDrawerDescription",
 })
 export class ZardDrawerDescriptionComponent {
   private readonly drawer = inject(ZardDrawerHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDescription = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextDrawerId('description');
-  protected readonly classes = computed(() => mergeClasses(drawerDescriptionVariants(), this.class()));
+  protected readonly id = nextDrawerId("description");
+  protected readonly classes = computed(() =>
+    mergeClasses(drawerDescriptionVariants(), this.class()),
+  );
 
   constructor() {
     afterNextRender(() => this.drawer?.descriptionId.set(this.id));
@@ -351,32 +353,30 @@ export class ZardDrawerDescriptionComponent {
 }
 
 @Component({
-  selector: 'z-drawer-footer, [z-drawer-footer]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-drawer-footer, [z-drawer-footer]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'drawer-footer',
-    '[class]': 'classes()',
+    "data-slot": "drawer-footer",
+    "[class]": "classes()",
   },
-  exportAs: 'zDrawerFooter',
+  exportAs: "zDrawerFooter",
 })
 export class ZardDrawerFooterComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(drawerFooterVariants(), this.class()));
 }
 
 /** Closes the drawer it is projected into — declarative or service-opened alike. */
 @Directive({
-  selector: '[z-drawer-close]',
+  selector: "[z-drawer-close]",
   host: {
-    'data-slot': 'drawer-close',
-    '(click)': 'onClick()',
+    "data-slot": "drawer-close",
+    "(click)": "onClick()",
   },
-  exportAs: 'zDrawerClose',
+  exportAs: "zDrawerClose",
 })
 export class ZardDrawerCloseDirective {
   private readonly drawer = inject(ZardDrawerHost, { optional: true });

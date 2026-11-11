@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 // From the base package, not the Angular wrapper: the wrapper re-exported these
 // types in v21 and stopped in v22, which is why `embla-carousel` is a declared
 // dependency of the component.
-import type { EmblaPluginType } from 'embla-carousel';
+import type { EmblaPluginType } from "embla-carousel";
 
 /**
  * Service to create and manage Embla Carousel plugins
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardCarouselPluginsService {
   /**
@@ -26,12 +26,12 @@ export class ZardCarouselPluginsService {
     } = {},
   ) {
     try {
-      const AutoplayModule = await import('embla-carousel-autoplay');
+      const AutoplayModule = await import("embla-carousel-autoplay");
       const Autoplay = AutoplayModule.default;
       return Autoplay(options);
     } catch (err) {
-      console.error('Error loading Autoplay plugin:', err);
-      throw new Error('Make sure embla-carousel-autoplay is installed.');
+      console.error("Error loading Autoplay plugin:", err);
+      throw new Error("Make sure embla-carousel-autoplay is installed.", { cause: err });
     }
   }
 
@@ -71,12 +71,12 @@ export class ZardCarouselPluginsService {
     } = {},
   ): Promise<EmblaPluginType> {
     try {
-      const ClassNamesModule = await import('embla-carousel-class-names');
+      const ClassNamesModule = await import("embla-carousel-class-names");
       const ClassNames = ClassNamesModule.default;
       return ClassNames(options);
     } catch (err) {
-      console.error('Error loading ClassNames plugin:', err);
-      throw new Error('Make sure embla-carousel-class-names is installed.');
+      console.error("Error loading ClassNames plugin:", err);
+      throw new Error("Make sure embla-carousel-class-names is installed.", { cause: err });
     }
   }
 
@@ -86,16 +86,16 @@ export class ZardCarouselPluginsService {
   async createWheelGesturesPlugin(
     options: {
       wheelDraggingClass?: string;
-      forceWheelAxis?: 'x' | 'y';
+      forceWheelAxis?: "x" | "y";
       target?: Element;
     } = {},
   ) {
     try {
-      const { WheelGesturesPlugin } = await import('embla-carousel-wheel-gestures');
+      const { WheelGesturesPlugin } = await import("embla-carousel-wheel-gestures");
       return WheelGesturesPlugin(options);
     } catch (err) {
-      console.error('Error loading WheelGestures plugin:', err);
-      throw new Error('Make sure embla-carousel-wheel-gestures is installed.');
+      console.error("Error loading WheelGestures plugin:", err);
+      throw new Error("Make sure embla-carousel-wheel-gestures is installed.", { cause: err });
     }
   }
 }

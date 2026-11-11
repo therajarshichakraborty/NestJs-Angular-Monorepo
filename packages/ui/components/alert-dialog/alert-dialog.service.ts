@@ -1,16 +1,26 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, type ViewContainerRef } from '@angular/core';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
+import {
+  inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  PLATFORM_ID,
+  type ViewContainerRef,
+} from "@angular/core";
 
-import { takeUntil } from 'rxjs';
+import { takeUntil } from "rxjs";
 
-import { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
-import { ALERT_DIALOG_BACKDROP_CLASSES } from './alert-dialog.variants';
+import {
+  ZardAlertDialogContainerComponent,
+  ZardAlertDialogOptions,
+} from "./alert-dialog-container.component";
+import { ZardAlertDialogRef } from "./alert-dialog-ref";
+import { ALERT_DIALOG_BACKDROP_CLASSES } from "./alert-dialog.variants";
 
-export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DATA');
+export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>("Z_ALERT_MODAL_DATA");
 
 /**
  * Type-safe accessor for the data passed to an alert dialog via {@link ZardAlertDialogOptions.zData}.
@@ -25,7 +35,7 @@ export function injectAlertDialogData<T>(): T {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardAlertDialogService {
   private readonly overlay = inject(Overlay);
@@ -47,7 +57,12 @@ export class ZardAlertDialogService {
 
     const overlayRef = this.createOverlay(config);
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
+    const alertDialogRef = new ZardAlertDialogRef<T>(
+      overlayRef,
+      config,
+      alertDialogContainer,
+      this.platformId,
+    );
 
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
@@ -55,31 +70,35 @@ export class ZardAlertDialogService {
   }
 
   confirm<T>(
-    config: Omit<ZardAlertDialogOptions<T>, 'zOkText' | 'zCancelText'> & {
+    config: Omit<ZardAlertDialogOptions<T>, "zOkText" | "zCancelText"> & {
       zOkText?: string;
       zCancelText?: string;
     },
   ): ZardAlertDialogRef<T> {
     return this.create({
       ...config,
-      zOkText: config.zOkText ?? 'Confirm',
-      zCancelText: config.zCancelText ?? 'Cancel',
+      zOkText: config.zOkText ?? "Confirm",
+      zCancelText: config.zCancelText ?? "Cancel",
       zOkDestructive: config.zOkDestructive ?? false,
     });
   }
 
-  warning<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
+  warning<T>(
+    config: Omit<ZardAlertDialogOptions<T>, "zOkText"> & { zOkText?: string },
+  ): ZardAlertDialogRef<T> {
     return this.create({
       ...config,
-      zOkText: config.zOkText ?? 'OK',
+      zOkText: config.zOkText ?? "OK",
       zCancelText: null,
     });
   }
 
-  info<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
+  info<T>(
+    config: Omit<ZardAlertDialogOptions<T>, "zOkText"> & { zOkText?: string },
+  ): ZardAlertDialogRef<T> {
     return this.create({
       ...config,
-      zOkText: config.zOkText ?? 'OK',
+      zOkText: config.zOkText ?? "OK",
       zCancelText: null,
     });
   }
@@ -88,7 +107,7 @@ export class ZardAlertDialogService {
     const directionality = this.directionalityFor(config.zViewContainerRef);
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: directionality?.value ?? 'ltr',
+        direction: directionality?.value ?? "ltr",
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),

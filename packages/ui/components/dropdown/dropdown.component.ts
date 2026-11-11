@@ -1,7 +1,12 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import {
+  Overlay,
+  OverlayModule,
+  OverlayPositionBuilder,
+  type OverlayRef,
+} from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -19,18 +24,18 @@ import {
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardIdDirective } from '@repo/ui/core/directives/id.directive';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardIdDirective } from "@repo/ui/core/directives/id.directive";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { dropdownContentVariants } from './dropdown.variants';
+import { dropdownContentVariants } from "./dropdown.variants";
 
 @Component({
-  selector: 'z-dropdown-menu',
+  selector: "z-dropdown-menu",
   imports: [OverlayModule, ZardIdDirective],
   template: `
     <!-- Dropdown Trigger -->
@@ -58,7 +63,9 @@ import { dropdownContentVariants } from './dropdown.variants';
         data-slot="dropdown-menu-content"
         [attr.data-state]="'open'"
         (click)="onDropdownClick($event)"
-        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="
+          onDropdownKeydown($event)
+        "
         tabindex="-1"
       >
         <ng-content />
@@ -68,12 +75,12 @@ import { dropdownContentVariants } from './dropdown.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'relative inline-block text-left',
-    'data-slot': 'dropdown-menu',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '(document:click)': 'onDocumentClick($event)',
+    class: "relative inline-block text-left",
+    "data-slot": "dropdown-menu",
+    "[attr.data-state]": 'isOpen() ? "open" : "closed"',
+    "(document:click)": "onDocumentClick($event)",
   },
-  exportAs: 'zDropdownMenu',
+  exportAs: "zDropdownMenu",
 })
 export class ZardDropdownMenuComponent implements OnDestroy {
   private elementRef = inject(ElementRef);
@@ -85,16 +92,16 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
   private directionality = inject(Directionality, { optional: true });
 
-  readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
-  readonly triggerContainer = viewChild.required<ElementRef<HTMLElement>>('triggerContainer');
+  readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>("dropdownTemplate");
+  readonly triggerContainer = viewChild.required<ElementRef<HTMLElement>>("triggerContainer");
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+    transform: (value) => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
   readonly openChange = output<boolean>();
@@ -103,12 +110,14 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   readonly focusedIndex = signal<number>(-1);
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
-  protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(dropdownContentVariants(), this.class()),
+  );
 
   constructor() {
     // A `[dir]` switch while the menu is open closes it: it reopens with the new direction.
     this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      this.overlayRef?.setDirection(this.directionality?.value ?? "ltr");
       if (this.isOpen()) {
         this.close();
       }
@@ -120,7 +129,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   }
 
   onDocumentClick(event: Event) {
-    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
       this.close();
     }
   }
@@ -130,24 +139,24 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     const { key } = e as KeyboardEvent;
 
     switch (key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         this.navigateItems(1, items);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         this.navigateItems(-1, items);
         break;
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         this.selectFocusedItem(items);
         break;
-      case 'Escape':
+      case "Escape":
         this.close();
         this.focusTrigger();
         break;
-      case 'Home':
+      case "Home":
         this.focusFirstItem(items);
         break;
-      case 'End':
+      case "End":
         this.focusLastItem(items);
         break;
     }
@@ -156,10 +165,10 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   onDropdownClick(event: Event) {
     const target = event.target as HTMLElement;
     const item = target.closest<HTMLElement>(
-      'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+      "z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]",
     );
 
-    if (!item || item.dataset['disabled'] !== undefined) {
+    if (!item || item.dataset["disabled"] !== undefined) {
       return;
     }
 
@@ -194,7 +203,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
 
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
-    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
+    this.overlayRef.setDirection(this.directionality?.value ?? "ltr");
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
     this.openChange.emit(true);
@@ -224,17 +233,17 @@ export class ZardDropdownMenuComponent implements OnDestroy {
           .flexibleConnectedTo(this.elementRef)
           .withPositions([
             {
-              originX: 'start',
-              originY: 'bottom',
-              overlayX: 'start',
-              overlayY: 'top',
+              originX: "start",
+              originY: "bottom",
+              overlayX: "start",
+              overlayY: "top",
               offsetY: 4,
             },
             {
-              originX: 'start',
-              originY: 'top',
-              overlayX: 'start',
-              overlayY: 'bottom',
+              originX: "start",
+              originY: "top",
+              overlayX: "start",
+              overlayY: "bottom",
               offsetY: -4,
             },
           ])
@@ -242,14 +251,14 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
-          direction: this.directionality?.value ?? 'ltr',
+          direction: this.directionality?.value ?? "ltr",
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           minWidth: 200,
           maxHeight: 400,
         });
       } catch (error) {
-        console.error('Error creating overlay:', error);
+        console.error("Error creating overlay:", error);
       }
     }
   }
@@ -268,9 +277,9 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
       dropdownElement.querySelectorAll<HTMLElement>(
-        'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+        "z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]",
       ),
-    ).filter(item => item.dataset['disabled'] === undefined);
+    ).filter((item) => item.dataset["disabled"] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -323,16 +332,17 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     items.forEach((item, index) => {
       if (index === focusedIndex) {
         item.focus();
-        item.setAttribute('data-highlighted', '');
+        item.setAttribute("data-highlighted", "");
       } else {
-        item.removeAttribute('data-highlighted');
+        item.removeAttribute("data-highlighted");
       }
     });
   }
 
   private focusDropdown() {
     if (this.overlayRef?.hasAttached()) {
-      const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
+      const dropdownElement =
+        this.overlayRef.overlayElement.querySelector<HTMLElement>('[role="menu"]')!;
       if (dropdownElement) {
         dropdownElement.focus();
       }

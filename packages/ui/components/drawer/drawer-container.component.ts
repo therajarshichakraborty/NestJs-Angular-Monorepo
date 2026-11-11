@@ -4,7 +4,7 @@ import {
   type ComponentPortal,
   PortalModule,
   type TemplatePortal,
-} from '@angular/cdk/portal';
+} from "@angular/cdk/portal";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,25 +22,25 @@ import {
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideX } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardButtonComponent } from "@repo/ui/components/button";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { ZardDrawerHost } from './drawer-host';
-import { ZardDrawerPanelComponent } from './drawer-panel.component';
+import { ZardDrawerHost } from "./drawer-host";
+import { ZardDrawerPanelComponent } from "./drawer-panel.component";
 import {
   ZardDrawerDescriptionComponent,
   ZardDrawerFooterComponent,
   ZardDrawerHeaderComponent,
   ZardDrawerTitleComponent,
-} from './drawer.component';
-import { DRAWER_DURATION, type ZardDrawerSnapPoint } from './drawer.utils';
-import type { ZardDrawerPlacement } from './drawer.variants';
+} from "./drawer.component";
+import { DRAWER_DURATION, type ZardDrawerSnapPoint } from "./drawer.utils";
+import type { ZardDrawerPlacement } from "./drawer.variants";
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -70,7 +70,7 @@ export class ZardDrawerOptions<T, U> {
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  zPlacement?: ZardDrawerPlacement = 'bottom';
+  zPlacement?: ZardDrawerPlacement = "bottom";
   zSnapPoint?: ZardDrawerSnapPoint;
   zSnapPoints?: readonly ZardDrawerSnapPoint[];
   zTitle?: string | TemplateRef<void>;
@@ -84,7 +84,7 @@ export class ZardDrawerOptions<T, U> {
  * @internal
  */
 @Component({
-  selector: 'z-drawer-container',
+  selector: "z-drawer-container",
   imports: [
     NgIcon,
     PortalModule,
@@ -133,7 +133,11 @@ export class ZardDrawerOptions<T, U> {
               <z-drawer-title data-testid="z-title" [zTitle]="config.zTitle" />
             }
             @if (config.zDescription) {
-              <p z-drawer-description data-testid="z-description" [zDescription]="config.zDescription"></p>
+              <p
+                z-drawer-description
+                data-testid="z-description"
+                [zDescription]="config.zDescription"
+              ></p>
             }
           </z-drawer-header>
         }
@@ -168,7 +172,7 @@ export class ZardDrawerOptions<T, U> {
                   }
                 }
 
-                {{ config.zOkText ?? 'OK' }}
+                {{ config.zOkText ?? "OK" }}
               </button>
             }
 
@@ -188,7 +192,7 @@ export class ZardDrawerOptions<T, U> {
                   }
                 }
 
-                {{ config.zCancelText ?? 'Cancel' }}
+                {{ config.zCancelText ?? "Cancel" }}
               </button>
             }
           </z-drawer-footer>
@@ -199,12 +203,14 @@ export class ZardDrawerOptions<T, U> {
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardDrawerContainerComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardDrawerHost, useExisting: forwardRef(() => ZardDrawerContainerComponent) }],
+  providers: [
+    { provide: ZardDrawerHost, useExisting: forwardRef(() => ZardDrawerContainerComponent) },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
-  host: { style: 'display: contents' },
-  exportAs: 'zDrawerContainer',
+  host: { style: "display: contents" },
+  exportAs: "zDrawerContainer",
 })
 export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet implements ZardDrawerHost {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -218,15 +224,16 @@ export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet impleme
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
   protected readonly snapPoint = signal<ZardDrawerSnapPoint | undefined>(this.config.zSnapPoint);
 
-  protected readonly placement = computed(() => this.config.zPlacement ?? 'bottom');
+  protected readonly placement = computed(() => this.config.zPlacement ?? "bottom");
   protected readonly dismissible = computed(() => this.config.zDismissible ?? true);
   protected readonly duration = computed(() => this.config.zDuration ?? DRAWER_DURATION);
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === "string");
   /** The scroll region sits between the header and the footer, as shadcn's demos compose it. */
-  protected readonly contentClasses = 'flex min-h-0 w-full flex-1 flex-col gap-4 overflow-y-auto p-4';
+  protected readonly contentClasses =
+    "flex min-h-0 w-full flex-1 flex-col gap-4 overflow-y-auto p-4";
 
   protected isSvgString(icon: string): boolean {
     return /^\s*<svg/i.test(icon);
@@ -241,7 +248,7 @@ export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet impleme
 
   /** Plays the exit animation. The ref disposes the overlay once it finishes. */
   leave(): void {
-    this.state.set('closed');
+    this.state.set("closed");
   }
 
   getNativeElement(): HTMLElement {
@@ -250,14 +257,14 @@ export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet impleme
 
   attachComponentPortal<C>(portal: ComponentPortal<C>): ComponentRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach drawer content after content is already attached');
+      throw new Error("Attempting to attach drawer content after content is already attached");
     }
     return this.portalOutlet().attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach drawer content after content is already attached');
+      throw new Error("Attempting to attach drawer content after content is already attached");
     }
     return this.portalOutlet().attachTemplatePortal(portal);
   }

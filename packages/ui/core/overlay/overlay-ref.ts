@@ -1,19 +1,19 @@
-import type { OverlayRef } from '@angular/cdk/overlay';
-import { isPlatformBrowser } from '@angular/common';
-import { EventEmitter, signal } from '@angular/core';
-import { outputToObservable } from '@angular/core/rxjs-interop';
+import type { OverlayRef } from "@angular/cdk/overlay";
+import { isPlatformBrowser } from "@angular/common";
+import { EventEmitter, signal } from "@angular/core";
+import { outputToObservable } from "@angular/core/rxjs-interop";
 
-import { filter, takeUntil, type Observable } from 'rxjs';
+import { filter, takeUntil, type Observable } from "rxjs";
 
-import { isTopmostOverlay, popOverlay, pushOverlay } from './overlay-stack';
+import { isTopmostOverlay, popOverlay, pushOverlay } from "./overlay-stack";
 
 /** The keys that dismiss the topmost overlay. `Esc` is the legacy IE/Edge spelling. */
-const ESCAPE_KEYS = ['Escape', 'Esc'] as const;
+const ESCAPE_KEYS = ["Escape", "Esc"] as const;
 
 /** Which of the two footer buttons fired. */
 export const enum ZardOverlayTrigger {
-  CANCEL = 'cancel',
-  OK = 'ok',
+  CANCEL = "cancel",
+  OK = "ok",
 }
 
 /**
@@ -22,7 +22,8 @@ export const enum ZardOverlayTrigger {
  * Returning `false` keeps the overlay open — which is how a form stays up when
  * validation fails.
  */
-export type ZardOverlayCallback<T> = ((instance: T) => false | void | object) | EventEmitter<T> | undefined;
+export type ZardOverlayCallback<T> =
+  ((instance: T) => false | void | object) | EventEmitter<T> | undefined;
 
 /** The subset of an overlay's options this base class reads. */
 export interface ZardOverlayRefOptions<T> {
@@ -131,7 +132,9 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
     // make sure stack and focus state are cleaned up.
     detached$.subscribe(() => this.dispose());
 
-    outputs.cancel.pipe(takeUntil(detached$)).subscribe(() => this.trigger(ZardOverlayTrigger.CANCEL));
+    outputs.cancel
+      .pipe(takeUntil(detached$))
+      .subscribe(() => this.trigger(ZardOverlayTrigger.CANCEL));
     outputs.ok.pipe(takeUntil(detached$)).subscribe(() => this.trigger(ZardOverlayTrigger.OK));
 
     if (this.closesOnOutsidePointer()) {
@@ -144,10 +147,10 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
     this.overlayRef
       .keydownEvents()
       .pipe(
-        filter(event => ESCAPE_KEYS.includes(event.key as (typeof ESCAPE_KEYS)[number])),
+        filter((event) => ESCAPE_KEYS.includes(event.key as (typeof ESCAPE_KEYS)[number])),
         takeUntil(detached$),
       )
-      .subscribe(event => {
+      .subscribe((event) => {
         if (isTopmostOverlay(this) && this.closesOnEscape()) {
           event.preventDefault();
           this.close();
@@ -183,7 +186,10 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
       this.playLeaveAnimation();
     }
 
-    this.disposeTimer = setTimeout(() => this.dispose(), this.overlayOptions.zDuration ?? this.defaultDuration);
+    this.disposeTimer = setTimeout(
+      () => this.dispose(),
+      this.overlayOptions.zDuration ?? this.defaultDuration,
+    );
   }
 
   private dispose(): void {
@@ -212,18 +218,19 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
   }
 
   private trigger(action: ZardOverlayTrigger): void {
-    const callback = action === ZardOverlayTrigger.OK ? this.overlayOptions.zOnOk : this.overlayOptions.zOnCancel;
+    const callback =
+      action === ZardOverlayTrigger.OK ? this.overlayOptions.zOnOk : this.overlayOptions.zOnCancel;
 
     if (callback instanceof EventEmitter) {
       callback.emit(this.callbackArgument());
       return;
     }
 
-    if (typeof callback === 'function') {
+    if (typeof callback === "function") {
       const result = callback(this.callbackArgument()) as R | false;
       // `false` keeps the overlay open — a form that failed validation stays up.
       if (result !== false) {
-        this.close(this.forwardsCallbackResult() ? (result as R) : undefined);
+        this.close(this.forwardsCallbackResult() ? result : undefined);
       }
       return;
     }

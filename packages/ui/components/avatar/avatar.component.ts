@@ -6,13 +6,13 @@ import {
   input,
   linkedSignal,
   ViewEncapsulation,
-} from '@angular/core';
-import type { SafeUrl } from '@angular/platform-browser';
+} from "@angular/core";
+import type { SafeUrl } from "@angular/platform-browser";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 import {
   avatarVariants,
@@ -20,7 +20,7 @@ import {
   fallbackVariants,
   imageVariants,
   type ZardAvatarSizeVariants,
-} from './avatar.variants';
+} from "./avatar.variants";
 
 /** Rendered `<img>` size (px) per `zSize`, matching `size-6`/`size-8`/`size-10` in `avatarVariants`. */
 const AVATAR_IMAGE_SIZE: Record<ZardAvatarSizeVariants, number> = {
@@ -30,7 +30,7 @@ const AVATAR_IMAGE_SIZE: Record<ZardAvatarSizeVariants, number> = {
 };
 
 @Component({
-  selector: 'z-avatar, [z-avatar]',
+  selector: "z-avatar, [z-avatar]",
   imports: [NgIcon],
   template: `
     @if (zFallback()) {
@@ -65,21 +65,21 @@ const AVATAR_IMAGE_SIZE: Record<ZardAvatarSizeVariants, number> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'avatarClasses()',
-    '[attr.data-slot]': '"avatar"',
-    '[attr.data-size]': 'zSize()',
+    "[class]": "avatarClasses()",
+    "[attr.data-slot]": '"avatar"',
+    "[attr.data-size]": "zSize()",
   },
-  exportAs: 'zAvatar',
+  exportAs: "zAvatar",
 })
 export class ZardAvatarComponent {
-  readonly class = input<ClassValue>('');
-  readonly zAlt = input<string>('');
-  readonly zBadgeClass = input<ClassValue>('');
-  readonly zBadgeIcon = input<string>('');
-  readonly zFallback = input<string>('');
+  readonly class = input<ClassValue>("");
+  readonly zAlt = input<string>("");
+  readonly zBadgeClass = input<ClassValue>("");
+  readonly zBadgeIcon = input<string>("");
+  readonly zFallback = input<string>("");
   readonly zPriority = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardAvatarSizeVariants>('default');
-  readonly zSrc = input<string | SafeUrl>('');
+  readonly zSize = input<ZardAvatarSizeVariants>("default");
+  readonly zSrc = input<string | SafeUrl>("");
   readonly zShowBadge = input(false, { transform: booleanAttribute });
 
   // Keyed on zSrc so a source change resets synchronously — no stale frame between sources.
@@ -99,7 +99,9 @@ export class ZardAvatarComponent {
 
   protected readonly fallbackClasses = computed(() => fallbackVariants());
 
-  protected readonly badgeClasses = computed(() => mergeClasses(avatarBadgeVariants, this.zBadgeClass()));
+  protected readonly badgeClasses = computed(() =>
+    mergeClasses(avatarBadgeVariants, this.zBadgeClass()),
+  );
 
   protected readonly imgSize = computed(() => AVATAR_IMAGE_SIZE[this.zSize()]);
 
@@ -110,7 +112,7 @@ export class ZardAvatarComponent {
   protected readonly imgSrc = computed(() => this.zSrc() as string);
 
   protected readonly imgClasses = computed(() =>
-    mergeClasses(imageVariants({ zSize: this.zSize() }), this.imageLoaded() && 'opacity-100'),
+    mergeClasses(imageVariants({ zSize: this.zSize() }), this.imageLoaded() && "opacity-100"),
   );
 
   protected onImageLoad(): void {

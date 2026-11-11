@@ -1,4 +1,4 @@
-import { NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,13 +6,13 @@ import {
   input,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core/directives/string-template-outlet.directive';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core/directives/string-template-outlet.directive";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 import {
   emptyActionsVariants,
@@ -22,10 +22,10 @@ import {
   emptyImageVariants,
   emptyTitleVariants,
   emptyVariants,
-} from './empty.variants';
+} from "./empty.variants";
 
 @Component({
-  selector: 'z-empty',
+  selector: "z-empty",
   imports: [NgOptimizedImage, NgIcon, ZardStringTemplateOutletDirective],
   template: `
     @let image = zImage();
@@ -73,10 +73,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'empty',
-    '[class]': 'classes()',
+    "data-slot": "empty",
+    "[class]": "classes()",
   },
-  exportAs: 'zEmpty',
+  exportAs: "zEmpty",
 })
 export class ZardEmptyComponent {
   readonly zActions = input<TemplateRef<void>[]>([]);
@@ -84,7 +84,7 @@ export class ZardEmptyComponent {
   readonly zImage = input<string | TemplateRef<void>>();
   readonly zTitle = input<string | TemplateRef<void>>();
   readonly zDescription = input<string | TemplateRef<void>>();
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(emptyVariants(), this.class()));
   protected readonly headerClasses = computed(() => emptyHeaderVariants());

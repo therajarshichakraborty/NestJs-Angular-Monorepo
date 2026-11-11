@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from "@angular/core";
 
 import {
   DEFAULT_CALENDAR_I18N,
@@ -8,9 +8,9 @@ import {
   getPresetLocale,
   type ZardDayOfWeek,
   ZardI18nService,
-} from '@repo/ui/core/i18n';
+} from "@repo/ui/core/i18n";
 
-import { makeSafeDate } from './calendar.utils';
+import { makeSafeDate } from "./calendar.utils";
 
 export function capitalize(str: string, locale?: string): string {
   if (!str) {
@@ -20,17 +20,23 @@ export function capitalize(str: string, locale?: string): string {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardCalendarI18nService {
   private readonly i18n = inject(ZardI18nService);
 
-  private readonly globalCalendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
+  private readonly globalCalendarData = this.i18n.getLocaleData<ZardCalendarI18n>(
+    "calendar",
+    DEFAULT_CALENDAR_I18N,
+  );
 
   /** Per-calendar locale (`zLocale`). When set it wins over the application-wide ZardI18nService locale. */
   readonly localeOverride = signal<string | null>(null);
 
-  readonly locale = computed(() => this.localeOverride() || this.i18n.locale());
+  readonly locale = computed(() => {
+    const override = this.localeOverride();
+    return override !== null && override !== "" ? override : this.i18n.locale();
+  });
 
   private readonly calendarData = computed<ZardCalendarI18n>(() => {
     const override = this.localeOverride();
@@ -53,11 +59,11 @@ export class ZardCalendarI18nService {
     };
   });
 
-  readonly shortMonths = computed(() => this.getMonthNames('short'));
-  readonly longMonths = computed(() => this.getMonthNames('long'));
+  readonly shortMonths = computed(() => this.getMonthNames("short"));
+  readonly longMonths = computed(() => this.getMonthNames("long"));
   readonly weekdays = computed(() => this.getWeekdayNames());
 
-  getMonthNames(format: 'short' | 'long' = 'short', locale: string = this.locale()): string[] {
+  getMonthNames(format: "short" | "long" = "short", locale: string = this.locale()): string[] {
     const formatter = new Intl.DateTimeFormat(locale, { month: format });
     return Array.from({ length: 12 }, (_, i) => {
       const date = makeSafeDate(2024, i, 1);
@@ -66,7 +72,7 @@ export class ZardCalendarI18nService {
   }
 
   getWeekdayNames(
-    format: 'short' | 'narrow' | 'long' = 'short',
+    format: "short" | "narrow" | "long" = "short",
     weekStartsOn: ZardDayOfWeek = this.weekStartsOn(),
     locale: string = this.locale(),
   ): string[] {
@@ -74,7 +80,7 @@ export class ZardCalendarI18nService {
     return Array.from({ length: 7 }, (_, i) => {
       const dayIndex = (weekStartsOn + i) % 7;
       const date = makeSafeDate(2024, 0, 7 + dayIndex);
-      return capitalize(formatter.format(date).replace(/\.$/, ''), locale);
+      return capitalize(formatter.format(date).replace(/\.$/, ""), locale);
     });
   }
 

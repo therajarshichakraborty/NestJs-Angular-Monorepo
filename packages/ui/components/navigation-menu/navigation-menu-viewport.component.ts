@@ -1,6 +1,6 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { CdkConnectedOverlay, type ConnectedPosition, Overlay } from '@angular/cdk/overlay';
-import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { CdkConnectedOverlay, type ConnectedPosition, Overlay } from "@angular/cdk/overlay";
+import { isPlatformBrowser, NgTemplateOutlet } from "@angular/common";
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -17,26 +17,26 @@ import {
   untracked,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
 import {
   navigationMenuViewportVariants,
   navigationMenuViewportWrapperVariants,
   type ZardNavigationMenuAlign,
-} from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardNavigationMenuService } from './navigation-menu.service';
+import { ZardNavigationMenuService } from "./navigation-menu.service";
 
-const AUTO_SIZE = { width: 'auto', height: 'auto' } as const;
+const AUTO_SIZE = { width: "auto", height: "auto" } as const;
 
 /** Breathing room kept between the popup and the window edges when the bar sits near one. */
 const WINDOW_MARGIN = 8;
 
 /** Anchored to the bar itself; the offset to the active trigger is applied inside the pane. */
 const OVERLAY_POSITIONS: ConnectedPosition[] = [
-  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
-  { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+  { originX: "start", originY: "bottom", overlayX: "start", overlayY: "top" },
+  { originX: "start", originY: "top", overlayX: "start", overlayY: "bottom" },
 ];
 
 /**
@@ -48,7 +48,7 @@ const OVERLAY_POSITIONS: ConnectedPosition[] = [
  * inside containers that clip (`overflow: hidden`), and an inline popup would be cut off by them.
  */
 @Component({
-  selector: 'z-navigation-menu-viewport',
+  selector: "z-navigation-menu-viewport",
   imports: [CdkConnectedOverlay, NgTemplateOutlet],
   template: `
     <ng-template
@@ -84,8 +84,8 @@ const OVERLAY_POSITIONS: ConnectedPosition[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // The popup lives in the overlay, so the host itself must not take part in the bar's layout.
-  host: { class: 'contents' },
-  exportAs: 'zNavigationMenuViewport',
+  host: { class: "contents" },
+  exportAs: "zNavigationMenuViewport",
 })
 export class ZardNavigationMenuViewportComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -97,7 +97,7 @@ export class ZardNavigationMenuViewportComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly service = inject(ZardNavigationMenuService);
 
-  private readonly content = viewChild<ElementRef<HTMLElement>>('content');
+  private readonly content = viewChild<ElementRef<HTMLElement>>("content");
   private readonly measured = signal<{ width: string; height: string }>({ ...AUTO_SIZE });
   private readonly offsetX = signal(0);
   /** Opening from closed would otherwise animate out of the previous item's size and position. */
@@ -107,7 +107,7 @@ export class ZardNavigationMenuViewportComponent {
   private observedContent: HTMLElement | null = null;
   private wasOpen = false;
 
-  readonly align = signal<ZardNavigationMenuAlign>('start');
+  readonly align = signal<ZardNavigationMenuAlign>("start");
 
   protected readonly positions = OVERLAY_POSITIONS;
   protected readonly scrollStrategy = this.overlay.scrollStrategies.reposition();
@@ -117,14 +117,16 @@ export class ZardNavigationMenuViewportComponent {
   protected readonly isOpen = computed(() => this.template() !== null);
   protected readonly offset = computed(() => `${this.offsetX()}px 0`);
   /** Falls back to the host only before the root has registered itself, when nothing is open yet. */
-  protected readonly origin = computed(() => this.service.rootElement() ?? this.elementRef.nativeElement);
+  protected readonly origin = computed(
+    () => this.service.rootElement() ?? this.elementRef.nativeElement,
+  );
 
   protected readonly wrapperClasses = computed(() =>
-    mergeClasses(navigationMenuViewportWrapperVariants(), this.instant() && 'transition-none'),
+    mergeClasses(navigationMenuViewportWrapperVariants(), this.instant() && "transition-none"),
   );
 
   protected readonly viewportClasses = computed(() =>
-    mergeClasses(navigationMenuViewportVariants(), this.instant() && 'transition-none'),
+    mergeClasses(navigationMenuViewportVariants(), this.instant() && "transition-none"),
   );
 
   constructor() {
@@ -166,7 +168,7 @@ export class ZardNavigationMenuViewportComponent {
   }
 
   protected onOverlayKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Escape') {
+    if (event.key !== "Escape") {
       return;
     }
 
@@ -226,13 +228,13 @@ export class ZardNavigationMenuViewportComponent {
     const bar = root.getBoundingClientRect();
 
     // `start`/`end` are inline edges: in RTL the popup's start edge is its right edge.
-    const rtl = (this.directionality?.value ?? 'ltr') === 'rtl';
+    const rtl = (this.directionality?.value ?? "ltr") === "rtl";
     let left: number;
     switch (this.align()) {
-      case 'center':
+      case "center":
         left = trigger.left + trigger.width / 2 - width / 2;
         break;
-      case 'end':
+      case "end":
         left = rtl ? trigger.left : trigger.right - width;
         break;
       default:
@@ -250,7 +252,7 @@ export class ZardNavigationMenuViewportComponent {
 
   /** Keeps the morph honest when the rendered content resizes after being mounted. */
   private observe(element: HTMLElement): void {
-    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === 'undefined') {
+    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === "undefined") {
       return;
     }
     if (this.observedContent === element) {
@@ -278,8 +280,8 @@ export class ZardNavigationMenuViewportComponent {
     }
 
     const onResize = () => this.measure();
-    view.addEventListener('resize', onResize);
-    this.destroyRef.onDestroy(() => view.removeEventListener('resize', onResize));
+    view.addEventListener("resize", onResize);
+    this.destroyRef.onDestroy(() => view.removeEventListener("resize", onResize));
   }
 
   private disconnectObserver(): void {

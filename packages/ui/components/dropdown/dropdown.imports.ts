@@ -1,5 +1,5 @@
-import { ZardDropdownMenuItemComponent } from '@repo/ui/components/dropdown/dropdown-item.component';
-import { ZardDropdownMenuContentComponent } from '@repo/ui/components/dropdown/dropdown-menu-content.component';
+import { ZardDropdownMenuItemComponent } from "@repo/ui/components/dropdown/dropdown-item.component";
+import { ZardDropdownMenuContentComponent } from "@repo/ui/components/dropdown/dropdown-menu-content.component";
 import {
   ZardDropdownMenuCheckboxItemComponent,
   ZardDropdownMenuGroupComponent,
@@ -8,13 +8,13 @@ import {
   ZardDropdownMenuRadioItemComponent,
   ZardDropdownMenuSeparatorComponent,
   ZardDropdownMenuShortcutComponent,
-} from '@repo/ui/components/dropdown/dropdown-primitives.component';
+} from "@repo/ui/components/dropdown/dropdown-primitives.component";
 import {
   ZardDropdownMenuSubContentComponent,
   ZardDropdownMenuSubTriggerComponent,
-} from '@repo/ui/components/dropdown/dropdown-submenu.component';
-import { ZardDropdownDirective } from '@repo/ui/components/dropdown/dropdown-trigger.directive';
-import { ZardDropdownMenuComponent } from '@repo/ui/components/dropdown/dropdown.component';
+} from "@repo/ui/components/dropdown/dropdown-submenu.component";
+import { ZardDropdownDirective } from "@repo/ui/components/dropdown/dropdown-trigger.directive";
+import { ZardDropdownMenuComponent } from "@repo/ui/components/dropdown/dropdown.component";
 
 export const ZardDropdownImports = [
   ZardDropdownMenuComponent,

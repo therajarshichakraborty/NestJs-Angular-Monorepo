@@ -6,19 +6,19 @@
 
 /** Every row of a menu surface that can take focus, in DOM order. */
 export const ZARD_MENU_ITEM_SELECTOR = [
-  'z-dropdown-menu-item',
-  '[z-dropdown-menu-item]',
-  'z-dropdown-menu-checkbox-item',
-  '[z-dropdown-menu-checkbox-item]',
-  'z-dropdown-menu-radio-item',
-  '[z-dropdown-menu-radio-item]',
-  'z-dropdown-menu-sub-trigger',
-  '[z-dropdown-menu-sub-trigger]',
-].join(', ');
+  "z-dropdown-menu-item",
+  "[z-dropdown-menu-item]",
+  "z-dropdown-menu-checkbox-item",
+  "[z-dropdown-menu-checkbox-item]",
+  "z-dropdown-menu-radio-item",
+  "[z-dropdown-menu-radio-item]",
+  "z-dropdown-menu-sub-trigger",
+  "[z-dropdown-menu-sub-trigger]",
+].join(", ");
 
 export function getMenuItems(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(ZARD_MENU_ITEM_SELECTOR)).filter(
-    item => item.dataset['disabled'] === undefined,
+    (item) => item.dataset["disabled"] === undefined,
   );
 }
 
@@ -28,9 +28,9 @@ export function highlightMenuItem(items: HTMLElement[], index: number): void {
     const item = items[i];
     if (i === index) {
       item.focus();
-      item.dataset['highlighted'] = '';
+      item.dataset["highlighted"] = "";
     } else {
-      delete item.dataset['highlighted'];
+      delete item.dataset["highlighted"];
     }
   }
 }
@@ -73,5 +73,7 @@ export function findMenuItemByChar(items: HTMLElement[], char: string, from: num
 
 /** True for a key that should drive typeahead rather than an action. */
 export function isTypeaheadKey(event: KeyboardEvent): boolean {
-  return event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey;
+  return (
+    event.key.length === 1 && event.key !== " " && !event.ctrlKey && !event.metaKey && !event.altKey
+  );
 }

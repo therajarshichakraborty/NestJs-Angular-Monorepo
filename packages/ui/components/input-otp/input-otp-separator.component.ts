@@ -1,14 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardInputOtpComponent } from './input-otp.component';
-import { inputOtpSeparatorVariants } from './input-otp.variants';
+import { ZardInputOtpComponent } from "./input-otp.component";
+import { inputOtpSeparatorVariants } from "./input-otp.variants";
 
 @Component({
-  selector: 'z-input-otp-separator, [z-input-otp-separator]',
+  selector: "z-input-otp-separator, [z-input-otp-separator]",
   template: `
     <div [class]="classes()">
       <svg
@@ -27,18 +34,21 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'aria-hidden': 'true',
-    '[attr.data-slot]': '"input-otp-separator"',
-    '[attr.data-input-otp-separator]': '""',
+    "aria-hidden": "true",
+    "[attr.data-slot]": '"input-otp-separator"',
+    "[attr.data-input-otp-separator]": '""',
   },
-  exportAs: 'zInputOtpSeparator',
+  exportAs: "zInputOtpSeparator",
 })
 export class ZardInputOtpSeparatorComponent {
   private readonly inputOtp = inject(ZardInputOtpComponent, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly classes = computed(() =>
-    mergeClasses(inputOtpSeparatorVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+    mergeClasses(
+      inputOtpSeparatorVariants({ zSize: this.inputOtp?.zSize() ?? "default" }),
+      this.class(),
+    ),
   );
 }

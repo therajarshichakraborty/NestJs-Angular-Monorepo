@@ -2,7 +2,7 @@ import {
   ZardCollapsibleDirective,
   ZardCollapsibleContentComponent,
   ZardCollapsibleTriggerDirective,
-} from '@repo/ui/components/collapsible/collapsible.component';
+} from "@repo/ui/components/collapsible/collapsible.component";
 
 export const ZardCollapsibleImports = [
   ZardCollapsibleDirective,

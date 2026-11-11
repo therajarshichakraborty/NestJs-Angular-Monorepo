@@ -1,9 +1,9 @@
-import type { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from "@angular/cdk/overlay";
 
-import { ZardOverlayRefBase } from '@repo/ui/core';
+import { ZardOverlayRefBase } from "@repo/ui/core";
 
-import type { ZardDrawerContainerComponent, ZardDrawerOptions } from './drawer-container.component';
-import { DRAWER_DURATION } from './drawer.utils';
+import type { ZardDrawerContainerComponent, ZardDrawerOptions } from "./drawer-container.component";
+import { DRAWER_DURATION } from "./drawer.utils";
 
 /**
  * Reference to a drawer opened via {@link ZardDrawerService}.
@@ -37,7 +37,11 @@ export class ZardDrawerRef<T = unknown, R = unknown, U = unknown> extends ZardOv
    * the drawer deliberately left usable — it must not dismiss.
    */
   protected override closesOnOutsidePointer(): boolean {
-    return (this.config.zMask ?? true) && (this.config.zMaskClosable ?? true) && (this.config.zDismissible ?? true);
+    return (
+      (this.config.zMask ?? true) &&
+      (this.config.zMaskClosable ?? true) &&
+      (this.config.zDismissible ?? true)
+    );
   }
 
   protected override closesOnEscape(): boolean {

@@ -7,7 +7,7 @@ import {
   ZardButtonGroupComponent,
   ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
-} from '@repo/ui/components/button-group/button-group.component';
+} from "@repo/ui/components/button-group/button-group.component";
 
 /** Every part of the button-group component, for a template that uses more than one. */
 export const ZardButtonGroupImports = [

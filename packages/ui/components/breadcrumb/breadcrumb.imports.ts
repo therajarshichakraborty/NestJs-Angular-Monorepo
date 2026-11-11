@@ -5,7 +5,7 @@ import {
   ZardBreadcrumbLinkComponent,
   ZardBreadcrumbPageComponent,
   ZardBreadcrumbSeparatorComponent,
-} from '@repo/ui/components/breadcrumb/breadcrumb.component';
+} from "@repo/ui/components/breadcrumb/breadcrumb.component";
 
 export const ZardBreadcrumbImports = [
   ZardBreadcrumbComponent,

@@ -9,22 +9,22 @@ import {
   input,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, type IconName } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon, type IconName } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import type { ZardCommandOptionGroupComponent } from '@repo/ui/components/command/command-option-group.component';
-import { ZardCommand } from '@repo/ui/components/command/command.tokens';
+import type { ZardCommandOptionGroupComponent } from "@repo/ui/components/command/command-option-group.component";
+import { ZardCommand } from "@repo/ui/components/command/command.tokens";
 import {
   commandItemVariants,
   commandShortcutVariants,
   type ZardCommandItemVariants,
-} from '@repo/ui/components/command/command.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/command/command.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-command-option',
+  selector: "z-command-option",
   imports: [NgIcon],
   template: `
     @if (isOptionVisible()) {
@@ -54,7 +54,7 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zCommandOption',
+  exportAs: "zCommandOption",
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
@@ -62,12 +62,12 @@ export class ZardCommandOptionComponent {
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
-  readonly zCommand = input<string>('');
+  readonly zCommand = input<string>("");
   readonly zIcon = input<IconName>();
-  readonly zShortcut = input<string>('');
+  readonly zShortcut = input<string>("");
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly variant = input<ZardCommandItemVariants>('default');
-  readonly class = input<ClassValue>('');
+  readonly variant = input<ZardCommandItemVariants>("default");
+  readonly class = input<ClassValue>("");
   readonly parentCommand = input<ZardCommand | null>(null);
   readonly commandGroup = input<ZardCommandOptionGroupComponent | null>(null);
 
@@ -81,7 +81,7 @@ export class ZardCommandOptionComponent {
 
   private get commandComponent() {
     let parent = this.parentCommand();
-    parent ||= this.parentCommandComponent;
+    parent ??= this.parentCommandComponent;
     return parent;
   }
 
@@ -99,7 +99,7 @@ export class ZardCommandOptionComponent {
   });
 
   constructor() {
-    effect(onCleanup => {
+    effect((onCleanup) => {
       const cmd = this.parentCommand();
       const grp = this.commandGroup();
 
@@ -146,6 +146,6 @@ export class ZardCommandOptionComponent {
    * input while navigating, so typing keeps filtering the list.
    */
   scrollIntoView() {
-    this.elementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    this.elementRef.nativeElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 }

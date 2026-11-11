@@ -11,52 +11,52 @@ import {
   Injector,
   input,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown, lucideX } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronDown, lucideX } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
 import {
   comboboxClearVariants,
   comboboxInputGroupVariants,
   comboboxInputHostVariants,
   comboboxTriggerVariants,
-} from '@repo/ui/components/combobox/combobox.variants';
-import { ZardInputComponent } from '@repo/ui/components/input/input.component';
+} from "@repo/ui/components/combobox/combobox.variants";
+import { ZardInputComponent } from "@repo/ui/components/input/input.component";
 import {
   ZardInputGroupAddonComponent,
   ZardInputGroupButtonDirective,
   ZardInputGroupComponent,
-} from '@repo/ui/components/input-group';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/input-group";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardComboboxContentComponent } from './combobox-content.component';
-import { ZardComboboxRoot } from './combobox.types';
+import { ZardComboboxContentComponent } from "./combobox-content.component";
+import { ZardComboboxRoot } from "./combobox.types";
 
 @Directive({
-  selector: 'button[z-combobox-trigger]',
+  selector: "button[z-combobox-trigger]",
   host: {
-    type: 'button',
-    'aria-haspopup': 'listbox',
+    type: "button",
+    "aria-haspopup": "listbox",
     // Bound instead of static so it wins over the `data-slot` of a co-located `z-input-group-button`.
-    '[attr.data-slot]': '"combobox-trigger"',
-    '[attr.aria-controls]': 'root.listboxId',
-    '[attr.aria-expanded]': 'root.open()',
-    '[attr.aria-label]': 'root.ariaLabel() || "Toggle options"',
-    '[attr.tabindex]': 'standalone ? "0" : "-1"',
-    '[class]': 'classes()',
-    '(click)': 'toggle()',
-    '(mousedown)': 'onMousedown($event)',
+    "[attr.data-slot]": '"combobox-trigger"',
+    "[attr.aria-controls]": "root.listboxId",
+    "[attr.aria-expanded]": "root.open()",
+    "[attr.aria-label]": 'root.ariaLabel() || "Toggle options"',
+    "[attr.tabindex]": 'standalone ? "0" : "-1"',
+    "[class]": "classes()",
+    "(click)": "toggle()",
+    "(mousedown)": "onMousedown($event)",
   },
-  exportAs: 'zComboboxTrigger',
+  exportAs: "zComboboxTrigger",
 })
 export class ZardComboboxTriggerDirective {
   protected readonly root = inject(ZardComboboxRoot);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly inputGroup = inject(ZardInputGroupComponent, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** A trigger rendered outside a `z-input-group` opens the popup on its own and anchors it. */
   protected readonly standalone = this.inputGroup === null;
@@ -67,7 +67,7 @@ export class ZardComboboxTriggerDirective {
 
   constructor() {
     if (this.standalone) {
-      this.root.registerAnchor(this.elementRef.nativeElement, 'trigger');
+      this.root.registerAnchor(this.elementRef.nativeElement, "trigger");
     }
   }
 
@@ -92,24 +92,24 @@ export class ZardComboboxTriggerDirective {
 }
 
 @Directive({
-  selector: 'button[z-combobox-clear]',
+  selector: "button[z-combobox-clear]",
   host: {
-    type: 'button',
-    tabindex: '-1',
+    type: "button",
+    tabindex: "-1",
     // Bound instead of static so it wins over the `data-slot` of a co-located `z-input-group-button`.
     // The `group-has-data-[slot=combobox-clear]/input-group:hidden` rule on the trigger depends on it.
-    '[attr.data-slot]': '"combobox-clear"',
-    '[attr.aria-label]': '"Clear selection"',
-    '[class]': 'classes()',
-    '(click)': 'clear()',
-    '(mousedown)': 'onMousedown($event)',
+    "[attr.data-slot]": '"combobox-clear"',
+    "[attr.aria-label]": '"Clear selection"',
+    "[class]": "classes()",
+    "(click)": "clear()",
+    "(mousedown)": "onMousedown($event)",
   },
-  exportAs: 'zComboboxClear',
+  exportAs: "zComboboxClear",
 })
 export class ZardComboboxClearDirective {
   protected readonly root = inject(ZardComboboxRoot);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(comboboxClearVariants(), this.class()));
 
@@ -128,7 +128,7 @@ export class ZardComboboxClearDirective {
 }
 
 @Component({
-  selector: 'z-combobox-input',
+  selector: "z-combobox-input",
   imports: [
     NgIcon,
     ZardComboboxClearDirective,
@@ -172,7 +172,10 @@ export class ZardComboboxClearDirective {
             zVariant="ghost"
             [disabled]="disabled()"
           >
-            <ng-icon name="lucideChevronDown" class="text-muted-foreground pointer-events-none size-4" />
+            <ng-icon
+              name="lucideChevronDown"
+              class="text-muted-foreground pointer-events-none size-4"
+            />
           </button>
         }
         @if (showClear()) {
@@ -196,10 +199,10 @@ export class ZardComboboxClearDirective {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronDown, lucideX })],
   host: {
-    'data-slot': 'combobox-input',
-    '[class]': 'classes()',
+    "data-slot": "combobox-input",
+    "[class]": "classes()",
   },
-  exportAs: 'zComboboxInput',
+  exportAs: "zComboboxInput",
 })
 export class ZardComboboxInputComponent {
   protected readonly root = inject(ZardComboboxRoot);
@@ -209,8 +212,8 @@ export class ZardComboboxInputComponent {
   /** Resolved when the input is projected inside the popup (`z-combobox-content`), i.e. popup mode. */
   private readonly content = inject(ZardComboboxContentComponent, { optional: true });
 
-  readonly class = input<ClassValue>('');
-  readonly placeholder = input<string>('');
+  readonly class = input<ClassValue>("");
+  readonly placeholder = input<string>("");
   readonly zShowTrigger = input(true, { transform: booleanAttribute });
   readonly zShowClear = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -227,10 +230,14 @@ export class ZardComboboxInputComponent {
     if (own) {
       return own;
     }
-    return this.root.open() && this.root.searchable() ? this.root.searchPlaceholder() : this.root.placeholder();
+    return this.root.open() && this.root.searchable()
+      ? this.root.searchPlaceholder()
+      : this.root.placeholder();
   });
 
-  protected readonly classes = computed(() => mergeClasses(comboboxInputHostVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(comboboxInputHostVariants(), this.class()),
+  );
   protected readonly inputGroupClasses = computed(() => mergeClasses(comboboxInputGroupVariants()));
 
   constructor() {
@@ -246,7 +253,7 @@ export class ZardComboboxInputComponent {
   private syncWithRoot(open: boolean): void {
     const host: HTMLElement = this.elementRef.nativeElement;
     const group = host.querySelector<HTMLElement>('[data-slot="input-group"]');
-    const element = host.querySelector<HTMLInputElement>('input');
+    const element = host.querySelector<HTMLInputElement>("input");
 
     // A popup that is closed keeps its input out of the document, and a detached input must not be
     // registered as the active one.
@@ -257,7 +264,7 @@ export class ZardComboboxInputComponent {
     // Inside the popup the input group must not become the anchor, otherwise the popup would
     // anchor itself to its own content instead of the standalone trigger.
     if (group && !this.content) {
-      this.root.registerAnchor(group, 'input');
+      this.root.registerAnchor(group, "input");
     }
 
     this.root.registerInput(element);

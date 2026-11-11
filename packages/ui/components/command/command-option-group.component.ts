@@ -7,14 +7,14 @@ import {
   input,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardCommandOptionComponent } from '@repo/ui/components/command/command-option.component';
-import { ZardCommandComponent } from '@repo/ui/components/command/command.component';
-import { commandGroupVariants } from '@repo/ui/components/command/command.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardCommandOptionComponent } from "@repo/ui/components/command/command-option.component";
+import { ZardCommandComponent } from "@repo/ui/components/command/command.component";
+import { commandGroupVariants } from "@repo/ui/components/command/command.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 export abstract class ZardCommandOptionGroup {
   abstract registerOption(option: ZardCommandOptionComponent): void;
@@ -22,7 +22,7 @@ export abstract class ZardCommandOptionGroup {
 }
 
 @Component({
-  selector: 'z-command-option-group',
+  selector: "z-command-option-group",
   template: `
     @if (isGroupVisible()) {
       <div [class]="classes()" role="group" data-slot="command-group">
@@ -39,19 +39,23 @@ export abstract class ZardCommandOptionGroup {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zCommandOptionGroup',
+  exportAs: "zCommandOptionGroup",
 })
 export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, {
+    descendants: true,
+  });
   private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
   readonly zLabel = input.required<string>();
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(commandGroupVariants(), this.class()));
   private readonly optionComponents = computed(() =>
-    this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
+    this.optionComponentsAsChildren().length
+      ? this.optionComponentsAsChildren()
+      : this.registeredOptionComponents(),
   );
 
   protected readonly isGroupVisible = computed(() => {
@@ -67,14 +71,14 @@ export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
 
     const filteredOptions = this.commandComponent.filteredOptions();
     // Check if any option in this group is in the filtered list
-    return this.optionComponents().some(option => filteredOptions.includes(option));
+    return this.optionComponents().some((option) => filteredOptions.includes(option));
   });
 
   registerOption(option: ZardCommandOptionComponent) {
-    this.registeredOptionComponents.update(current => [...current, option]);
+    this.registeredOptionComponents.update((current) => [...current, option]);
   }
 
   unregisterOption(option: ZardCommandOptionComponent) {
-    this.registeredOptionComponents.update(current => current.filter(o => o !== option));
+    this.registeredOptionComponents.update((current) => current.filter((o) => o !== option));
   }
 }

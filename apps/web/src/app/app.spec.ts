@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
 
-import { App } from './app';
+import { App } from "./app";
 
-describe('App', () => {
+describe("App", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
@@ -11,14 +11,14 @@ describe('App', () => {
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     const fixture = TestBed.createComponent(App);
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render a router outlet', () => {
+  it("should render a router outlet", () => {
     const fixture = TestBed.createComponent(App);
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('router-outlet')).not.toBeNull();
+    expect(compiled.querySelector("router-outlet")).not.toBeNull();
   });
 });

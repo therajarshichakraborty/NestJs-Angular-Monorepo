@@ -1,20 +1,24 @@
-import { DEFAULT_CALENDAR_LABELS, DEFAULT_LOCALE, type ZardCalendarLabels } from '@repo/ui/core/i18n';
+import {
+  DEFAULT_CALENDAR_LABELS,
+  DEFAULT_LOCALE,
+  type ZardCalendarLabels,
+} from "@repo/ui/core/i18n";
 
-import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
+import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from "./calendar.types";
 
 export const calendarMonths = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ] as const;
 
 /**
@@ -23,21 +27,21 @@ export const calendarMonths = [
  * `toLocaleString` would follow the browser locale and mix languages inside the header.
  */
 export const calendarMonthsLong = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ] as const;
 
-export const calendarWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
+export const calendarWeekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
 
 /**
  * Checks if two dates represent the same day (ignoring time)
@@ -66,7 +70,7 @@ export function isDateDisabled(
     return true;
   }
 
-  return !!disabledDates?.some(disabledDate => isSameDay(date, disabledDate));
+  return !!disabledDates?.some((disabledDate) => isSameDay(date, disabledDate));
 }
 
 function startOfDay(date: Date): Date {
@@ -79,7 +83,17 @@ function startOfDay(date: Date): Date {
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates, weekStartsOn = 0 } = config;
+  const {
+    year,
+    month,
+    mode,
+    selectedDates,
+    minDate,
+    maxDate,
+    disabled,
+    disabledDates,
+    weekStartsOn = 0,
+  } = config;
 
   const today = new Date();
 
@@ -105,7 +119,7 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
   // For range mode, determine range start and end
   let rangeStart: Date | null = null;
   let rangeEnd: Date | null = null;
-  if (mode === 'range' && selectedDates.length > 0) {
+  if (mode === "range" && selectedDates.length > 0) {
     rangeStart = selectedDates[0];
     rangeEnd = selectedDates.length > 1 ? selectedDates[1] : null;
   }
@@ -122,11 +136,11 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
     let isRangeEnd = false;
     let isInRange = false;
 
-    if (mode === 'single') {
+    if (mode === "single") {
       isSelected = selectedDates.length > 0 && isSameDay(date, selectedDates[0]);
-    } else if (mode === 'multiple') {
-      isSelected = selectedDates.some(d => isSameDay(date, d));
-    } else if (mode === 'range') {
+    } else if (mode === "multiple") {
+      isSelected = selectedDates.some((d) => isSameDay(date, d));
+    } else if (mode === "range") {
       if (rangeStart && isSameDay(date, rangeStart)) {
         isRangeStart = true;
         isSelected = true;
@@ -169,11 +183,11 @@ export function getSelectedDatesArray(value: CalendarValue, mode: CalendarMode):
     return [];
   }
 
-  if (mode === 'single') {
+  if (mode === "single") {
     return [value as Date];
   }
 
-  if ((mode === 'multiple' || mode === 'range') && Array.isArray(value)) {
+  if ((mode === "multiple" || mode === "range") && Array.isArray(value)) {
     return value;
   }
 
@@ -197,26 +211,26 @@ export function getDayAriaLabel(
   labels?: Partial<ZardCalendarLabels>,
 ): string {
   const dateStr = day.date.toLocaleDateString(locale, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   const merged = { ...DEFAULT_CALENDAR_LABELS, ...labels };
 
   const ariaLabels = [
     dateStr,
-    day.isToday && (merged.today ?? 'Today'),
-    day.isSelected && (merged.selected ?? 'Selected'),
-    day.isRangeStart && (merged.rangeStart ?? 'Range start'),
-    day.isRangeEnd && (merged.rangeEnd ?? 'Range end'),
-    day.isInRange && (merged.inRange ?? 'In range'),
-    !day.isCurrentMonth && (merged.outsideMonth ?? 'Outside month'),
-    day.isDisabled && (merged.disabled ?? 'Disabled'),
+    day.isToday && (merged.today ?? "Today"),
+    day.isSelected && (merged.selected ?? "Selected"),
+    day.isRangeStart && (merged.rangeStart ?? "Range start"),
+    day.isRangeEnd && (merged.rangeEnd ?? "Range end"),
+    day.isInRange && (merged.inRange ?? "In range"),
+    !day.isCurrentMonth && (merged.outsideMonth ?? "Outside month"),
+    day.isDisabled && (merged.disabled ?? "Disabled"),
   ].filter(Boolean);
 
-  return ariaLabels.join(', ');
+  return ariaLabels.join(", ");
 }
 
 /**
@@ -269,7 +283,7 @@ export function toValidDate(value: unknown): Date | null {
     return isNaN(value.getTime()) ? null : value;
   }
 
-  if (typeof value === 'number' && value.toString().length === 8) {
+  if (typeof value === "number" && value.toString().length === 8) {
     const s = value.toString();
     const y = +s.slice(0, 4);
     const m = +s.slice(4, 6) - 1;
@@ -278,7 +292,7 @@ export function toValidDate(value: unknown): Date | null {
     return makeSafeDate(y, m, d);
   }
 
-  if (typeof value === 'string' && /^\d{8}$/.test(value)) {
+  if (typeof value === "string" && /^\d{8}$/.test(value)) {
     const y = +value.slice(0, 4);
     const m = +value.slice(4, 6) - 1;
     const d = +value.slice(6, 8);

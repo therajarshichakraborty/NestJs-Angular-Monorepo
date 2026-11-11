@@ -3,8 +3,20 @@ packages:
   - "packages/*"
 
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   esbuild: true
   lmdb: true
   msgpackr-extract: true
-  '@scarf/scarf': false
+  "@scarf/scarf": false
+
+# Patched releases newer than the minimum release age; required by the security overrides below.
+minimumReleaseAgeExclude:
+  - glob@14.0.2
+  - minimatch@11.0.1
+
+# Security overrides for transitive dev-tool dependencies (@nestjs/cli, jest, eslint).
+overrides:
+  # GHSA-3g3m-2fjr-6pw4
+  glob@>=9.0.0 <=14.0.1: 14.0.2
+  # GHSA-g3hv-75wg-m249
+  minimatch@>=7.0.0 <11.0.1: 11.0.1

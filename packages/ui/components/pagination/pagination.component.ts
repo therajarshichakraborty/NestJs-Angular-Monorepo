@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -8,65 +8,66 @@ import {
   model,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight, lucideEllipsis } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronLeft, lucideChevronRight, lucideEllipsis } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
 import {
   ZardButtonComponent,
   type ZardButtonSizeVariants,
   type ZardButtonTypeVariants,
-} from '@repo/ui/components/button';
+} from "@repo/ui/components/button";
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
   paginationNextVariants,
   paginationPreviousVariants,
   paginationVariants,
-} from '@repo/ui/components/pagination/pagination.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/pagination/pagination.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-type PaginationItemSizeType = Exclude<ZardButtonSizeVariants, 'default' | 'xs' | 'sm' | 'lg'>;
-type PaginationNavSizeType = Exclude<ZardButtonSizeVariants, 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'>;
+type PaginationItemSizeType = Exclude<ZardButtonSizeVariants, "default" | "xs" | "sm" | "lg">;
+type PaginationNavSizeType = Exclude<
+  ZardButtonSizeVariants,
+  "icon" | "icon-xs" | "icon-sm" | "icon-lg"
+>;
 
 @Component({
-  selector: 'ul[z-pagination-content]',
-  template: `
-    <ng-content />
-  `,
+  selector: "ul[z-pagination-content]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'pagination-content',
-    '[class]': 'classes()',
+    "data-slot": "pagination-content",
+    "[class]": "classes()",
   },
-  exportAs: 'zPaginationContent',
+  exportAs: "zPaginationContent",
 })
 export class ZardPaginationContentComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(paginationContentVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(paginationContentVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'li[z-pagination-item]',
-  template: `
-    <ng-content />
-  `,
+  selector: "li[z-pagination-item]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'pagination-item',
+    "data-slot": "pagination-item",
   },
-  exportAs: 'zPaginationItem',
+  exportAs: "zPaginationItem",
 })
 export class ZardPaginationItemComponent {}
 // Structural wrapper component for pagination items (<li>). No inputs required.
 
 @Component({
-  selector: 'button[z-pagination-button], a[z-pagination-button]',
+  selector: "button[z-pagination-button], a[z-pagination-button]",
   imports: [ZardButtonComponent],
   template: `
     <z-button
@@ -82,21 +83,23 @@ export class ZardPaginationItemComponent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'pagination-button',
+    "data-slot": "pagination-button",
   },
-  exportAs: 'zPaginationButton',
+  exportAs: "zPaginationButton",
 })
 export class ZardPaginationButtonComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zActive = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardButtonSizeVariants>('icon');
+  readonly zSize = input<ZardButtonSizeVariants>("icon");
 
-  protected readonly zType = computed<ZardButtonTypeVariants>(() => (this.zActive() ? 'outline' : 'ghost'));
+  protected readonly zType = computed<ZardButtonTypeVariants>(() =>
+    this.zActive() ? "outline" : "ghost",
+  );
 }
 
 @Component({
-  selector: 'z-pagination-previous',
+  selector: "z-pagination-previous",
   imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
@@ -115,21 +118,25 @@ export class ZardPaginationButtonComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronLeft })],
-  exportAs: 'zPaginationPrevious',
+  exportAs: "zPaginationPrevious",
 })
 export class ZardPaginationPreviousComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zSize = input<PaginationNavSizeType>('default');
+  readonly zSize = input<PaginationNavSizeType>("default");
   /** Visible label. Also the accessible name once it differs from the English default. */
-  readonly zText = input('Previous');
+  readonly zText = input("Previous");
 
-  protected readonly classes = computed(() => mergeClasses(paginationPreviousVariants(), this.class()));
-  protected readonly label = computed(() => (this.zText() === 'Previous' ? 'To previous page' : this.zText()));
+  protected readonly classes = computed(() =>
+    mergeClasses(paginationPreviousVariants(), this.class()),
+  );
+  protected readonly label = computed(() =>
+    this.zText() === "Previous" ? "To previous page" : this.zText(),
+  );
 }
 
 @Component({
-  selector: 'z-pagination-next',
+  selector: "z-pagination-next",
   imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
@@ -148,42 +155,44 @@ export class ZardPaginationPreviousComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronRight })],
-  exportAs: 'zPaginationNext',
+  exportAs: "zPaginationNext",
 })
 export class ZardPaginationNextComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zSize = input<PaginationNavSizeType>('default');
+  readonly zSize = input<PaginationNavSizeType>("default");
   /** Visible label. Also the accessible name once it differs from the English default. */
-  readonly zText = input('Next');
+  readonly zText = input("Next");
 
   protected readonly classes = computed(() => mergeClasses(paginationNextVariants(), this.class()));
-  protected readonly label = computed(() => (this.zText() === 'Next' ? 'To next page' : this.zText()));
+  protected readonly label = computed(() =>
+    this.zText() === "Next" ? "To next page" : this.zText(),
+  );
 }
 
 @Component({
-  selector: 'z-pagination-ellipsis',
+  selector: "z-pagination-ellipsis",
   imports: [NgIcon],
-  template: `
-    <ng-icon name="lucideEllipsis" aria-hidden="true" />
-  `,
+  template: ` <ng-icon name="lucideEllipsis" aria-hidden="true" /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideEllipsis })],
   host: {
-    '[class]': 'classes()',
-    'aria-hidden': 'true',
+    "[class]": "classes()",
+    "aria-hidden": "true",
   },
-  exportAs: 'zPaginationEllipsis',
+  exportAs: "zPaginationEllipsis",
 })
 export class ZardPaginationEllipsisComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(paginationEllipsisVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(paginationEllipsisVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-pagination',
+  selector: "z-pagination",
   imports: [
     ZardPaginationContentComponent,
     ZardPaginationItemComponent,
@@ -222,7 +231,9 @@ export class ZardPaginationEllipsisComponent {
               [zSize]="zSize()"
               (click)="goToPage(page)"
             >
-              <span class="sr-only">{{ pages().length === page ? 'To last page, page' : 'To page' }}</span>
+              <span class="sr-only">{{
+                pages().length === page ? "To last page, page" : "To page"
+              }}</span>
               {{ page }}
             </button>
           </li>
@@ -245,41 +256,43 @@ export class ZardPaginationEllipsisComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'group',
-    'data-slot': 'pagination',
-    '[attr.aria-label]': 'zAriaLabel()',
-    '[class]': 'classes()',
+    role: "group",
+    "data-slot": "pagination",
+    "[attr.aria-label]": "zAriaLabel()",
+    "[class]": "classes()",
   },
-  exportAs: 'zPagination',
+  exportAs: "zPagination",
 })
 export class ZardPaginationComponent {
-  readonly zAriaLabel = input('Pagination');
+  readonly zAriaLabel = input("Pagination");
   readonly zContent = input<TemplateRef<void> | undefined>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zNextText = input('Next');
+  readonly zNextText = input("Next");
   readonly zPageIndex = model<number>(1);
-  readonly zPreviousText = input('Previous');
+  readonly zPreviousText = input("Previous");
   readonly zSimple = input(false, { transform: booleanAttribute });
-  readonly zSize = input<PaginationItemSizeType>('icon');
+  readonly zSize = input<PaginationItemSizeType>("icon");
   readonly zTotal = input<number>(1);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly Math = Math;
 
   protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
-  readonly pages = computed<number[]>(() => Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1));
+  readonly pages = computed<number[]>(() =>
+    Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1),
+  );
   readonly navSize = computed(() => {
     const size = this.zSize();
     switch (size) {
-      case 'icon-xs':
-        return 'xs';
-      case 'icon-sm':
-        return 'sm';
-      case 'icon-lg':
-        return 'lg';
+      case "icon-xs":
+        return "xs";
+      case "icon-sm":
+        return "sm";
+      case "icon-lg":
+        return "lg";
       default:
-        return 'default';
+        return "default";
     }
   });
 

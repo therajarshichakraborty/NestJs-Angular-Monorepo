@@ -1,20 +1,22 @@
-import { computed, Directive, input } from '@angular/core';
+import { computed, Directive, input } from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { navigationMenuListVariants } from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { navigationMenuListVariants } from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Directive({
-  selector: '[z-navigation-menu-list]',
+  selector: "[z-navigation-menu-list]",
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'navigation-menu-list',
+    "[class]": "classes()",
+    "data-slot": "navigation-menu-list",
   },
-  exportAs: 'zNavigationMenuList',
+  exportAs: "zNavigationMenuList",
 })
 export class ZardNavigationMenuListDirective {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(navigationMenuListVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(navigationMenuListVariants(), this.class()),
+  );
 }

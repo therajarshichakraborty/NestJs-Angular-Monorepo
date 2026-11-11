@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -13,37 +13,47 @@ import {
   viewChild,
   ViewEncapsulation,
   type TemplateRef,
-} from '@angular/core';
-import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+} from "@angular/core";
+import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from "@angular/forms";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCalendar, lucideChevronDown } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCalendar, lucideChevronDown } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent, type ZardButtonTypeVariants } from '@repo/ui/components/button';
-import { ZardCalendarComponent } from '@repo/ui/components/calendar';
+import { ZardButtonComponent, type ZardButtonTypeVariants } from "@repo/ui/components/button";
+import { ZardCalendarComponent } from "@repo/ui/components/calendar";
 import type {
   CalendarMode,
   CalendarValue,
   ZardCalendarCaptionLayout,
-} from '@repo/ui/components/calendar/calendar.types';
-import { normalizeCalendarValue } from '@repo/ui/components/calendar/calendar.utils';
+} from "@repo/ui/components/calendar/calendar.types";
+import { normalizeCalendarValue } from "@repo/ui/components/calendar/calendar.utils";
 import {
   datePickerTriggerVariants,
   datePickerVariants,
   type ZardDatePickerIconVariants,
   type ZardDatePickerSizeVariants,
-} from '@repo/ui/components/date-picker/date-picker.variants';
-import { ZardPopoverComponent, ZardPopoverDirective, type ZardPopoverAlign } from '@repo/ui/components/popover';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+} from "@repo/ui/components/date-picker/date-picker.variants";
+import {
+  ZardPopoverComponent,
+  ZardPopoverDirective,
+  type ZardPopoverAlign,
+} from "@repo/ui/components/popover";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
 /** Separates the two ends of a range in the trigger label. */
-const RANGE_SEPARATOR = ' - ';
+const RANGE_SEPARATOR = " - ";
 
 @Component({
-  selector: 'z-date-picker, [z-date-picker]',
-  imports: [NgIcon, ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective],
+  selector: "z-date-picker, [z-date-picker]",
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardCalendarComponent,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
+  ],
   template: `
     <button
       z-button
@@ -62,11 +72,11 @@ const RANGE_SEPARATOR = ' - ';
       [zAlign]="zAlign()"
       (zVisibleChange)="onPopoverVisibilityChange($event)"
     >
-      @if (zIcon() === 'calendar') {
+      @if (zIcon() === "calendar") {
         <ng-icon name="lucideCalendar" class="size-4!" data-icon="inline-start" />
       }
       <span class="min-w-0 truncate">{{ displayText() }}</span>
-      @if (zIcon() === 'chevron') {
+      @if (zIcon() === "chevron") {
         <ng-icon name="lucideChevronDown" class="size-4!" data-icon="inline-end" />
       }
     </button>
@@ -103,31 +113,31 @@ const RANGE_SEPARATOR = ' - ';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCalendar, lucideChevronDown })],
   host: {
-    'data-slot': 'date-picker',
-    '[class]': 'classes()',
-    '[attr.data-empty]': "isEmpty() ? 'true' : null",
+    "data-slot": "date-picker",
+    "[class]": "classes()",
+    "[attr.data-empty]": "isEmpty() ? 'true' : null",
   },
-  exportAs: 'zDatePicker',
+  exportAs: "zDatePicker",
 })
 export class ZardDatePickerComponent implements ControlValueAccessor {
   private readonly datePipe = inject(DatePipe);
 
-  readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');
-  readonly popoverDirective = viewChild.required<ZardPopoverDirective>('popoverDirective');
+  readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>("calendarTemplate");
+  readonly popoverDirective = viewChild.required<ZardPopoverDirective>("popoverDirective");
   /** Only resolves while the popover is open — the calendar lives in a lazily rendered template. */
-  readonly calendar = viewChild<ZardCalendarComponent>('calendar');
+  readonly calendar = viewChild<ZardCalendarComponent>("calendar");
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   /** Applied to the trigger button, so a `<label for="…">` points at something focusable. */
-  readonly zId = input<string>('');
-  readonly zType = input<ZardButtonTypeVariants>('outline');
-  readonly zSize = input<ZardDatePickerSizeVariants>('default');
-  readonly zIcon = input<ZardDatePickerIconVariants>('chevron');
+  readonly zId = input<string>("");
+  readonly zType = input<ZardButtonTypeVariants>("outline");
+  readonly zSize = input<ZardDatePickerSizeVariants>("default");
+  readonly zIcon = input<ZardDatePickerIconVariants>("chevron");
   readonly value = model<CalendarValue>(null);
-  readonly zPlaceholder = input<string>('Pick a date');
-  readonly zFormat = input<string>('MMMM d, yyyy');
-  readonly zMode = input<CalendarMode>('single');
-  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zPlaceholder = input<string>("Pick a date");
+  readonly zFormat = input<string>("MMMM d, yyyy");
+  readonly zMode = input<CalendarMode>("single");
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>("label");
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
@@ -136,7 +146,7 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
    * Falls back to the application locale.
    */
   readonly zLocale = input<string | undefined>(undefined);
-  readonly zAlign = input<ZardPopoverAlign>('start');
+  readonly zAlign = input<ZardPopoverAlign>("start");
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
@@ -148,7 +158,9 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(datePickerVariants(), this.class()));
 
-  protected readonly triggerClasses = computed(() => datePickerTriggerVariants({ zIcon: this.zIcon() }));
+  protected readonly triggerClasses = computed(() =>
+    datePickerTriggerVariants({ zIcon: this.zIcon() }),
+  );
 
   /** The value flattened to a list, whatever the mode — empty when nothing is selected. */
   private readonly selectedDates = computed(() => {
@@ -168,14 +180,14 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
     }
 
     const format = this.zFormat();
-    if (this.zMode() === 'range') {
+    if (this.zMode() === "range") {
       const [from, to] = dates;
       return to
         ? `${this.formatDate(from, format)}${RANGE_SEPARATOR}${this.formatDate(to, format)}`
         : this.formatDate(from, format);
     }
 
-    return dates.map(date => this.formatDate(date, format)).join(', ');
+    return dates.map((date) => this.formatDate(date, format)).join(", ");
   });
 
   protected onCalendarValueChange(value: CalendarValue): void {
@@ -192,9 +204,9 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   /** Single mode closes on pick, range once both ends are set, multiple stays open. */
   private shouldCloseOnSelect(value: CalendarValue): boolean {
     switch (this.zMode()) {
-      case 'single':
+      case "single":
         return value !== null;
-      case 'range':
+      case "range":
         return Array.isArray(value) && value.length >= 2;
       default:
         return false;
@@ -213,14 +225,14 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   private formatDate(date: Date, format: string): string {
     const locale = this.zLocale();
     if (!locale) {
-      return this.datePipe.transform(date, format) ?? '';
+      return this.datePipe.transform(date, format) ?? "";
     }
 
     try {
-      return this.datePipe.transform(date, format, undefined, locale) ?? '';
+      return this.datePipe.transform(date, format, undefined, locale) ?? "";
     } catch {
       // Angular only formats locales whose data was registered with registerLocaleData; Intl covers the rest.
-      return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date);
+      return new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(date);
     }
   }
 

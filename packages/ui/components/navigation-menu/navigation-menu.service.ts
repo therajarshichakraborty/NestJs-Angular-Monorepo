@@ -1,7 +1,7 @@
-import { computed, Injectable, signal, type TemplateRef } from '@angular/core';
+import { computed, Injectable, signal, type TemplateRef } from "@angular/core";
 
 /** Direction the content slides in from when moving between two triggers. */
-export type ZardNavigationMenuMotion = 'from-start' | 'from-end' | null;
+export type ZardNavigationMenuMotion = "from-start" | "from-end" | null;
 
 export interface ZardNavigationMenuActiveTrigger {
   /** Index of the trigger within the list, used to derive the slide direction. */
@@ -38,7 +38,7 @@ export class ZardNavigationMenuService {
       return null;
     }
 
-    return previous < current.index ? 'from-end' : 'from-start';
+    return previous < current.index ? "from-end" : "from-start";
   });
 
   /** Called once per trigger on init so the service can derive the slide direction later. */

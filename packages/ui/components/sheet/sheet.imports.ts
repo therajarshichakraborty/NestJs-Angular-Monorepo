@@ -5,7 +5,7 @@ import {
   ZardSheetFooterComponent,
   ZardSheetHeaderComponent,
   ZardSheetTitleComponent,
-} from '@repo/ui/components/sheet/sheet.component';
+} from "@repo/ui/components/sheet/sheet.component";
 
 /** Every part of the declarative sheet, for a template that composes one. */
 export const ZardSheetImports = [

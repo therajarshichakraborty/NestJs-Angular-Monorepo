@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayConfig, type OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -23,30 +23,30 @@ import {
   ViewContainerRef,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
-import { filter, takeUntil } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter, takeUntil } from "rxjs";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { nextSheetId, ZardSheetHost } from './sheet-host';
+import { nextSheetId, ZardSheetHost } from "./sheet-host";
 import {
   SHEET_DURATION,
   ZardSheetPanelComponent,
   type ZardSheetSide,
   type ZardSheetSize,
-} from './sheet-panel.component';
+} from "./sheet-panel.component";
 import {
   SHEET_BACKDROP_CLASSES,
   sheetDescriptionVariants,
   sheetFooterVariants,
   sheetHeaderVariants,
   sheetTitleVariants,
-} from './sheet.variants';
+} from "./sheet.variants";
 
-const ESCAPE_KEYS = ['Escape', 'Esc'];
+const ESCAPE_KEYS = ["Escape", "Esc"];
 
 /**
  * A panel that slides in from an edge of the screen, composed in the template.
@@ -67,7 +67,7 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
  * `ZardSheetService.create()` opens the same panel from code.
  */
 @Component({
-  selector: 'z-sheet',
+  selector: "z-sheet",
   imports: [ZardSheetPanelComponent],
   template: `
     <ng-template #panel>
@@ -94,8 +94,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
   providers: [{ provide: ZardSheetHost, useExisting: forwardRef(() => ZardSheetComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zSheet',
+  host: { style: "display: contents" },
+  exportAs: "zSheet",
 })
 export class ZardSheetComponent extends ZardSheetHost {
   private readonly overlay = inject(Overlay);
@@ -104,14 +104,14 @@ export class ZardSheetComponent extends ZardSheetHost {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly panel = viewChild.required<TemplateRef<void>>('panel');
+  private readonly panel = viewChild.required<TemplateRef<void>>("panel");
 
   /** Open state, two-way bound. */
   readonly zVisible = model(false);
   /** Edge of the screen the sheet slides from. */
-  readonly zSide = input<ZardSheetSide>('right');
+  readonly zSide = input<ZardSheetSide>("right");
   /** Preset width (left/right) or height (top/bottom). Ignored once `zWidth` or `zHeight` is set. */
-  readonly zSize = input<ZardSheetSize>('default');
+  readonly zSize = input<ZardSheetSize>("default");
   /** Explicit width, for left/right sheets. */
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
@@ -123,7 +123,7 @@ export class ZardSheetComponent extends ZardSheetHost {
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(SHEET_DURATION);
   /** Custom classes applied to the panel. */
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** Emitted once the sheet is attached to the DOM. */
   readonly zAfterOpen = output<void>();
@@ -133,7 +133,7 @@ export class ZardSheetComponent extends ZardSheetHost {
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
 
   private overlayRef: OverlayRef | null = null;
   private disposeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -166,16 +166,16 @@ export class ZardSheetComponent extends ZardSheetHost {
     // Re-opening mid-exit: keep the same overlay and reverse the transition.
     if (this.overlayRef) {
       this.clearDisposeTimer();
-      this.state.set('open');
+      this.state.set("open");
       return;
     }
 
     this.previouslyFocused = document.activeElement as HTMLElement | null;
-    this.state.set('open');
+    this.state.set("open");
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: this.directionality?.value ?? 'ltr',
+        direction: this.directionality?.value ?? "ltr",
         hasBackdrop: true,
         backdropClass: SHEET_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -188,7 +188,7 @@ export class ZardSheetComponent extends ZardSheetHost {
     // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
     this.directionality?.change
       .pipe(takeUntil(overlayRef.detachments()))
-      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? "ltr"));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -199,8 +199,8 @@ export class ZardSheetComponent extends ZardSheetHost {
     });
     overlayRef
       .keydownEvents()
-      .pipe(filter(event => ESCAPE_KEYS.includes(event.key)))
-      .subscribe(event => {
+      .pipe(filter((event) => ESCAPE_KEYS.includes(event.key)))
+      .subscribe((event) => {
         event.preventDefault();
         this.requestClose();
       });
@@ -213,7 +213,7 @@ export class ZardSheetComponent extends ZardSheetHost {
       return;
     }
 
-    this.state.set('closed');
+    this.state.set("closed");
     this.overlayRef.detachBackdrop();
     this.disposeTimer = setTimeout(() => this.dispose(), this.zDuration());
   }
@@ -249,26 +249,24 @@ export class ZardSheetComponent extends ZardSheetHost {
 }
 
 @Component({
-  selector: 'z-sheet-header, [z-sheet-header]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-sheet-header, [z-sheet-header]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sheet-header',
-    '[class]': 'classes()',
+    "data-slot": "sheet-header",
+    "[class]": "classes()",
   },
-  exportAs: 'zSheetHeader',
+  exportAs: "zSheetHeader",
 })
 export class ZardSheetHeaderComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sheetHeaderVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-sheet-title, [z-sheet-title]',
+  selector: "z-sheet-title, [z-sheet-title]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let title = zTitle();
@@ -280,21 +278,21 @@ export class ZardSheetHeaderComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sheet-title',
-    role: 'heading',
-    'aria-level': '2',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "sheet-title",
+    role: "heading",
+    "aria-level": "2",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zSheetTitle',
+  exportAs: "zSheetTitle",
 })
 export class ZardSheetTitleComponent {
   private readonly sheet = inject(ZardSheetHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextSheetId('title');
+  protected readonly id = nextSheetId("title");
   protected readonly classes = computed(() => mergeClasses(sheetTitleVariants(), this.class()));
 
   constructor() {
@@ -311,7 +309,7 @@ export class ZardSheetTitleComponent {
 }
 
 @Component({
-  selector: 'z-sheet-description, [z-sheet-description]',
+  selector: "z-sheet-description, [z-sheet-description]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let description = zDescription();
@@ -323,20 +321,22 @@ export class ZardSheetTitleComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sheet-description',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "sheet-description",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zSheetDescription',
+  exportAs: "zSheetDescription",
 })
 export class ZardSheetDescriptionComponent {
   private readonly sheet = inject(ZardSheetHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDescription = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextSheetId('description');
-  protected readonly classes = computed(() => mergeClasses(sheetDescriptionVariants(), this.class()));
+  protected readonly id = nextSheetId("description");
+  protected readonly classes = computed(() =>
+    mergeClasses(sheetDescriptionVariants(), this.class()),
+  );
 
   constructor() {
     afterNextRender(() => this.sheet?.descriptionId.set(this.id));
@@ -350,32 +350,30 @@ export class ZardSheetDescriptionComponent {
 }
 
 @Component({
-  selector: 'z-sheet-footer, [z-sheet-footer]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-sheet-footer, [z-sheet-footer]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sheet-footer',
-    '[class]': 'classes()',
+    "data-slot": "sheet-footer",
+    "[class]": "classes()",
   },
-  exportAs: 'zSheetFooter',
+  exportAs: "zSheetFooter",
 })
 export class ZardSheetFooterComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sheetFooterVariants(), this.class()));
 }
 
 /** Closes the sheet it is projected into — declarative or service-opened alike. */
 @Directive({
-  selector: '[z-sheet-close]',
+  selector: "[z-sheet-close]",
   host: {
-    'data-slot': 'sheet-close',
-    '(click)': 'onClick()',
+    "data-slot": "sheet-close",
+    "(click)": "onClick()",
   },
-  exportAs: 'zSheetClose',
+  exportAs: "zSheetClose",
 })
 export class ZardSheetCloseDirective {
   private readonly sheet = inject(ZardSheetHost, { optional: true });

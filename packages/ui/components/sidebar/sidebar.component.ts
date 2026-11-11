@@ -1,5 +1,5 @@
-import { A11yModule } from '@angular/cdk/a11y';
-import { NgTemplateOutlet } from '@angular/common';
+import { A11yModule } from "@angular/cdk/a11y";
+import { NgTemplateOutlet } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -11,19 +11,19 @@ import {
   type OnInit,
   output,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucidePanelLeft } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucidePanelLeft } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { buttonVariants } from '@repo/ui/components/button/button.variants';
+import { buttonVariants } from "@repo/ui/components/button/button.variants";
 import {
   ZARD_SIDEBAR_WIDTH,
   ZARD_SIDEBAR_WIDTH_ICON,
   ZARD_SIDEBAR_WIDTH_MOBILE,
-} from '@repo/ui/components/sidebar/sidebar.constants';
-import { ZardSidebarService } from '@repo/ui/components/sidebar/sidebar.service';
+} from "@repo/ui/components/sidebar/sidebar.constants";
+import { ZardSidebarService } from "@repo/ui/components/sidebar/sidebar.service";
 import {
   sidebarContainerVariants,
   sidebarGapVariants,
@@ -39,25 +39,23 @@ import {
   type ZardSidebarCollapsibleVariants,
   type ZardSidebarSideVariants,
   type ZardSidebarVariantVariants,
-} from '@repo/ui/components/sidebar/sidebar.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/sidebar/sidebar.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-sidebar-provider',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-sidebar-provider",
+  template: ` <ng-content /> `,
   providers: [ZardSidebarService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-wrapper',
-    '[class]': 'classes()',
-    '[style]': 'hostStyle()',
-    '(document:keydown.control.b)': 'onKeyboardShortcut($event)',
-    '(document:keydown.meta.b)': 'onKeyboardShortcut($event)',
+    "data-slot": "sidebar-wrapper",
+    "[class]": "classes()",
+    "[style]": "hostStyle()",
+    "(document:keydown.control.b)": "onKeyboardShortcut($event)",
+    "(document:keydown.meta.b)": "onKeyboardShortcut($event)",
   },
-  exportAs: 'zSidebarProvider',
+  exportAs: "zSidebarProvider",
 })
 export class ZardSidebarProviderComponent implements OnInit {
   readonly sidebarService = inject(ZardSidebarService);
@@ -68,14 +66,14 @@ export class ZardSidebarProviderComponent implements OnInit {
    * blocks rely on that to stay deterministic without changing the state of other sidebars.
    */
   readonly zDefaultOpen = input<boolean | undefined, unknown>(undefined, {
-    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+    transform: (value) => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
   /** When set, the provider is controlled: `setOpen` only reports through `zOpenChange`. */
   readonly zOpen = input<boolean | undefined>(undefined);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   /** Extra inline style. Declared after the width variables, so it can override them. */
-  readonly style = input<string>('');
+  readonly style = input<string>("");
 
   readonly zOpenChange = output<boolean>();
 
@@ -84,13 +82,17 @@ export class ZardSidebarProviderComponent implements OnInit {
   // The docs site declares a global `--sidebar-width` for its own navigation, so the variables have
   // to be set inline on this host to win inside the provider's scope.
   protected readonly hostStyle = computed(() =>
-    [`--sidebar-width: ${ZARD_SIDEBAR_WIDTH}`, `--sidebar-width-icon: ${ZARD_SIDEBAR_WIDTH_ICON}`, this.style()]
+    [
+      `--sidebar-width: ${ZARD_SIDEBAR_WIDTH}`,
+      `--sidebar-width-icon: ${ZARD_SIDEBAR_WIDTH_ICON}`,
+      this.style(),
+    ]
       .filter(Boolean)
-      .join('; '),
+      .join("; "),
   );
 
   constructor() {
-    this.sidebarService.onOpenChange = open => this.zOpenChange.emit(open);
+    this.sidebarService.onOpenChange = (open) => this.zOpenChange.emit(open);
 
     effect(() => {
       this.sidebarService.controlledOpen.set(this.zOpen());
@@ -109,14 +111,14 @@ export class ZardSidebarProviderComponent implements OnInit {
 }
 
 @Component({
-  selector: 'z-sidebar',
+  selector: "z-sidebar",
   imports: [A11yModule, NgTemplateOutlet],
   template: `
     <ng-template #projected>
       <ng-content />
     </ng-template>
 
-    @if (zCollapsible() === 'none') {
+    @if (zCollapsible() === "none") {
       <ng-container [ngTemplateOutlet]="projected" />
     } @else if (sidebarService.isMobile()) {
       <!-- Both parts stay mounted so the drawer animates out as well as in. The inert attribute
@@ -164,45 +166,49 @@ export class ZardSidebarProviderComponent implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar',
-    '[class]': 'hostClasses()',
-    '[attr.dir]': 'dir() ?? null',
-    '[attr.data-state]': 'isDesktop() ? sidebarService.state() : null',
-    '[attr.data-collapsible]': 'isDesktop() ? desktopCollapsible() : null',
-    '[attr.data-variant]': 'isDesktop() ? zVariant() : null',
-    '[attr.data-side]': 'isDesktop() ? zSide() : null',
-    '(document:keydown.escape)': 'onEscape()',
+    "data-slot": "sidebar",
+    "[class]": "hostClasses()",
+    "[attr.dir]": "dir() ?? null",
+    "[attr.data-state]": "isDesktop() ? sidebarService.state() : null",
+    "[attr.data-collapsible]": "isDesktop() ? desktopCollapsible() : null",
+    "[attr.data-variant]": "isDesktop() ? zVariant() : null",
+    "[attr.data-side]": "isDesktop() ? zSide() : null",
+    "(document:keydown.escape)": "onEscape()",
   },
-  exportAs: 'zSidebar',
+  exportAs: "zSidebar",
 })
 export class ZardSidebarComponent {
   readonly sidebarService = inject(ZardSidebarService);
 
-  readonly zSide = input<ZardSidebarSideVariants>('left');
-  readonly zVariant = input<ZardSidebarVariantVariants>('sidebar');
-  readonly zCollapsible = input<ZardSidebarCollapsibleVariants>('offcanvas');
-  readonly class = input<ClassValue>('');
-  readonly dir = input<'ltr' | 'rtl' | undefined>(undefined);
+  readonly zSide = input<ZardSidebarSideVariants>("left");
+  readonly zVariant = input<ZardSidebarVariantVariants>("sidebar");
+  readonly zCollapsible = input<ZardSidebarCollapsibleVariants>("offcanvas");
+  readonly class = input<ClassValue>("");
+  readonly dir = input<"ltr" | "rtl" | undefined>(undefined);
 
   protected readonly mobileStyle = `--sidebar-width: ${ZARD_SIDEBAR_WIDTH_MOBILE}`;
 
-  protected readonly isDesktop = computed(() => this.zCollapsible() !== 'none' && !this.sidebarService.isMobile());
+  protected readonly isDesktop = computed(
+    () => this.zCollapsible() !== "none" && !this.sidebarService.isMobile(),
+  );
 
   /** shadcn keeps this attribute empty while expanded, and every `group-data-[collapsible=…]` class relies on it. */
   protected readonly desktopCollapsible = computed(() =>
-    this.sidebarService.state() === 'collapsed' ? this.zCollapsible() : '',
+    this.sidebarService.state() === "collapsed" ? this.zCollapsible() : "",
   );
 
   protected readonly hostClasses = computed(() => {
-    if (this.zCollapsible() === 'none') {
+    if (this.zCollapsible() === "none") {
       return mergeClasses(sidebarNoneVariants(), this.class());
     }
 
     // The mobile drawer is positioned fixed, so the host must not introduce a box of its own.
-    return this.sidebarService.isMobile() ? 'contents' : sidebarRootVariants();
+    return this.sidebarService.isMobile() ? "contents" : sidebarRootVariants();
   });
 
-  protected readonly mobileState = computed(() => (this.sidebarService.openMobile() ? 'open' : 'closed'));
+  protected readonly mobileState = computed(() =>
+    this.sidebarService.openMobile() ? "open" : "closed",
+  );
 
   protected readonly backdropClasses = computed(() => sidebarMobileBackdropVariants());
 
@@ -213,7 +219,10 @@ export class ZardSidebarComponent {
   protected readonly gapClasses = computed(() => sidebarGapVariants({ zVariant: this.zVariant() }));
 
   protected readonly containerClasses = computed(() =>
-    mergeClasses(sidebarContainerVariants({ zSide: this.zSide(), zVariant: this.zVariant() }), this.class()),
+    mergeClasses(
+      sidebarContainerVariants({ zSide: this.zSide(), zVariant: this.zVariant() }),
+      this.class(),
+    ),
   );
 
   protected readonly innerClasses = computed(() => sidebarInnerVariants());
@@ -226,7 +235,7 @@ export class ZardSidebarComponent {
 }
 
 @Component({
-  selector: 'button[z-sidebar-trigger]',
+  selector: "button[z-sidebar-trigger]",
   imports: [NgIcon],
   template: `
     <ng-icon name="lucidePanelLeft" class="rtl:rotate-180" />
@@ -236,64 +245,66 @@ export class ZardSidebarComponent {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucidePanelLeft })],
   host: {
-    'data-slot': 'sidebar-trigger',
-    'data-sidebar': 'trigger',
-    type: 'button',
-    '[class]': 'classes()',
-    '(click)': 'sidebarService.toggleSidebar()',
+    "data-slot": "sidebar-trigger",
+    "data-sidebar": "trigger",
+    type: "button",
+    "[class]": "classes()",
+    "(click)": "sidebarService.toggleSidebar()",
   },
-  exportAs: 'zSidebarTrigger',
+  exportAs: "zSidebarTrigger",
 })
 export class ZardSidebarTriggerComponent {
   readonly sidebarService = inject(ZardSidebarService);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
-    mergeClasses(buttonVariants({ zType: 'ghost', zSize: 'icon-sm' }), sidebarTriggerVariants(), this.class()),
+    mergeClasses(
+      buttonVariants({ zType: "ghost", zSize: "icon-sm" }),
+      sidebarTriggerVariants(),
+      this.class(),
+    ),
   );
 }
 
 @Component({
-  selector: 'button[z-sidebar-rail]',
-  template: '',
+  selector: "button[z-sidebar-rail]",
+  template: "",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-rail',
-    'data-sidebar': 'rail',
-    type: 'button',
-    tabindex: '-1',
-    'aria-label': 'Toggle Sidebar',
-    title: 'Toggle Sidebar',
-    '[class]': 'classes()',
-    '(click)': 'sidebarService.toggleSidebar()',
+    "data-slot": "sidebar-rail",
+    "data-sidebar": "rail",
+    type: "button",
+    tabindex: "-1",
+    "aria-label": "Toggle Sidebar",
+    title: "Toggle Sidebar",
+    "[class]": "classes()",
+    "(click)": "sidebarService.toggleSidebar()",
   },
-  exportAs: 'zSidebarRail',
+  exportAs: "zSidebarRail",
 })
 export class ZardSidebarRailComponent {
   readonly sidebarService = inject(ZardSidebarService);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sidebarRailVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-sidebar-inset, main[z-sidebar-inset]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-sidebar-inset, main[z-sidebar-inset]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-inset',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-inset",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarInset',
+  exportAs: "zSidebarInset",
 })
 export class ZardSidebarInsetComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sidebarInsetVariants(), this.class()));
 }

@@ -1,5 +1,5 @@
-import type { BooleanInput } from '@angular/cdk/coercion';
-import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
+import type { BooleanInput } from "@angular/cdk/coercion";
+import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from "@angular/cdk/menu";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -11,25 +11,25 @@ import {
   input,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
 import {
   navigationMenuVariants,
   type ZardNavigationMenuAlign,
-} from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardNavigationMenuViewportComponent } from './navigation-menu-viewport.component';
-import { ZardNavigationMenuService } from './navigation-menu.service';
+import { ZardNavigationMenuViewportComponent } from "./navigation-menu-viewport.component";
+import { ZardNavigationMenuService } from "./navigation-menu.service";
 
 /**
  * Root of a navigation bar. With `zViewport` enabled (the default) every trigger inside shares a
  * single animated popup; with it disabled each trigger opens its own popup in an overlay.
  */
 @Component({
-  selector: 'z-navigation-menu, [z-navigation-menu]',
+  selector: "z-navigation-menu, [z-navigation-menu]",
   imports: [ZardNavigationMenuViewportComponent],
   template: `
     <ng-content />
@@ -43,23 +43,23 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'navigation-menu',
-    '[attr.data-viewport]': 'zViewport()',
-    '(mouseenter)': 'onMouseEnter()',
-    '(mouseleave)': 'onMouseLeave()',
-    '(keydown.escape)': 'onEscape()',
+    "[class]": "classes()",
+    "data-slot": "navigation-menu",
+    "[attr.data-viewport]": "zViewport()",
+    "(mouseenter)": "onMouseEnter()",
+    "(mouseleave)": "onMouseLeave()",
+    "(keydown.escape)": "onEscape()",
   },
-  exportAs: 'zNavigationMenu',
+  exportAs: "zNavigationMenu",
 })
 export class ZardNavigationMenuComponent {
   private readonly service = inject(ZardNavigationMenuService);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly viewportRef = viewChild(ZardNavigationMenuViewportComponent);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zViewport = input<boolean, BooleanInput>(true, { transform: booleanAttribute });
-  readonly zAlign = input<ZardNavigationMenuAlign>('start');
+  readonly zAlign = input<ZardNavigationMenuAlign>("start");
   readonly zHoverDelay = input<number>(100);
 
   protected readonly classes = computed(() => mergeClasses(navigationMenuVariants(), this.class()));

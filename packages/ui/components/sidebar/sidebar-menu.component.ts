@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -15,11 +15,11 @@ import {
   PLATFORM_ID,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardSidebarService } from '@repo/ui/components/sidebar/sidebar.service';
+import { ZardSidebarService } from "@repo/ui/components/sidebar/sidebar.service";
 import {
   sidebarMenuActionVariants,
   sidebarMenuBadgeVariants,
@@ -33,19 +33,19 @@ import {
   type ZardSidebarMenuButtonSizeVariants,
   type ZardSidebarMenuButtonTypeVariants,
   type ZardSidebarMenuSubButtonSizeVariants,
-} from '@repo/ui/components/sidebar/sidebar.variants';
-import { ZardSkeletonComponent } from '@repo/ui/components/skeleton/skeleton.component';
-import { ZardTooltipComponent } from '@repo/ui/components/tooltip/tooltip';
-import { getTooltipPosition } from '@repo/ui/components/tooltip/tooltip-positions';
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/sidebar/sidebar.variants";
+import { ZardSkeletonComponent } from "@repo/ui/components/skeleton/skeleton.component";
+import { ZardTooltipComponent } from "@repo/ui/components/tooltip/tooltip";
+import { getTooltipPosition } from "@repo/ui/components/tooltip/tooltip-positions";
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 /**
  * shadcn picks a random width between 50% and 90% for every skeleton row. Doing that per render
  * would desynchronise the server and the client, so the width is derived from the element's unique
  * id instead — deterministic, and still varied across rows.
  */
-const SKELETON_WIDTHS = ['72%', '58%', '85%', '64%', '78%', '51%', '90%', '67%'];
+const SKELETON_WIDTHS = ["72%", "58%", "85%", "64%", "78%", "51%", "90%", "67%"];
 
 /** Object form of `zTooltip`, the Zard counterpart of passing `TooltipContent` props in shadcn. */
 export interface ZardSidebarMenuButtonTooltip {
@@ -55,64 +55,60 @@ export interface ZardSidebarMenuButtonTooltip {
 }
 
 @Component({
-  selector: 'ul[z-sidebar-menu]',
-  template: `
-    <ng-content />
-  `,
+  selector: "ul[z-sidebar-menu]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu',
-    'data-sidebar': 'menu',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu",
+    "data-sidebar": "menu",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenu',
+  exportAs: "zSidebarMenu",
 })
 export class ZardSidebarMenuComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sidebarMenuVariants(), this.class()));
 }
 
 @Component({
-  selector: 'li[z-sidebar-menu-item]',
-  template: `
-    <ng-content />
-  `,
+  selector: "li[z-sidebar-menu-item]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-item',
-    'data-sidebar': 'menu-item',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-item",
+    "data-sidebar": "menu-item",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenuItem',
+  exportAs: "zSidebarMenuItem",
 })
 export class ZardSidebarMenuItemComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(sidebarMenuItemVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sidebarMenuItemVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'button[z-sidebar-menu-button], a[z-sidebar-menu-button]',
-  template: `
-    <ng-content />
-  `,
+  selector: "button[z-sidebar-menu-button], a[z-sidebar-menu-button]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-button',
-    'data-sidebar': 'menu-button',
-    '[class]': 'classes()',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-active]': 'zActive()',
-    '(mouseenter)': 'showTooltip()',
-    '(mouseleave)': 'hideTooltip()',
-    '(focus)': 'showTooltip()',
-    '(blur)': 'hideTooltip()',
+    "data-slot": "sidebar-menu-button",
+    "data-sidebar": "menu-button",
+    "[class]": "classes()",
+    "[attr.data-size]": "zSize()",
+    "[attr.data-active]": "zActive()",
+    "(mouseenter)": "showTooltip()",
+    "(mouseleave)": "hideTooltip()",
+    "(focus)": "showTooltip()",
+    "(blur)": "hideTooltip()",
   },
-  exportAs: 'zSidebarMenuButton',
+  exportAs: "zSidebarMenuButton",
 })
 export class ZardSidebarMenuButtonComponent {
   private readonly sidebarService = inject(ZardSidebarService);
@@ -126,8 +122,8 @@ export class ZardSidebarMenuButtonComponent {
   private overlayRef?: OverlayRef;
   private tooltipRef?: ComponentRef<ZardTooltipComponent>;
 
-  readonly zType = input<ZardSidebarMenuButtonTypeVariants>('default');
-  readonly zSize = input<ZardSidebarMenuButtonSizeVariants>('default');
+  readonly zType = input<ZardSidebarMenuButtonTypeVariants>("default");
+  readonly zSize = input<ZardSidebarMenuButtonSizeVariants>("default");
   readonly zActive = input(false, { transform: booleanAttribute });
   /**
    * Shown only while the sidebar is collapsed on desktop, mirroring shadcn's hidden TooltipContent.
@@ -135,7 +131,7 @@ export class ZardSidebarMenuButtonComponent {
    * an expanded sidebar, which is what shadcn's `tooltip={{ children, hidden: false }}` does.
    */
   readonly zTooltip = input<string | TemplateRef<void> | ZardSidebarMenuButtonTooltip | null>(null);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly resolvedTooltip = computed(() => {
     const tooltip = this.zTooltip();
@@ -143,8 +139,9 @@ export class ZardSidebarMenuButtonComponent {
       return null;
     }
 
-    const isCollapsed = this.sidebarService.state() === 'collapsed' && !this.sidebarService.isMobile();
-    const isTooltipObject = typeof tooltip === 'object' && 'content' in tooltip;
+    const isCollapsed =
+      this.sidebarService.state() === "collapsed" && !this.sidebarService.isMobile();
+    const isTooltipObject = typeof tooltip === "object" && "content" in tooltip;
     const hidden = isTooltipObject ? (tooltip.hidden ?? !isCollapsed) : !isCollapsed;
 
     if (hidden) {
@@ -155,7 +152,10 @@ export class ZardSidebarMenuButtonComponent {
   });
 
   protected readonly classes = computed(() =>
-    mergeClasses(sidebarMenuButtonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()),
+    mergeClasses(
+      sidebarMenuButtonVariants({ zType: this.zType(), zSize: this.zSize() }),
+      this.class(),
+    ),
   );
 
   constructor() {
@@ -176,10 +176,10 @@ export class ZardSidebarMenuButtonComponent {
       return;
     }
 
-    const rtl = this.directionality?.value === 'rtl';
+    const rtl = this.directionality?.value === "rtl";
     // The tooltip opens on the inner edge of the sidebar: right of a `left` sidebar, left of a `right` one
     // (the natural choice in RTL). `getTooltipPosition` resolves that physical side against the direction.
-    const side = this.sidebarSide() === 'right' ? 'left' : 'right';
+    const side = this.sidebarSide() === "right" ? "left" : "right";
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.elementRef)
       .withPositions([getTooltipPosition(side, 4, rtl)]);
@@ -189,17 +189,19 @@ export class ZardSidebarMenuButtonComponent {
     } else {
       this.overlayRef = this.overlay.create({ positionStrategy });
     }
-    this.overlayRef.setDirection(rtl ? 'rtl' : 'ltr');
+    this.overlayRef.setDirection(rtl ? "rtl" : "ltr");
 
     this.tooltipRef = this.overlayRef.attach(new ComponentPortal(ZardTooltipComponent));
-    this.tooltipRef.instance.state.set('open');
+    this.tooltipRef.instance.state.set("open");
     this.tooltipRef.instance.setProps(this.resolvedTooltip(), side);
   }
 
   /** The physical side of the sidebar this button lives in, read from the `data-side` it publishes. */
-  private sidebarSide(): 'left' | 'right' {
-    const host = (this.elementRef.nativeElement as HTMLElement).closest('[data-slot="sidebar"][data-side]');
-    return host?.getAttribute('data-side') === 'right' ? 'right' : 'left';
+  private sidebarSide(): "left" | "right" {
+    const host = (this.elementRef.nativeElement as HTMLElement).closest(
+      '[data-slot="sidebar"][data-side]',
+    );
+    return host?.getAttribute("data-side") === "right" ? "right" : "left";
   }
 
   protected hideTooltip(): void {
@@ -207,29 +209,27 @@ export class ZardSidebarMenuButtonComponent {
       return;
     }
 
-    this.tooltipRef.instance.state.set('closed');
+    this.tooltipRef.instance.state.set("closed");
     this.tooltipRef = undefined;
     this.overlayRef?.detach();
   }
 }
 
 @Component({
-  selector: 'button[z-sidebar-menu-action], a[z-sidebar-menu-action]',
-  template: `
-    <ng-content />
-  `,
+  selector: "button[z-sidebar-menu-action], a[z-sidebar-menu-action]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-action',
-    'data-sidebar': 'menu-action',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-action",
+    "data-sidebar": "menu-action",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenuAction',
+  exportAs: "zSidebarMenuAction",
 })
 export class ZardSidebarMenuActionComponent {
   readonly zShowOnHover = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
     mergeClasses(sidebarMenuActionVariants({ zShowOnHover: this.zShowOnHover() }), this.class()),
@@ -237,27 +237,27 @@ export class ZardSidebarMenuActionComponent {
 }
 
 @Component({
-  selector: 'z-sidebar-menu-badge, [z-sidebar-menu-badge]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-sidebar-menu-badge, [z-sidebar-menu-badge]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-badge',
-    'data-sidebar': 'menu-badge',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-badge",
+    "data-sidebar": "menu-badge",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenuBadge',
+  exportAs: "zSidebarMenuBadge",
 })
 export class ZardSidebarMenuBadgeComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(sidebarMenuBadgeVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sidebarMenuBadgeVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-sidebar-menu-skeleton',
+  selector: "z-sidebar-menu-skeleton",
   imports: [ZardSkeletonComponent],
   template: `
     @if (zShowIcon()) {
@@ -273,18 +273,18 @@ export class ZardSidebarMenuBadgeComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-skeleton',
-    'data-sidebar': 'menu-skeleton',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-skeleton",
+    "data-sidebar": "menu-skeleton",
+    "[class]": "classes()",
   },
   hostDirectives: [ZardIdDirective],
-  exportAs: 'zSidebarMenuSkeleton',
+  exportAs: "zSidebarMenuSkeleton",
 })
 export class ZardSidebarMenuSkeletonComponent {
   private readonly uniqueId = inject(ZardIdDirective);
 
   readonly zShowIcon = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly skeletonWidth = computed(() => {
     const sequence = Number(/(\d+)$/.exec(this.uniqueId.id())?.[1] ?? 0);
@@ -292,69 +292,67 @@ export class ZardSidebarMenuSkeletonComponent {
     return SKELETON_WIDTHS[sequence % SKELETON_WIDTHS.length];
   });
 
-  protected readonly classes = computed(() => mergeClasses(sidebarMenuSkeletonVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sidebarMenuSkeletonVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'ul[z-sidebar-menu-sub]',
-  template: `
-    <ng-content />
-  `,
+  selector: "ul[z-sidebar-menu-sub]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-sub',
-    'data-sidebar': 'menu-sub',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-sub",
+    "data-sidebar": "menu-sub",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenuSub',
+  exportAs: "zSidebarMenuSub",
 })
 export class ZardSidebarMenuSubComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sidebarMenuSubVariants(), this.class()));
 }
 
 @Component({
-  selector: 'li[z-sidebar-menu-sub-item]',
-  template: `
-    <ng-content />
-  `,
+  selector: "li[z-sidebar-menu-sub-item]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-sub-item',
-    'data-sidebar': 'menu-sub-item',
-    '[class]': 'classes()',
+    "data-slot": "sidebar-menu-sub-item",
+    "data-sidebar": "menu-sub-item",
+    "[class]": "classes()",
   },
-  exportAs: 'zSidebarMenuSubItem',
+  exportAs: "zSidebarMenuSubItem",
 })
 export class ZardSidebarMenuSubItemComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(sidebarMenuSubItemVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sidebarMenuSubItemVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]',
-  template: `
-    <ng-content />
-  `,
+  selector: "a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'sidebar-menu-sub-button',
-    'data-sidebar': 'menu-sub-button',
-    '[class]': 'classes()',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-active]': 'zActive()',
+    "data-slot": "sidebar-menu-sub-button",
+    "data-sidebar": "menu-sub-button",
+    "[class]": "classes()",
+    "[attr.data-size]": "zSize()",
+    "[attr.data-active]": "zActive()",
   },
-  exportAs: 'zSidebarMenuSubButton',
+  exportAs: "zSidebarMenuSubButton",
 })
 export class ZardSidebarMenuSubButtonComponent {
-  readonly zSize = input<ZardSidebarMenuSubButtonSizeVariants>('md');
+  readonly zSize = input<ZardSidebarMenuSubButtonSizeVariants>("md");
   readonly zActive = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
     mergeClasses(sidebarMenuSubButtonVariants({ zSize: this.zSize() }), this.class()),

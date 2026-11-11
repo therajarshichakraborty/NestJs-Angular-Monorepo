@@ -1,3 +1,3 @@
-export * from './slider.component';
-export * from './slider.imports';
-export * from './slider.variants';
+export * from "./slider.component";
+export * from "./slider.imports";
+export * from "./slider.variants";

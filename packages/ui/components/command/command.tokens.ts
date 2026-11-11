@@ -1,6 +1,6 @@
-import type { Signal, WritableSignal } from '@angular/core';
+import type { Signal, WritableSignal } from "@angular/core";
 
-import type { ZardCommandOptionComponent } from './command-option.component';
+import type { ZardCommandOptionComponent } from "./command-option.component";
 
 /**
  * What a command's children may ask of it.

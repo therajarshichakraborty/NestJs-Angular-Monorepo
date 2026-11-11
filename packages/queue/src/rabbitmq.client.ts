@@ -73,7 +73,11 @@ export class RabbitMqClient {
     this.assertedQueues.add(queueName);
   }
 
-  public async publish<TPayload>(queueName: string, type: string, payload: TPayload): Promise<QueueMessage<TPayload>> {
+  public async publish<TPayload>(
+    queueName: string,
+    type: string,
+    payload: TPayload,
+  ): Promise<QueueMessage<TPayload>> {
     await this.assertQueue(queueName);
 
     const message: QueueMessage<TPayload> = {
@@ -99,7 +103,10 @@ export class RabbitMqClient {
     return message;
   }
 
-  public async consume<TPayload>(queueName: string, handler: QueueMessageHandler<TPayload>): Promise<string> {
+  public async consume<TPayload>(
+    queueName: string,
+    handler: QueueMessageHandler<TPayload>,
+  ): Promise<string> {
     await this.assertQueue(queueName);
 
     const channel = this.getChannel();
@@ -142,9 +149,13 @@ export class RabbitMqClient {
       await handler(message);
       channel.ack(rawMessage);
     } catch (error) {
-      this.logger.error(`Failed to process message from "${queueName}", moving it to the dead letter queue`, error, {
-        messageId: rawMessage.properties.messageId as unknown,
-      });
+      this.logger.error(
+        `Failed to process message from "${queueName}", moving it to the dead letter queue`,
+        error,
+        {
+          messageId: rawMessage.properties.messageId as unknown,
+        },
+      );
       channel.nack(rawMessage, false, false);
     }
   }

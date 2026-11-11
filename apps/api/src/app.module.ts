@@ -1,8 +1,8 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { HttpLoggingMiddleware } from './common/http-logging.middleware';
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { HttpLoggingMiddleware } from "./common/http-logging.middleware";
 
 @Module({
   imports: [],
@@ -11,6 +11,6 @@ import { HttpLoggingMiddleware } from './common/http-logging.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(HttpLoggingMiddleware).forRoutes('{*splat}');
+    consumer.apply(HttpLoggingMiddleware).forRoutes("{*splat}");
   }
 }

@@ -6,13 +6,13 @@ import {
   model,
   untracked,
   ViewEncapsulation,
-} from '@angular/core';
-import type { FormValueControl } from '@angular/forms/signals';
+} from "@angular/core";
+import type { FormValueControl } from "@angular/forms/signals";
 
-import { ZardInputOtpComponent } from './input-otp.component';
+import { ZardInputOtpComponent } from "./input-otp.component";
 
 @Component({
-  selector: 'z-input-otp-signal, [z-input-otp-signal]',
+  selector: "z-input-otp-signal, [z-input-otp-signal]",
   template: `
     <div [class]="classes()" [attr.data-input-otp-container]="''">
       @if (!hasSlots()) {
@@ -48,20 +48,23 @@ import { ZardInputOtpComponent } from './input-otp.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-disabled]': 'disabled() ? "" : null',
+    "[attr.data-disabled]": 'disabled() ? "" : null',
   },
-  exportAs: 'zInputOtpSignal',
+  exportAs: "zInputOtpSignal",
 })
-export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implements FormValueControl<string> {
-  readonly value = model<string>('');
+export class ZardInputOtpSignalComponent
+  extends ZardInputOtpComponent
+  implements FormValueControl<string>
+{
+  readonly value = model<string>("");
   override readonly disabled = model<boolean>(false);
 
   constructor() {
     super();
 
     effect(() => {
-      const next = this.value() ?? '';
-      const current = untracked(() => this.tokens().join(''));
+      const next = this.value() ?? "";
+      const current = untracked(() => this.tokens().join(""));
       if (current !== next) {
         super.writeValue(next);
       }

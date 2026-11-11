@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -11,23 +11,23 @@ import {
   model,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { radioGroupVariants, radioVariants } from './radio-group.variants';
+import { radioGroupVariants, radioVariants } from "./radio-group.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: unknown) => void;
 
 @Component({
-  selector: 'z-radio-group, [z-radio-group]',
-  template: '<ng-content />',
+  selector: "z-radio-group, [z-radio-group]",
+  template: "<ng-content />",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -38,22 +38,22 @@ type OnChangeType = (value: unknown) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'radiogroup',
-    'data-slot': 'radio-group',
-    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
-    '[class]': 'classes()',
-    '(keydown)': 'onKeydown($event)',
+    role: "radiogroup",
+    "data-slot": "radio-group",
+    "[attr.aria-disabled]": 'isDisabled() ? "true" : null',
+    "[class]": "classes()",
+    "(keydown)": "onKeydown($event)",
   },
-  exportAs: 'zRadioGroup',
+  exportAs: "zRadioGroup",
 })
 export class ZardRadioGroupComponent implements ControlValueAccessor {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly directionality = inject(Directionality, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly value = model<unknown>(null);
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly name = input<string>('');
+  readonly name = input<string>("");
 
   protected readonly formDisabled = signal(false);
   protected readonly classes = computed(() => mergeClasses(radioGroupVariants(), this.class()));
@@ -67,19 +67,19 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
    * direction, so in RTL ArrowLeft goes to the next radio and ArrowRight to the previous one.
    */
   protected onKeydown(event: KeyboardEvent): void {
-    const rtl = this.directionality?.value === 'rtl';
-    let step = 0;
+    const rtl = this.directionality?.value === "rtl";
+    let step: number;
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         step = 1;
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         step = -1;
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         step = rtl ? -1 : 1;
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
         step = rtl ? 1 : -1;
         break;
       default:
@@ -88,7 +88,7 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
 
     const radios = Array.from(
       this.elementRef.nativeElement.querySelectorAll<HTMLButtonElement>('button[role="radio"]'),
-    ).filter(radio => !radio.disabled);
+    ).filter((radio) => !radio.disabled);
     const current = radios.indexOf(event.target as HTMLButtonElement);
     if (current === -1 || radios.length === 0) {
       return;
@@ -131,7 +131,7 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
 }
 
 @Component({
-  selector: 'z-radio, [z-radio]',
+  selector: "z-radio, [z-radio]",
   imports: [ZardIdDirective],
   template: `
     <button
@@ -150,23 +150,25 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
     >
       @if (checked()) {
         <span data-slot="radio-group-indicator" class="flex size-4 items-center justify-center">
-          <span class="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full"></span>
+          <span
+            class="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full"
+          ></span>
         </span>
       }
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zRadio',
+  exportAs: "zRadio",
 })
 export class ZardRadioComponent {
   private readonly group = inject(ZardRadioGroupComponent, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly value = input<unknown>(null);
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
-  readonly zId = input<string>('');
+  readonly zId = input<string>("");
 
   protected readonly checked = computed(() => this.group!.isSelected(this.value()));
   protected readonly disabledState = computed(() => this.zDisabled() || this.group!.isDisabled());
@@ -174,7 +176,7 @@ export class ZardRadioComponent {
 
   constructor() {
     if (!this.group) {
-      throw new Error('<z-radio> must be used inside a <z-radio-group>.');
+      throw new Error("<z-radio> must be used inside a <z-radio-group>.");
     }
   }
 

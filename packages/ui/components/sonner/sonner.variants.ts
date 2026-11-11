@@ -1,3 +1,3 @@
-import { cva } from 'class-variance-authority';
+import { cva } from "class-variance-authority";
 
-export const sonnerVariants = cva('toaster group');
+export const sonnerVariants = cva("toaster group");

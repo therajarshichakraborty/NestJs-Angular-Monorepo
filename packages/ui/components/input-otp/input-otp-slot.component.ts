@@ -10,19 +10,19 @@ import {
   signal,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardInputOtpComponent } from './input-otp.component';
-import { ZARD_INPUT_OTP_SLOT } from './input-otp.tokens';
-import { isInputElement } from './input-otp.utils';
-import { inputOtpSlotVariants } from './input-otp.variants';
+import { ZardInputOtpComponent } from "./input-otp.component";
+import { ZARD_INPUT_OTP_SLOT } from "./input-otp.tokens";
+import { isInputElement } from "./input-otp.utils";
+import { inputOtpSlotVariants } from "./input-otp.variants";
 
 @Component({
-  selector: 'z-input-otp-slot, [z-input-otp-slot]',
+  selector: "z-input-otp-slot, [z-input-otp-slot]",
   template: `
     <input
       #slotInput
@@ -58,32 +58,32 @@ import { inputOtpSlotVariants } from './input-otp.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-slot]': '"input-otp-slot"',
-    class: 'relative',
+    "[attr.data-slot]": '"input-otp-slot"',
+    class: "relative",
   },
-  exportAs: 'zInputOtpSlot',
+  exportAs: "zInputOtpSlot",
 })
 export class ZardInputOtpSlotComponent {
-  readonly slotInputRef = viewChild.required<ElementRef<HTMLInputElement>>('slotInput');
+  readonly slotInputRef = viewChild.required<ElementRef<HTMLInputElement>>("slotInput");
 
   inputOtp = inject(ZardInputOtpComponent, { optional: true });
 
   readonly zIndex = input.required<number>();
   readonly zInvalid = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** A slot is invalid when marked directly or when the whole input is. */
   readonly invalid = computed(() => this.zInvalid() || (this.inputOtp?.zInvalid() ?? false));
 
-  readonly char = signal<string>('');
+  readonly char = signal<string>("");
   readonly isActive = signal<boolean>(false);
   readonly hasFakeCaret = signal<boolean>(false);
 
   readonly classes = computed(() =>
     mergeClasses(
-      inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }),
+      inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? "default" }),
       // The blinking caret is rendered by this component, so the native one is hidden.
-      'caret-transparent',
+      "caret-transparent",
       this.class(),
     ),
   );
@@ -135,7 +135,7 @@ export class ZardInputOtpSlotComponent {
       return;
     }
 
-    const paste = event.clipboardData?.getData('text');
+    const paste = event.clipboardData?.getData("text");
     if (paste?.length) {
       this.inputOtp?.onPaste(event);
     }

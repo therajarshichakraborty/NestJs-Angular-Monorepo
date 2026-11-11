@@ -9,5 +9,7 @@ export type IsoDateString = string;
 export type Environment = "development" | "test" | "production";
 
 export type DeepReadonly<TValue> = {
-  readonly [TKey in keyof TValue]: TValue[TKey] extends object ? DeepReadonly<TValue[TKey]> : TValue[TKey];
+  readonly [TKey in keyof TValue]: TValue[TKey] extends object
+    ? DeepReadonly<TValue[TKey]>
+    : TValue[TKey];
 };

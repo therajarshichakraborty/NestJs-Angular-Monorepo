@@ -1,13 +1,13 @@
-import { Directionality, type Direction } from '@angular/cdk/bidi';
+import { Directionality, type Direction } from "@angular/cdk/bidi";
 import {
   type FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayPositionBuilder,
   type ConnectedPosition,
   type OverlayRef,
-} from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+} from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -30,59 +30,59 @@ import {
   type TemplateRef,
   ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import type { ClassValue } from 'clsx';
-import type { Subscription } from 'rxjs';
+import type { ClassValue } from "clsx";
+import type { Subscription } from "rxjs";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { hoverCardVariants } from './hover-card.variants';
+import { hoverCardVariants } from "./hover-card.variants";
 
 /** Supported positions for a hover card relative to its trigger. */
-export type ZardHoverCardPlacement = 'top' | 'bottom' | 'left' | 'right';
+export type ZardHoverCardPlacement = "top" | "bottom" | "left" | "right";
 
 /** Physical placements plus the logical ones, which follow the direction of the trigger. */
-export type ZardHoverCardSide = ZardHoverCardPlacement | 'inline-start' | 'inline-end';
+export type ZardHoverCardSide = ZardHoverCardPlacement | "inline-start" | "inline-end";
 
 function resolveSide(side: ZardHoverCardSide, rtl: boolean): ZardHoverCardPlacement {
-  if (side === 'inline-start') {
-    return rtl ? 'right' : 'left';
+  if (side === "inline-start") {
+    return rtl ? "right" : "left";
   }
-  if (side === 'inline-end') {
-    return rtl ? 'left' : 'right';
+  if (side === "inline-end") {
+    return rtl ? "left" : "right";
   }
   return side;
 }
 
 const HOVER_CARD_POSITIONS: Record<ZardHoverCardPlacement, ConnectedPosition> = {
   top: {
-    originX: 'center',
-    originY: 'top',
-    overlayX: 'center',
-    overlayY: 'bottom',
+    originX: "center",
+    originY: "top",
+    overlayX: "center",
+    overlayY: "bottom",
     offsetY: -8,
   },
   bottom: {
-    originX: 'center',
-    originY: 'bottom',
-    overlayX: 'center',
-    overlayY: 'top',
+    originX: "center",
+    originY: "bottom",
+    overlayX: "center",
+    overlayY: "top",
     offsetY: 8,
   },
   left: {
-    originX: 'start',
-    originY: 'center',
-    overlayX: 'end',
-    overlayY: 'center',
+    originX: "start",
+    originY: "center",
+    overlayX: "end",
+    overlayY: "center",
     offsetX: -8,
   },
   right: {
-    originX: 'end',
-    originY: 'center',
-    overlayX: 'start',
-    overlayY: 'center',
+    originX: "end",
+    originY: "center",
+    overlayX: "start",
+    overlayY: "center",
     offsetX: 8,
   },
 };
@@ -93,22 +93,22 @@ const HOVER_CARD_POSITIONS: Record<ZardHoverCardPlacement, ConnectedPosition> = 
  */
 function positionFor(placement: ZardHoverCardPlacement, rtl: boolean): ConnectedPosition {
   const position = HOVER_CARD_POSITIONS[placement];
-  if (!rtl || (placement !== 'left' && placement !== 'right')) {
+  if (!rtl || (placement !== "left" && placement !== "right")) {
     return position;
   }
-  const onLeft = placement === 'left';
+  const onLeft = placement === "left";
   return {
     ...position,
-    originX: onLeft ? 'end' : 'start',
-    overlayX: onLeft ? 'start' : 'end',
+    originX: onLeft ? "end" : "start",
+    overlayX: onLeft ? "start" : "end",
   };
 }
 
 const HOVER_CARD_FALLBACKS: Record<ZardHoverCardPlacement, readonly ZardHoverCardPlacement[]> = {
-  top: ['top', 'bottom', 'right', 'left'],
-  bottom: ['bottom', 'top', 'right', 'left'],
-  left: ['left', 'right', 'bottom', 'top'],
-  right: ['right', 'left', 'bottom', 'top'],
+  top: ["top", "bottom", "right", "left"],
+  bottom: ["bottom", "top", "right", "left"],
+  left: ["left", "right", "bottom", "top"],
+  right: ["right", "left", "bottom", "top"],
 };
 
 let nextHoverCardId = 0;
@@ -120,26 +120,26 @@ let nextHoverCardId = 0;
  * the trigger and its overlay content.
  */
 @Directive({
-  selector: '[zHoverCard]',
+  selector: "[zHoverCard]",
   host: {
-    '[attr.aria-expanded]': 'isOpen()',
-    '[attr.aria-controls]': 'isOpen() ? contentId : null',
-    '(mouseenter)': 'onTriggerMouseEnter()',
-    '(mouseleave)': 'onTriggerMouseLeave()',
-    '(focusin)': 'onTriggerFocusIn()',
-    '(focusout)': 'onTriggerFocusOut($event)',
-    '(keydown.escape)': 'onEscape()',
+    "[attr.aria-expanded]": "isOpen()",
+    "[attr.aria-controls]": "isOpen() ? contentId : null",
+    "(mouseenter)": "onTriggerMouseEnter()",
+    "(mouseleave)": "onTriggerMouseLeave()",
+    "(focusin)": "onTriggerFocusIn()",
+    "(focusout)": "onTriggerFocusOut($event)",
+    "(keydown.escape)": "onEscape()",
   },
-  exportAs: 'zHoverCard',
+  exportAs: "zHoverCard",
 })
 export class ZardHoverCardDirective implements OnInit, OnDestroy {
   /** Template rendered inside the hover card overlay. */
   readonly zContent = input.required<TemplateRef<void>>({
-    alias: 'zHoverCard',
+    alias: "zHoverCard",
   });
 
   /** Preferred placement relative to the trigger. */
-  readonly zPlacement = input<ZardHoverCardSide>('bottom');
+  readonly zPlacement = input<ZardHoverCardSide>("bottom");
 
   /** Delay in milliseconds before the hover card opens. */
   readonly zOpenDelay = input(700, { transform: numberAttribute });
@@ -172,7 +172,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   private positionChangesSubscription?: Subscription;
   private openTimer?: ReturnType<typeof setTimeout>;
   private closeTimer?: ReturnType<typeof setTimeout>;
-  private overlayListeners: Array<() => void> = [];
+  private overlayListeners: (() => void)[] = [];
 
   private pointerOverTrigger = false;
   private pointerOverOverlay = false;
@@ -242,19 +242,19 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     const { overlayElement } = this.overlayRef;
 
     this.overlayListeners.push(
-      this.renderer.listen(overlayElement, 'mouseenter', () => {
+      this.renderer.listen(overlayElement, "mouseenter", () => {
         this.pointerOverOverlay = true;
         this.cancelClose();
       }),
-      this.renderer.listen(overlayElement, 'mouseleave', () => {
+      this.renderer.listen(overlayElement, "mouseleave", () => {
         this.pointerOverOverlay = false;
         this.scheduleClose();
       }),
-      this.renderer.listen(overlayElement, 'focusin', () => {
+      this.renderer.listen(overlayElement, "focusin", () => {
         this.focusWithinOverlay = true;
         this.cancelClose();
       }),
-      this.renderer.listen(overlayElement, 'focusout', (event: FocusEvent) => {
+      this.renderer.listen(overlayElement, "focusout", (event: FocusEvent) => {
         const nextTarget = event.relatedTarget;
 
         if (nextTarget instanceof Node && overlayElement.contains(nextTarget)) {
@@ -269,8 +269,8 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
         this.scheduleClose();
       }),
-      this.renderer.listen(overlayElement, 'keydown', (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
+      this.renderer.listen(overlayElement, "keydown", (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
           this.onEscape();
         }
       }),
@@ -317,7 +317,8 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   protected onEscape(): void {
-    const restoreFocus = this.isOpen() && this.overlayRef?.overlayElement.contains(document.activeElement);
+    const restoreFocus =
+      this.isOpen() && this.overlayRef?.overlayElement.contains(document.activeElement);
     this.closeNow();
     if (restoreFocus) {
       this.elementRef.nativeElement.focus();
@@ -325,12 +326,14 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private direction(): Direction {
-    return this.directionality?.value ?? 'ltr';
+    return this.directionality?.value ?? "ltr";
   }
 
   private getPositions(placement: ZardHoverCardSide = this.zPlacement()): ConnectedPosition[] {
-    const rtl = this.direction() === 'rtl';
-    return HOVER_CARD_FALLBACKS[resolveSide(placement, rtl)].map(fallback => positionFor(fallback, rtl));
+    const rtl = this.direction() === "rtl";
+    return HOVER_CARD_FALLBACKS[resolveSide(placement, rtl)].map((fallback) =>
+      positionFor(fallback, rtl),
+    );
   }
 
   private createOverlay(): void {
@@ -353,7 +356,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     });
 
     this.overlayRef.overlayElement.id = this.contentId;
-    this.positionChangesSubscription = this.positionStrategy.positionChanges.subscribe(change => {
+    this.positionChangesSubscription = this.positionStrategy.positionChanges.subscribe((change) => {
       this.updateContentSide(this.getSideFromPosition(change.connectionPair));
     });
     this.overlayReady.set(true);
@@ -381,7 +384,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
     this.overlayRef.attach(portal);
     this.setupOverlayListeners();
-    this.updateContentSide(resolveSide(this.zPlacement(), this.direction() === 'rtl'));
+    this.updateContentSide(resolveSide(this.zPlacement(), this.direction() === "rtl"));
     this.isOpen.set(true);
     this.zVisibleChange.emit(true);
   }
@@ -417,7 +420,12 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.pointerOverTrigger || this.pointerOverOverlay || this.focusWithinTrigger || this.focusWithinOverlay) {
+    if (
+      this.pointerOverTrigger ||
+      this.pointerOverOverlay ||
+      this.focusWithinTrigger ||
+      this.focusWithinOverlay
+    ) {
       this.cancelClose();
       return;
     }
@@ -427,7 +435,12 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     this.closeTimer = setTimeout(() => {
       this.closeTimer = undefined;
 
-      if (this.pointerOverTrigger || this.pointerOverOverlay || this.focusWithinTrigger || this.focusWithinOverlay) {
+      if (
+        this.pointerOverTrigger ||
+        this.pointerOverOverlay ||
+        this.focusWithinTrigger ||
+        this.focusWithinOverlay
+      ) {
         return;
       }
 
@@ -450,56 +463,56 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private getSideFromPosition(position: ConnectedPosition): ZardHoverCardPlacement {
-    if (position.originY === 'bottom' && position.overlayY === 'top') {
-      return 'bottom';
+    if (position.originY === "bottom" && position.overlayY === "top") {
+      return "bottom";
     }
 
-    if (position.originY === 'top' && position.overlayY === 'bottom') {
-      return 'top';
+    if (position.originY === "top" && position.overlayY === "bottom") {
+      return "top";
     }
 
     // CDK start/end follow the overlay direction; `left`/`right` are physical.
-    const cdkEnd = position.originX === 'end' && position.overlayX === 'start';
-    return cdkEnd !== (this.direction() === 'rtl') ? 'right' : 'left';
+    const cdkEnd = position.originX === "end" && position.overlayX === "start";
+    return cdkEnd !== (this.direction() === "rtl") ? "right" : "left";
   }
 
   private updateContentSide(side: ZardHoverCardPlacement): void {
-    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('[data-slot="hover-card-content"]');
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>(
+      '[data-slot="hover-card-content"]',
+    );
 
     if (!content) {
       return;
     }
 
     const transformOrigins: Record<ZardHoverCardPlacement, string> = {
-      top: 'bottom center',
-      bottom: 'top center',
-      left: 'right center',
-      right: 'left center',
+      top: "bottom center",
+      bottom: "top center",
+      left: "right center",
+      right: "left center",
     };
 
-    content.dataset['state'] = 'open';
-    content.dataset['side'] = side;
-    content.style.setProperty('--z-hover-card-transform-origin', transformOrigins[side]);
+    content.dataset["state"] = "open";
+    content.dataset["side"] = side;
+    content.style.setProperty("--z-hover-card-transform-origin", transformOrigins[side]);
   }
 }
 
 /** Styled content container rendered inside a hover card overlay. */
 @Component({
-  selector: 'z-hover-card, [z-hover-card]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-hover-card, [z-hover-card]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'hover-card-content',
-    '[class]': 'classes()',
+    "data-slot": "hover-card-content",
+    "[class]": "classes()",
   },
-  exportAs: 'zHoverCard',
+  exportAs: "zHoverCard",
 })
 export class ZardHoverCardComponent {
   /** Additional CSS classes merged with the default hover card styles. */
-  readonly class: InputSignal<ClassValue> = input<ClassValue>('');
+  readonly class: InputSignal<ClassValue> = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(hoverCardVariants(), this.class()));
 }

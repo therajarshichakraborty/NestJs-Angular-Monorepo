@@ -8,7 +8,7 @@ import {
   ZardAttachmentActionComponent,
   ZardAttachmentTriggerDirective,
   ZardAttachmentGroupComponent,
-} from '@repo/ui/components/attachment/attachment.component';
+} from "@repo/ui/components/attachment/attachment.component";
 
 export const ZardAttachmentImports = [
   ZardAttachmentComponent,

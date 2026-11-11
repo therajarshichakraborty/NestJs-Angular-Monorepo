@@ -1,5 +1,5 @@
-import { FocusTrapFactory } from '@angular/cdk/a11y';
-import { isPlatformBrowser } from '@angular/common';
+import { FocusTrapFactory } from "@angular/cdk/a11y";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -19,13 +19,19 @@ import {
   untracked,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { DRAWER_STACK_PEEK, DRAWER_STACK_STEP, drawerDepth, popDrawerPanel, pushDrawerPanel } from './drawer-stack';
+import {
+  DRAWER_STACK_PEEK,
+  DRAWER_STACK_STEP,
+  drawerDepth,
+  popDrawerPanel,
+  pushDrawerPanel,
+} from "./drawer-stack";
 import {
   closingDirection,
   DRAWER_CLOSE_THRESHOLD,
@@ -38,8 +44,13 @@ import {
   resolveSnapPoints,
   rubberband,
   type ZardDrawerSnapPoint,
-} from './drawer.utils';
-import { drawerBodyVariants, drawerHandleVariants, drawerVariants, type ZardDrawerPlacement } from './drawer.variants';
+} from "./drawer.utils";
+import {
+  drawerBodyVariants,
+  drawerHandleVariants,
+  drawerVariants,
+  type ZardDrawerPlacement,
+} from "./drawer.variants";
 
 /** Movement (px) tolerated before a pointer press is treated as a swipe rather than a tap. */
 const SWIPE_START_THRESHOLD = 3;
@@ -52,7 +63,7 @@ const SWIPE_START_THRESHOLD = 3;
  * @internal Compose `z-drawer` instead of using this directly.
  */
 @Component({
-  selector: 'z-drawer-panel',
+  selector: "z-drawer-panel",
   template: `
     @if (showHandle()) {
       <div data-slot="drawer-swipe-handle" aria-hidden="true" [class]="handleClasses()"></div>
@@ -60,7 +71,12 @@ const SWIPE_START_THRESHOLD = 3;
 
     <!-- A drawer with snap points is laid out at full height and translated, so the body is
          capped at the part that is actually on screen — otherwise its scroll area runs off it. -->
-    <div #body data-slot="drawer-content" [class]="bodyClasses()" [style.max-height.px]="bodyHeight()">
+    <div
+      #body
+      data-slot="drawer-content"
+      [class]="bodyClasses()"
+      [style.max-height.px]="bodyHeight()"
+    >
       <ng-content />
     </div>
   `,
@@ -85,30 +101,30 @@ const SWIPE_START_THRESHOLD = 3;
     /* translate carries the enter/exit slide and transform the swipe offset and the nested
        stacking, so the inline styles never overwrite the animation (and vice versa). */
     @starting-style {
-      z-drawer-panel[data-placement='top'] {
+      z-drawer-panel[data-placement="top"] {
         translate: 0 calc(-1 * var(--z-drawer-exit));
       }
-      z-drawer-panel[data-placement='bottom'] {
+      z-drawer-panel[data-placement="bottom"] {
         translate: 0 var(--z-drawer-exit);
       }
-      z-drawer-panel[data-placement='left'] {
+      z-drawer-panel[data-placement="left"] {
         translate: calc(-1 * var(--z-drawer-exit)) 0;
       }
-      z-drawer-panel[data-placement='right'] {
+      z-drawer-panel[data-placement="right"] {
         translate: var(--z-drawer-exit) 0;
       }
     }
 
-    z-drawer-panel[data-state='closed'][data-placement='top'] {
+    z-drawer-panel[data-state="closed"][data-placement="top"] {
       translate: 0 calc(-1 * var(--z-drawer-exit));
     }
-    z-drawer-panel[data-state='closed'][data-placement='bottom'] {
+    z-drawer-panel[data-state="closed"][data-placement="bottom"] {
       translate: 0 var(--z-drawer-exit);
     }
-    z-drawer-panel[data-state='closed'][data-placement='left'] {
+    z-drawer-panel[data-state="closed"][data-placement="left"] {
       translate: calc(-1 * var(--z-drawer-exit)) 0;
     }
-    z-drawer-panel[data-state='closed'][data-placement='right'] {
+    z-drawer-panel[data-state="closed"][data-placement="right"] {
       translate: var(--z-drawer-exit) 0;
     }
 
@@ -123,49 +139,49 @@ const SWIPE_START_THRESHOLD = 3;
     }
 
     /* The pill inside the grab strip. */
-    [data-slot='drawer-swipe-handle']::after {
-      content: '';
+    [data-slot="drawer-swipe-handle"]::after {
+      content: "";
       border-radius: 9999px;
       background: var(--color-muted);
     }
 
-    z-drawer-panel[data-axis='y'] [data-slot='drawer-swipe-handle']::after {
+    z-drawer-panel[data-axis="y"] [data-slot="drawer-swipe-handle"]::after {
       width: 100px;
       height: 6px;
     }
 
-    z-drawer-panel[data-axis='x'] [data-slot='drawer-swipe-handle']::after {
+    z-drawer-panel[data-axis="x"] [data-slot="drawer-swipe-handle"]::after {
       width: 6px;
       height: 100px;
     }
 
     z-drawer-panel::after {
-      content: '';
+      content: "";
       position: absolute;
       pointer-events: none;
       background: var(--z-drawer-bleed);
     }
 
-    z-drawer-panel[data-axis='y']::after {
+    z-drawer-panel[data-axis="y"]::after {
       inset-inline: 0;
       height: 3rem;
     }
 
-    z-drawer-panel[data-axis='x']::after {
+    z-drawer-panel[data-axis="x"]::after {
       inset-block: 0;
       width: 3rem;
     }
 
-    z-drawer-panel[data-placement='bottom']::after {
+    z-drawer-panel[data-placement="bottom"]::after {
       top: 100%;
     }
-    z-drawer-panel[data-placement='top']::after {
+    z-drawer-panel[data-placement="top"]::after {
       bottom: 100%;
     }
-    z-drawer-panel[data-placement='right']::after {
+    z-drawer-panel[data-placement="right"]::after {
       left: 100%;
     }
-    z-drawer-panel[data-placement='left']::after {
+    z-drawer-panel[data-placement="left"]::after {
       right: 100%;
     }
 
@@ -178,27 +194,27 @@ const SWIPE_START_THRESHOLD = 3;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'drawer-popup',
-    role: 'dialog',
-    tabindex: '-1',
-    '[attr.data-placement]': 'zPlacement()',
-    '[attr.data-axis]': 'axis()',
-    '[attr.data-state]': 'zState()',
-    '[attr.data-swiping]': 'isSwiping() ? "" : null',
-    '[attr.data-snap-points]': 'hasSnapPoints() ? "" : null',
-    '[attr.data-expanded]': 'isExpanded() ? "" : null',
-    '[attr.data-nested-open]': 'depth() ? "" : null',
-    '[attr.aria-modal]': 'zModal() ? "true" : null',
-    '[attr.aria-labelledby]': 'zLabelledBy()',
-    '[attr.aria-describedby]': 'zDescribedBy()',
-    '[class]': 'classes()',
-    '[style.transform]': 'transform()',
-    '[style.touch-action]': 'swipeable() ? "none" : null',
-    '[style.--z-drawer-duration.ms]': 'zDuration()',
-    '[style.--z-drawer-visible-size.px]': 'visibleSize()',
-    '(pointerdown)': 'onPointerDown($event)',
+    "data-slot": "drawer-popup",
+    role: "dialog",
+    tabindex: "-1",
+    "[attr.data-placement]": "zPlacement()",
+    "[attr.data-axis]": "axis()",
+    "[attr.data-state]": "zState()",
+    "[attr.data-swiping]": 'isSwiping() ? "" : null',
+    "[attr.data-snap-points]": 'hasSnapPoints() ? "" : null',
+    "[attr.data-expanded]": 'isExpanded() ? "" : null',
+    "[attr.data-nested-open]": 'depth() ? "" : null',
+    "[attr.aria-modal]": 'zModal() ? "true" : null',
+    "[attr.aria-labelledby]": "zLabelledBy()",
+    "[attr.aria-describedby]": "zDescribedBy()",
+    "[class]": "classes()",
+    "[style.transform]": "transform()",
+    "[style.touch-action]": 'swipeable() ? "none" : null',
+    "[style.--z-drawer-duration.ms]": "zDuration()",
+    "[style.--z-drawer-visible-size.px]": "visibleSize()",
+    "(pointerdown)": "onPointerDown($event)",
   },
-  exportAs: 'zDrawerPanel',
+  exportAs: "zDrawerPanel",
 })
 export class ZardDrawerPanelComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -207,7 +223,7 @@ export class ZardDrawerPanelComponent {
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly zPlacement = input<ZardDrawerPlacement>('bottom');
+  readonly zPlacement = input<ZardDrawerPlacement>("bottom");
   readonly zSnapPoints = input<readonly ZardDrawerSnapPoint[] | undefined>(undefined);
   readonly zSnapPoint = model<ZardDrawerSnapPoint | undefined>(undefined);
   readonly zDismissible = input(true, { transform: booleanAttribute });
@@ -215,17 +231,17 @@ export class ZardDrawerPanelComponent {
   readonly zModal = input(true, { transform: booleanAttribute });
   readonly zDuration = input(DRAWER_DURATION);
   /** Drives the enter/exit slide. The owner flips it to `closed` before disposing the overlay. */
-  readonly zState = input<'open' | 'closed'>('open');
+  readonly zState = input<"open" | "closed">("open");
   readonly zLabelledBy = input<string | null>(null);
   readonly zDescribedBy = input<string | null>(null);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** Emitted when a gesture asks for the drawer to close. */
   readonly closeRequested = output<void>();
 
   protected readonly isSwiping = signal(false);
 
-  private readonly body = viewChild.required<ElementRef<HTMLElement>>('body');
+  private readonly body = viewChild.required<ElementRef<HTMLElement>>("body");
 
   private readonly viewportWidth = signal(0);
   private readonly viewportHeight = signal(0);
@@ -237,7 +253,7 @@ export class ZardDrawerPanelComponent {
   /** How many drawers are stacked on top of this one. */
   protected readonly depth = drawerDepth(this);
 
-  protected readonly axis = computed(() => (isVerticalPlacement(this.zPlacement()) ? 'y' : 'x'));
+  protected readonly axis = computed(() => (isVerticalPlacement(this.zPlacement()) ? "y" : "x"));
 
   protected readonly hasSnapPoints = computed(() => (this.zSnapPoints()?.length ?? 0) > 0);
 
@@ -246,10 +262,15 @@ export class ZardDrawerPanelComponent {
   protected readonly showHandle = computed(() => this.zHandle());
 
   protected readonly classes = computed(() =>
-    mergeClasses(drawerVariants({ zPlacement: this.zPlacement(), zSnapping: this.hasSnapPoints() }), this.class()),
+    mergeClasses(
+      drawerVariants({ zPlacement: this.zPlacement(), zSnapping: this.hasSnapPoints() }),
+      this.class(),
+    ),
   );
 
-  protected readonly handleClasses = computed(() => drawerHandleVariants({ zPlacement: this.zPlacement() }));
+  protected readonly handleClasses = computed(() =>
+    drawerHandleVariants({ zPlacement: this.zPlacement() }),
+  );
   protected readonly bodyClasses = computed(() => drawerBodyVariants());
 
   private readonly viewportSize = computed(() =>
@@ -278,7 +299,7 @@ export class ZardDrawerPanelComponent {
       return -1;
     }
 
-    const index = points.indexOf(this.zSnapPoint() as ZardDrawerSnapPoint);
+    const index = points.indexOf(this.zSnapPoint()!);
     return index >= 0 ? index : 0;
   });
 
@@ -361,7 +382,7 @@ export class ZardDrawerPanelComponent {
     // un-stacks while both are still moving — and re-join it if the drawer is re-opened
     // mid-exit, which reuses this same panel.
     effect(() => {
-      const closing = this.zState() === 'closed';
+      const closing = this.zState() === "closed";
       untracked(() => (closing ? popDrawerPanel(this) : pushDrawerPanel(this)));
     });
 
@@ -392,14 +413,16 @@ export class ZardDrawerPanelComponent {
     // the swipe maths needs its layout size, not the size it happens to be painted at.
     const element = this.host.nativeElement;
 
-    this.measuredSize.set(isVerticalPlacement(this.zPlacement()) ? element.offsetHeight : element.offsetWidth);
+    this.measuredSize.set(
+      isVerticalPlacement(this.zPlacement()) ? element.offsetHeight : element.offsetWidth,
+    );
     // The panel is `position: fixed`, so it is the offsetParent of its own children.
     this.bodyOffset.set(this.body().nativeElement.offsetTop);
     this.readViewport();
   }
 
   private observeResize(): void {
-    if (typeof ResizeObserver === 'undefined') {
+    if (typeof ResizeObserver === "undefined") {
       return;
     }
 
@@ -439,9 +462,9 @@ export class ZardDrawerPanelComponent {
     this.startOffset = this.offset();
     this.startTime = event.timeStamp;
 
-    window.addEventListener('pointermove', this.onPointerMove, { passive: false });
-    window.addEventListener('pointerup', this.onPointerUp);
-    window.addEventListener('pointercancel', this.onPointerUp);
+    window.addEventListener("pointermove", this.onPointerMove, { passive: false });
+    window.addEventListener("pointerup", this.onPointerUp);
+    window.addEventListener("pointercancel", this.onPointerUp);
   }
 
   private readonly onPointerMove = (event: PointerEvent): void => {
@@ -483,7 +506,8 @@ export class ZardDrawerPanelComponent {
 
     const wasSwiping = this.isSwiping();
     const elapsed = Math.max(1, event.timeStamp - this.startTime);
-    const velocity = ((this.lastPosition - this.startPosition) * closingDirection(this.zPlacement())) / elapsed;
+    const velocity =
+      ((this.lastPosition - this.startPosition) * closingDirection(this.zPlacement())) / elapsed;
 
     this.endGesture();
     if (!wasSwiping) {
@@ -505,9 +529,9 @@ export class ZardDrawerPanelComponent {
     this.pointerId = null;
     this.isSwiping.set(false);
 
-    window.removeEventListener('pointermove', this.onPointerMove);
-    window.removeEventListener('pointerup', this.onPointerUp);
-    window.removeEventListener('pointercancel', this.onPointerUp);
+    window.removeEventListener("pointermove", this.onPointerMove);
+    window.removeEventListener("pointerup", this.onPointerUp);
+    window.removeEventListener("pointercancel", this.onPointerUp);
   }
 
   /** Swiping past the fully open edge — and past the last stop of a locked drawer — resists. */
@@ -534,7 +558,8 @@ export class ZardDrawerPanelComponent {
     const dismiss =
       this.zDismissible() &&
       (velocity > DRAWER_VELOCITY_THRESHOLD ||
-        (velocity > -DRAWER_VELOCITY_THRESHOLD && this.offset() > this.panelSize() * DRAWER_CLOSE_THRESHOLD));
+        (velocity > -DRAWER_VELOCITY_THRESHOLD &&
+          this.offset() > this.panelSize() * DRAWER_CLOSE_THRESHOLD));
 
     this.swipeOffset.set(null);
     if (dismiss) {

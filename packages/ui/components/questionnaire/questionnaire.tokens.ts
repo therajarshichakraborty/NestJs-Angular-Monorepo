@@ -1,6 +1,6 @@
-import { InjectionToken, type Signal } from '@angular/core';
+import { InjectionToken, type Signal } from "@angular/core";
 
-import type { ZardQuestionnaireItem } from './questionnaire.types';
+import type { ZardQuestionnaireItem } from "./questionnaire.types";
 
 /** What the questionnaire needs from a projected item; the token keeps item and root free of an import cycle. */
 export interface ZardQuestionnaireItemRef {
@@ -15,5 +15,9 @@ export interface ZardQuestionnaireChoiceRef {
   select(): void;
 }
 
-export const ZARD_QUESTIONNAIRE_ITEM = new InjectionToken<ZardQuestionnaireItemRef>('ZARD_QUESTIONNAIRE_ITEM');
-export const ZARD_QUESTIONNAIRE_CHOICE = new InjectionToken<ZardQuestionnaireChoiceRef>('ZARD_QUESTIONNAIRE_CHOICE');
+export const ZARD_QUESTIONNAIRE_ITEM = new InjectionToken<ZardQuestionnaireItemRef>(
+  "ZARD_QUESTIONNAIRE_ITEM",
+);
+export const ZARD_QUESTIONNAIRE_CHOICE = new InjectionToken<ZardQuestionnaireChoiceRef>(
+  "ZARD_QUESTIONNAIRE_CHOICE",
+);

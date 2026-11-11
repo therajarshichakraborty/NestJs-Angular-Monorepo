@@ -1,5 +1,5 @@
-import { LoggerService } from '@nestjs/common';
-import type { AppLogger } from '@repo/logs';
+import { LoggerService } from "@nestjs/common";
+import type { AppLogger } from "@repo/logs";
 
 export class NestLoggerAdapter implements LoggerService {
   constructor(private readonly appLogger: AppLogger) {}

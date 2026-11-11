@@ -12,7 +12,12 @@ interface DemoUser {
 
 const DEMO_USERS: DemoUser[] = [
   { email: "admin@example.com", fullName: "Demo Admin", password: "admin-password", role: "admin" },
-  { email: "member@example.com", fullName: "Demo Member", password: "member-password", role: "member" },
+  {
+    email: "member@example.com",
+    fullName: "Demo Member",
+    password: "member-password",
+    role: "member",
+  },
 ];
 
 async function seedDemoUsers(): Promise<void> {

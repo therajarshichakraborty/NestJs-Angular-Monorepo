@@ -6,39 +6,37 @@ import {
   contentChildren,
   input,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardAccordionItemComponent } from '@repo/ui/components/accordion/accordion-item.component';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardAccordionItemComponent } from "@repo/ui/components/accordion/accordion-item.component";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-accordion, [z-accordion]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-accordion, [z-accordion]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'accordion',
+    "data-slot": "accordion",
   },
-  exportAs: 'zAccordion',
+  exportAs: "zAccordion",
 })
 export class ZardAccordionComponent implements AfterContentInit {
   readonly items = contentChildren(ZardAccordionItemComponent);
 
-  readonly class = input<ClassValue>('');
-  readonly zType = input<'single' | 'multiple'>('single');
+  readonly class = input<ClassValue>("");
+  readonly zType = input<"single" | "multiple">("single");
   readonly zCollapsible = input<boolean>(true);
-  readonly zDefaultValue = input<string | string[]>('');
+  readonly zDefaultValue = input<string | string[]>("");
 
   private readonly defaultValue = computed(() => {
     const defaultValue = this.zDefaultValue();
-    if (typeof defaultValue === 'string') {
+    if (typeof defaultValue === "string") {
       return defaultValue ? [defaultValue] : [];
-    } else if (this.zType() === 'single') {
-      throw new Error('Array of default values is supported only for multiple zType');
+    } else if (this.zType() === "single") {
+      throw new Error("Array of default values is supported only for multiple zType");
     }
     return defaultValue;
   });
@@ -53,7 +51,7 @@ export class ZardAccordionComponent implements AfterContentInit {
   }
 
   toggleItem(selectedItem: ZardAccordionItemComponent): void {
-    if (this.zType() === 'single') {
+    if (this.zType() === "single") {
       this.toggleForSingleType(selectedItem);
     } else {
       this.toggleForMultipleType(selectedItem);
@@ -79,10 +77,10 @@ export class ZardAccordionComponent implements AfterContentInit {
       return;
     }
 
-    selectedItem.isOpen.update(v => !v);
+    selectedItem.isOpen.update((v) => !v);
   }
 
   private countOpenItems(): number {
-    return this.items().reduce((counter, item) => (item.isOpen() ? ++counter : counter), 0);
+    return this.items().reduce((counter, item) => (item.isOpen() ? counter + 1 : counter), 0);
   }
 }

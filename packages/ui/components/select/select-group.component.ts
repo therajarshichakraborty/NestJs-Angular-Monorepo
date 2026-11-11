@@ -1,63 +1,71 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
 import {
   selectGroupVariants,
   selectLabelVariants,
   selectSeparatorVariants,
-} from '@repo/ui/components/select/select.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/select/select.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-select-group, [z-select-group]',
-  template: '<ng-content />',
+  selector: "z-select-group, [z-select-group]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'select-group',
-    role: 'group',
-    '[class]': 'classes()',
+    "data-slot": "select-group",
+    role: "group",
+    "[class]": "classes()",
   },
-  exportAs: 'zSelectGroup',
+  exportAs: "zSelectGroup",
 })
 export class ZardSelectGroupComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(selectGroupVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-select-label, [z-select-label]',
-  template: '<ng-content />',
+  selector: "z-select-label, [z-select-label]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'select-label',
-    '[class]': 'classes()',
+    "data-slot": "select-label",
+    "[class]": "classes()",
   },
-  exportAs: 'zSelectLabel',
+  exportAs: "zSelectLabel",
 })
 export class ZardSelectLabelComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(selectLabelVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-select-separator, [z-select-separator]',
-  template: '',
+  selector: "z-select-separator, [z-select-separator]",
+  template: "",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'select-separator',
-    role: 'separator',
-    '[class]': 'classes()',
+    "data-slot": "select-separator",
+    role: "separator",
+    "[class]": "classes()",
   },
-  exportAs: 'zSelectSeparator',
+  exportAs: "zSelectSeparator",
 })
 export class ZardSelectSeparatorComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(selectSeparatorVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(selectSeparatorVariants(), this.class()),
+  );
 }

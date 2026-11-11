@@ -1,6 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
 import {
   type ZardTableSizeVariants,
@@ -13,26 +19,24 @@ import {
   tableHeadVariants,
   tableRowVariants,
   tableVariants,
-} from '@repo/ui/components/table/table.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/table/table.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'table[z-table]',
-  template: `
-    <ng-content />
-  `,
+  selector: "table[z-table]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table',
-    '[class]': 'classes()',
+    "data-slot": "table",
+    "[class]": "classes()",
   },
-  exportAs: 'zTable',
+  exportAs: "zTable",
 })
 export class ZardTableComponent {
-  readonly zType = input<ZardTableTypeVariants>('default');
-  readonly zSize = input<ZardTableSizeVariants>('default');
-  readonly class = input<ClassValue>('');
+  readonly zType = input<ZardTableTypeVariants>("default");
+  readonly zSize = input<ZardTableSizeVariants>("default");
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -46,134 +50,120 @@ export class ZardTableComponent {
 }
 
 @Component({
-  selector: 'thead[z-table-header]',
-  template: `
-    <ng-content />
-  `,
+  selector: "thead[z-table-header]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-header',
-    '[class]': 'classes()',
+    "data-slot": "table-header",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableHeader',
+  exportAs: "zTableHeader",
 })
 export class ZardTableHeaderComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableHeaderVariants(), this.class()));
 }
 
 @Component({
-  selector: 'tbody[z-table-body]',
-  template: `
-    <ng-content />
-  `,
+  selector: "tbody[z-table-body]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-body',
-    '[class]': 'classes()',
+    "data-slot": "table-body",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableBody',
+  exportAs: "zTableBody",
 })
 export class ZardTableBodyComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableBodyVariants(), this.class()));
 }
 
 @Component({
-  selector: 'tr[z-table-row]',
-  template: `
-    <ng-content />
-  `,
+  selector: "tr[z-table-row]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-row',
-    '[class]': 'classes()',
+    "data-slot": "table-row",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableRow',
+  exportAs: "zTableRow",
 })
 export class ZardTableRowComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableRowVariants(), this.class()));
 }
 
 @Component({
-  selector: 'th[z-table-head]',
-  template: `
-    <ng-content />
-  `,
+  selector: "th[z-table-head]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-head',
-    '[class]': 'classes()',
+    "data-slot": "table-head",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableHead',
+  exportAs: "zTableHead",
 })
 export class ZardTableHeadComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableHeadVariants(), this.class()));
 }
 
 @Component({
-  selector: 'td[z-table-cell]',
-  template: `
-    <ng-content />
-  `,
+  selector: "td[z-table-cell]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-cell',
-    '[class]': 'classes()',
+    "data-slot": "table-cell",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableCell',
+  exportAs: "zTableCell",
 })
 export class ZardTableCellComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableCellVariants(), this.class()));
 }
 
 @Component({
-  selector: 'caption[z-table-caption]',
-  template: `
-    <ng-content />
-  `,
+  selector: "caption[z-table-caption]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-caption',
-    '[class]': 'classes()',
+    "data-slot": "table-caption",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableCaption',
+  exportAs: "zTableCaption",
 })
 export class ZardTableCaptionComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableCaptionVariants(), this.class()));
 }
 
 @Component({
-  selector: 'tfoot[z-table-footer]',
-  template: `
-    <ng-content />
-  `,
+  selector: "tfoot[z-table-footer]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'table-footer',
-    '[class]': 'classes()',
+    "data-slot": "table-footer",
+    "[class]": "classes()",
   },
-  exportAs: 'zTableFooter',
+  exportAs: "zTableFooter",
 })
 export class ZardTableFooterComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(tableFooterVariants(), this.class()));
 }

@@ -7,7 +7,12 @@ import DailyRotateFile from "winston-daily-rotate-file";
 
 import { HTTP_LOG_KINDS, LOG_CATEGORIES } from "./log-categories";
 import type { LogCategory } from "./log-categories";
-import { createConsoleFormat, createFileFormat, keepOnlyWhen, readOriginalLevel } from "./log-formats";
+import {
+  createConsoleFormat,
+  createFileFormat,
+  keepOnlyWhen,
+  readOriginalLevel,
+} from "./log-formats";
 
 const LOG_FILE_DATE_PATTERN = "YYYY-MM-DD";
 const LOG_FILE_MAXIMUM_SIZE = "20m";
@@ -76,14 +81,14 @@ export function createFileTransports(options: FileTransportsOptions): DailyRotat
       service: options.service,
       category: LOG_CATEGORIES.REQUESTS,
       level: "http",
-      filter: (info) => info["kind"] === HTTP_LOG_KINDS.REQUEST,
+      filter: (info) => info.kind === HTTP_LOG_KINDS.REQUEST,
     }),
     createRotatingFileTransport({
       directory: options.directory,
       service: options.service,
       category: LOG_CATEGORIES.RESPONSES,
       level: "http",
-      filter: (info) => info["kind"] === HTTP_LOG_KINDS.RESPONSE,
+      filter: (info) => info.kind === HTTP_LOG_KINDS.RESPONSE,
     }),
   ];
 }

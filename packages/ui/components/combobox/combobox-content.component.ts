@@ -1,13 +1,13 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayPositionBuilder,
   type OverlayRef,
-} from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+} from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,84 +25,90 @@ import {
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter } from "rxjs";
 
 import {
   comboboxContentVariants,
   comboboxEmptyVariants,
   comboboxListVariants,
   comboboxSeparatorVariants,
-} from '@repo/ui/components/combobox/combobox.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/combobox/combobox.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { type ZardComboboxAlignVariants, ZardComboboxRoot, type ZardComboboxSideVariants } from './combobox.types';
+import {
+  type ZardComboboxAlignVariants,
+  ZardComboboxRoot,
+  type ZardComboboxSideVariants,
+} from "./combobox.types";
 
 @Component({
-  selector: 'z-combobox-list, [z-combobox-list]',
-  template: '<ng-content />',
+  selector: "z-combobox-list, [z-combobox-list]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'listbox',
-    'data-slot': 'combobox-list',
-    '[attr.aria-multiselectable]': 'root.zMultiple() ? "true" : null',
-    '[attr.data-empty]': 'isEmpty() ? "" : null',
-    '[class]': 'classes()',
-    '[id]': 'root.listboxId',
+    role: "listbox",
+    "data-slot": "combobox-list",
+    "[attr.aria-multiselectable]": 'root.zMultiple() ? "true" : null',
+    "[attr.data-empty]": 'isEmpty() ? "" : null',
+    "[class]": "classes()",
+    "[id]": "root.listboxId",
   },
-  exportAs: 'zComboboxList',
+  exportAs: "zComboboxList",
 })
 export class ZardComboboxListComponent {
   protected readonly root = inject(ZardComboboxRoot);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly isEmpty = computed(() => this.root.visibleItems().length === 0);
   protected readonly classes = computed(() => mergeClasses(comboboxListVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-combobox-empty, [z-combobox-empty]',
-  template: '<ng-content />',
+  selector: "z-combobox-empty, [z-combobox-empty]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'combobox-empty',
-    '[class]': 'classes()',
+    "data-slot": "combobox-empty",
+    "[class]": "classes()",
   },
-  exportAs: 'zComboboxEmpty',
+  exportAs: "zComboboxEmpty",
 })
 export class ZardComboboxEmptyComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(comboboxEmptyVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-combobox-separator, [z-combobox-separator]',
-  template: '',
+  selector: "z-combobox-separator, [z-combobox-separator]",
+  template: "",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'separator',
-    'aria-orientation': 'horizontal',
-    'data-slot': 'combobox-separator',
-    '[class]': 'classes()',
+    role: "separator",
+    "aria-orientation": "horizontal",
+    "data-slot": "combobox-separator",
+    "[class]": "classes()",
   },
-  exportAs: 'zComboboxSeparator',
+  exportAs: "zComboboxSeparator",
 })
 export class ZardComboboxSeparatorComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(comboboxSeparatorVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(comboboxSeparatorVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-combobox-content',
+  selector: "z-combobox-content",
   template: `
     <ng-template #popupTemplate>
       <div class="isolate z-50">
@@ -130,10 +136,10 @@ export class ZardComboboxSeparatorComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'contents',
-    'data-slot': 'combobox-content-anchor',
+    class: "contents",
+    "data-slot": "combobox-content-anchor",
   },
-  exportAs: 'zComboboxContent',
+  exportAs: "zComboboxContent",
 })
 export class ZardComboboxContentComponent implements OnDestroy {
   protected readonly root = inject(ZardComboboxRoot);
@@ -145,7 +151,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
   // Optional: the direction of the anchor, which is where the overlay content takes its `dir` from.
   private readonly directionality = inject(Directionality, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zAnchor = input<ElementRef<HTMLElement> | HTMLElement | null>(null);
   readonly zSide = input<ZardComboboxSideVariants | null>(null);
   readonly zAlign = input<ZardComboboxAlignVariants | null>(null);
@@ -157,34 +163,41 @@ export class ZardComboboxContentComponent implements OnDestroy {
     transform: nullableNumberAttribute,
   });
 
-  private readonly popupTemplate = viewChild.required<TemplateRef<void>>('popupTemplate');
+  private readonly popupTemplate = viewChild.required<TemplateRef<void>>("popupTemplate");
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private positionStrategy?: FlexibleConnectedPositionStrategy;
 
-  protected readonly resolvedSide = signal<ZardComboboxSideVariants>('bottom');
-  protected readonly anchorWidth = signal('0px');
-  protected readonly availableWidth = signal('0px');
-  protected readonly availableHeight = signal('0px');
+  protected readonly resolvedSide = signal<ZardComboboxSideVariants>("bottom");
+  protected readonly anchorWidth = signal("0px");
+  protected readonly availableWidth = signal("0px");
+  protected readonly availableHeight = signal("0px");
 
   protected readonly sideValue = computed(() => this.zSide() ?? this.root.zSide());
   protected readonly alignValue = computed(() => this.zAlign() ?? this.root.zAlign());
-  protected readonly sideOffsetValue = computed(() => this.zSideOffset() ?? this.root.zSideOffset());
-  protected readonly alignOffsetValue = computed(() => this.zAlignOffset() ?? this.root.zAlignOffset());
+  protected readonly sideOffsetValue = computed(
+    () => this.zSideOffset() ?? this.root.zSideOffset(),
+  );
+  protected readonly alignOffsetValue = computed(
+    () => this.zAlignOffset() ?? this.root.zAlignOffset(),
+  );
 
   protected readonly isEmpty = computed(() => this.root.visibleItems().length === 0);
   protected readonly isChips = computed(() => this.zAnchor() !== null || this.root.hasChips());
 
   protected readonly transformOrigin = computed(() => {
-    const block = this.resolvedSide() === 'bottom' ? 'top' : 'bottom';
+    const block = this.resolvedSide() === "bottom" ? "top" : "bottom";
     const align = this.alignValue();
     // `start`/`end` are logical: the start edge is the physical right in RTL.
-    const inline = align === 'center' ? 'center' : (align === 'start') !== this.isRtl() ? 'left' : 'right';
+    const inline =
+      align === "center" ? "center" : (align === "start") !== this.isRtl() ? "left" : "right";
     return `${block} ${inline}`;
   });
 
-  protected readonly popupClasses = computed(() => mergeClasses(comboboxContentVariants(), this.class()));
+  protected readonly popupClasses = computed(() =>
+    mergeClasses(comboboxContentVariants(), this.class()),
+  );
 
   constructor() {
     effect(() => {
@@ -204,13 +217,13 @@ export class ZardComboboxContentComponent implements OnDestroy {
     });
   }
 
-  private direction(): 'ltr' | 'rtl' {
+  private direction(): "ltr" | "rtl" {
     // The signal keeps `transformOrigin` (a computed) in step with a `[dir]` switch.
-    return this.directionality?.valueSignal() ?? 'ltr';
+    return this.directionality?.valueSignal() ?? "ltr";
   }
 
   private isRtl(): boolean {
-    return this.direction() === 'rtl';
+    return this.direction() === "rtl";
   }
 
   ngOnDestroy(): void {
@@ -276,15 +289,17 @@ export class ZardComboboxContentComponent implements OnDestroy {
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
 
-    this.positionStrategy.positionChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(change => {
-      this.resolvedSide.set(change.connectionPair.originY === 'top' ? 'top' : 'bottom');
-      this.updateMeasurements();
-    });
+    this.positionStrategy.positionChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((change) => {
+        this.resolvedSide.set(change.connectionPair.originY === "top" ? "top" : "bottom");
+        this.updateMeasurements();
+      });
 
     this.overlayRef
       .outsidePointerEvents()
       .pipe(
-        filter(event => !this.isInsideCombobox(event.target)),
+        filter((event) => !this.isInsideCombobox(event.target)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => this.root.closePanel());
@@ -301,29 +316,29 @@ export class ZardComboboxContentComponent implements OnDestroy {
 
   private connectedPositions(): ConnectedPosition[] {
     const align = this.alignValue();
-    const x = align === 'center' ? 'center' : align === 'end' ? 'end' : 'start';
+    const x = align === "center" ? "center" : align === "end" ? "end" : "start";
     const sideOffset = this.sideOffsetValue();
     // `offsetX` is physical while `start`/`end` follow the direction, so the align offset is mirrored.
     const alignOffset = this.isRtl() ? -this.alignOffsetValue() : this.alignOffsetValue();
 
     const below: ConnectedPosition = {
       originX: x,
-      originY: 'bottom',
+      originY: "bottom",
       overlayX: x,
-      overlayY: 'top',
+      overlayY: "top",
       offsetX: alignOffset,
       offsetY: sideOffset,
     };
     const above: ConnectedPosition = {
       originX: x,
-      originY: 'top',
+      originY: "top",
       overlayX: x,
-      overlayY: 'bottom',
+      overlayY: "bottom",
       offsetX: alignOffset,
       offsetY: -sideOffset,
     };
 
-    return this.sideValue() === 'top' ? [above, below] : [below, above];
+    return this.sideValue() === "top" ? [above, below] : [below, above];
   }
 
   private updateMeasurements(): void {
@@ -338,10 +353,12 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const viewportWidth = window.innerWidth || 0;
     const align = this.alignValue();
 
-    const height = this.resolvedSide() === 'bottom' ? viewportHeight - rect.bottom - offset : rect.top - offset;
+    const height =
+      this.resolvedSide() === "bottom" ? viewportHeight - rect.bottom - offset : rect.top - offset;
     // The start edge is the physical right in RTL, so the room it grows into is measured from the other side.
-    const growsRight = (align === 'start') !== this.isRtl();
-    const width = align === 'center' ? viewportWidth : growsRight ? viewportWidth - rect.left : rect.right;
+    const growsRight = (align === "start") !== this.isRtl();
+    const width =
+      align === "center" ? viewportWidth : growsRight ? viewportWidth - rect.left : rect.right;
 
     this.anchorWidth.set(`${Math.round(anchor.offsetWidth || rect.width)}px`);
     this.availableHeight.set(`${Math.max(Math.round(height), 0)}px`);
@@ -355,7 +372,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
 }
 
 function nullableNumberAttribute(value: number | string | null | undefined): number | null {
-  if (value === null || value === undefined || value === '') {
+  if (value === null || value === undefined || value === "") {
     return null;
   }
   return numberAttribute(value);

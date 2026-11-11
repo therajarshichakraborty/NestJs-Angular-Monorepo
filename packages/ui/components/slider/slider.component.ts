@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   type AfterViewInit,
   booleanAttribute,
@@ -18,16 +18,16 @@ import {
   viewChild,
   viewChildren,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
-import { filter, fromEvent, map, switchMap, takeUntil, tap } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter, fromEvent, map, switchMap, takeUntil, tap } from "rxjs";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
-import { clamp, convertValueToPercentage, roundToStep } from '@repo/ui/utils/number';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
+import { clamp, convertValueToPercentage, roundToStep } from "@repo/ui/utils/number";
 
 import {
   sliderOrientationVariants,
@@ -35,34 +35,41 @@ import {
   sliderThumbVariants,
   sliderTrackVariants,
   sliderVariants,
-} from './slider.variants';
+} from "./slider.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: number[]) => void;
 
 @Component({
-  selector: 'z-slider-track',
+  selector: "z-slider-track",
   template: `
-    <span #track data-slot="slider-track" [attr.data-orientation]="orientation()" [class]="classes()">
+    <span
+      #track
+      data-slot="slider-track"
+      [attr.data-orientation]="orientation()"
+      [class]="classes()"
+    >
       <ng-content />
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[style.width]': '"inherit"',
-    '[style.height]': '"100%"',
-    '[attr.data-orientation]': 'orientation()',
+    "[style.width]": '"inherit"',
+    "[style.height]": '"100%"',
+    "[attr.data-orientation]": "orientation()",
   },
-  exportAs: 'zSliderTrack',
+  exportAs: "zSliderTrack",
 })
 export class ZardSliderTrackComponent {
-  readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly class = input<ClassValue>('');
+  readonly orientation = input<"horizontal" | "vertical">("horizontal");
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(sliderTrackVariants(), 'flex', this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sliderTrackVariants(), "flex", this.class()),
+  );
 
-  private readonly trackEl = viewChild.required<ElementRef<HTMLElement>>('track');
+  private readonly trackEl = viewChild.required<ElementRef<HTMLElement>>("track");
 
   get nativeElement(): HTMLElement {
     return this.trackEl().nativeElement;
@@ -70,7 +77,7 @@ export class ZardSliderTrackComponent {
 }
 
 @Component({
-  selector: 'z-slider-range',
+  selector: "z-slider-range",
   template: `
     @for (seg of segments(); track $index) {
       <span
@@ -86,13 +93,13 @@ export class ZardSliderTrackComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zSliderRange',
+  exportAs: "zSliderRange",
 })
 export class ZardSliderRangeComponent {
   readonly percent = input<number[]>([0]);
 
-  readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly class = input<ClassValue>('');
+  readonly orientation = input<"horizontal" | "vertical">("horizontal");
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sliderRangeVariants(), this.class()));
 
@@ -100,8 +107,8 @@ export class ZardSliderRangeComponent {
 
   protected readonly segments = computed(() => {
     const p = this.percent();
-    const isHorizontal = this.orientation() === 'horizontal';
-    const isRtl = (this.directionality?.valueSignal() ?? 'ltr') === 'rtl';
+    const isHorizontal = this.orientation() === "horizontal";
+    const isRtl = (this.directionality?.valueSignal() ?? "ltr") === "rtl";
 
     // `start` is the inset from the inline-start edge, `end` from the inline-end edge
     // (left/right in LTR, right/left in RTL), so the filled range grows from the reading start.
@@ -115,23 +122,23 @@ export class ZardSliderRangeComponent {
     };
 
     if (p.length === 0) {
-      return [make('0', '100%')];
+      return [make("0", "100%")];
     }
 
     if (p.length === 1) {
-      return [make('0', 100 - p[0] + '%')];
+      return [make("0", 100 - p[0] + "%")];
     }
 
     const segs: ReturnType<typeof make>[] = [];
     for (let i = 0; i < p.length - 1; i++) {
-      segs.push(make(p[i] + '%', 100 - p[i + 1] + '%'));
+      segs.push(make(p[i] + "%", 100 - p[i + 1] + "%"));
     }
     return segs;
   });
 }
 
 @Component({
-  selector: 'z-slider-thumb',
+  selector: "z-slider-thumb",
   template: `
     <span
       #thumb
@@ -148,12 +155,12 @@ export class ZardSliderRangeComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'orientationClasses()',
-    '[style.left]': 'orientation() === "horizontal" && !isRtl() ? position() : null',
-    '[style.right]': 'orientation() === "horizontal" && isRtl() ? position() : null',
-    '[style.bottom]': 'orientation() === "vertical" ? position() : null',
+    "[class]": "orientationClasses()",
+    "[style.left]": 'orientation() === "horizontal" && !isRtl() ? position() : null',
+    "[style.right]": 'orientation() === "horizontal" && isRtl() ? position() : null',
+    "[style.bottom]": 'orientation() === "vertical" ? position() : null',
   },
-  exportAs: 'zSliderThumb',
+  exportAs: "zSliderThumb",
 })
 export class ZardSliderThumbComponent {
   readonly value = input(0);
@@ -163,14 +170,16 @@ export class ZardSliderThumbComponent {
   readonly percent = input(0);
   readonly offset = input(0);
 
-  readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly class = input<ClassValue>('');
+  readonly orientation = input<"horizontal" | "vertical">("horizontal");
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
 
   private readonly directionality = inject(Directionality, { optional: true });
 
-  protected readonly isRtl = computed(() => (this.directionality?.valueSignal() ?? 'ltr') === 'rtl');
+  protected readonly isRtl = computed(
+    () => (this.directionality?.valueSignal() ?? "ltr") === "rtl",
+  );
 
   protected readonly position = computed(() => `calc(${this.percent()}% + ${this.offset()}px)`);
 
@@ -178,7 +187,7 @@ export class ZardSliderThumbComponent {
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
   );
 
-  private readonly thumbEl = viewChild.required<ElementRef<HTMLElement>>('thumb');
+  private readonly thumbEl = viewChild.required<ElementRef<HTMLElement>>("thumb");
 
   get nativeElement(): HTMLElement {
     return this.thumbEl().nativeElement;
@@ -186,7 +195,7 @@ export class ZardSliderThumbComponent {
 }
 
 @Component({
-  selector: 'z-slider',
+  selector: "z-slider",
   imports: [ZardSliderTrackComponent, ZardSliderRangeComponent, ZardSliderThumbComponent],
   template: `
     <span
@@ -208,7 +217,9 @@ export class ZardSliderThumbComponent {
           [min]="zMin()"
           [max]="zMax()"
           [disabled]="disabled()"
-          (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="handleKeydown($event, $index)"
+          (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="
+            handleKeydown($event, $index)
+          "
         />
       }
     </span>
@@ -223,11 +234,11 @@ export class ZardSliderThumbComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-orientation]': 'zOrientation()',
-    '[attr.aria-disabled]': 'disabled() ? true : null',
-    '[attr.data-disabled]': 'disabled() ? true : null',
+    "[attr.data-orientation]": "zOrientation()",
+    "[attr.aria-disabled]": "disabled() ? true : null",
+    "[attr.data-disabled]": "disabled() ? true : null",
   },
-  exportAs: 'zSlider',
+  exportAs: "zSlider",
 })
 export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -242,8 +253,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   readonly zStep = input(1, { transform: numberAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
 
-  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly class = input<ClassValue>('');
+  readonly zOrientation = input<"horizontal" | "vertical">("horizontal");
+  readonly class = input<ClassValue>("");
 
   readonly zSlideIndexChange = output<number[]>();
 
@@ -268,7 +279,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   protected readonly percentages = computed(() => {
     const [min, max] = this.getMinMax();
-    return this.values().map(v => convertValueToPercentage(v, min, max));
+    return this.values().map((v) => convertValueToPercentage(v, min, max));
   });
 
   readonly lastEmittedValue = signal<number[]>([]);
@@ -280,20 +291,20 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   constructor() {
     toObservable(this.zValue)
       .pipe(
-        filter(values => values.toString() !== this.lastEmittedValue().toString()),
+        filter((values) => values.toString() !== this.lastEmittedValue().toString()),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => this.setInitialValue());
   }
 
   ngAfterViewInit() {
-    const pointerDown$ = fromEvent<PointerEvent>(this.elementRef.nativeElement, 'pointerdown').pipe(
+    const pointerDown$ = fromEvent<PointerEvent>(this.elementRef.nativeElement, "pointerdown").pipe(
       filter(() => !this.disabled()),
-      tap(event => {
+      tap((event) => {
         const target = event.target as HTMLElement;
         const thumbs = this.thumbRefs();
 
-        const clickedIndex = thumbs.findIndex(t => t.nativeElement.contains(target));
+        const clickedIndex = thumbs.findIndex((t) => t.nativeElement.contains(target));
         if (clickedIndex !== -1) {
           this.activeThumbIndex.set(clickedIndex);
           return;
@@ -301,13 +312,14 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
         const isTrack = this.trackRef().nativeElement.contains(target);
         if (isTrack) {
-          const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
+          const coord = this.zOrientation() === "vertical" ? event.clientY : event.clientX;
           const clickPercentage = this.calculatePercentage(coord);
           const clickValue = this.percentageToValue(clickPercentage);
 
           const currentValues = this.values();
           const closestIndex = currentValues.reduce(
-            (prev, curr, i) => (Math.abs(curr - clickValue) < Math.abs(currentValues[prev] - clickValue) ? i : prev),
+            (prev, curr, i) =>
+              Math.abs(curr - clickValue) < Math.abs(currentValues[prev] - clickValue) ? i : prev,
             0,
           );
 
@@ -321,23 +333,23 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       }),
     );
 
-    const pointerMove$ = fromEvent<PointerEvent>(this.document, 'pointermove');
-    const pointerUp$ = fromEvent<PointerEvent>(this.document, 'pointerup');
+    const pointerMove$ = fromEvent<PointerEvent>(this.document, "pointermove");
+    const pointerUp$ = fromEvent<PointerEvent>(this.document, "pointerup");
 
     pointerDown$
       .pipe(
         switchMap(() =>
           pointerMove$.pipe(
             takeUntil(pointerUp$),
-            map(event => {
-              const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
+            map((event) => {
+              const coord = this.zOrientation() === "vertical" ? event.clientY : event.clientX;
               return this.calculatePercentage(coord);
             }),
           ),
         ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(percentage => {
+      .subscribe((percentage) => {
         this.updateThumbFromPercentage(percentage, this.activeThumbIndex());
         this.onTouched();
       });
@@ -346,12 +358,14 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   }
 
   writeValue(value: number | number[]): void {
-    if (value == null) {
+    if (value === null || value === undefined) {
       this.setInitialValue();
       return;
     }
 
-    const values = Array.isArray(value) ? value.map(v => this.snapToStep(v)) : [this.snapToStep(value)];
+    const values = Array.isArray(value)
+      ? value.map((v) => this.snapToStep(v))
+      : [this.snapToStep(value)];
 
     if (values.toString() === this.lastEmittedValue().toString()) {
       return;
@@ -381,28 +395,30 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
     const [min, max] = this.getMinMax();
     const currentValues = [...this.values()];
     const currentValue = currentValues[thumbIndex];
-    let newValue = currentValue;
+    let newValue: number;
 
     const { key } = event as KeyboardEvent;
 
     switch (key) {
-      case 'Home':
+      case "Home":
         newValue = min;
         break;
-      case 'End':
+      case "End":
         newValue = max;
         break;
-      case 'ArrowLeft':
-      case 'ArrowRight': {
+      case "ArrowLeft":
+      case "ArrowRight": {
         // horizontal keys follow the reading direction: in RTL the value grows towards the left
-        const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
-        newValue = this.snapToStep(towardsEnd ? currentValue + this.zStep() : currentValue - this.zStep());
+        const towardsEnd = (key === "ArrowRight") !== this.isRtl();
+        newValue = this.snapToStep(
+          towardsEnd ? currentValue + this.zStep() : currentValue - this.zStep(),
+        );
         break;
       }
-      case 'ArrowDown':
+      case "ArrowDown":
         newValue = this.snapToStep(currentValue - this.zStep());
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         newValue = this.snapToStep(currentValue + this.zStep());
         break;
       default:
@@ -453,16 +469,18 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   private calculatePercentage(clientCoord: number): number {
     const rect = this.trackRef().nativeElement.getBoundingClientRect();
-    if (this.zOrientation() === 'vertical') {
+    if (this.zOrientation() === "vertical") {
       const relativeY = (clientCoord - rect.top) / rect.height;
       return clamp(1 - relativeY, [0, 1]);
     }
-    const relativeX = this.isRtl() ? (rect.right - clientCoord) / rect.width : (clientCoord - rect.left) / rect.width;
+    const relativeX = this.isRtl()
+      ? (rect.right - clientCoord) / rect.width
+      : (clientCoord - rect.left) / rect.width;
     return clamp(relativeX, [0, 1]);
   }
 
   private isRtl(): boolean {
-    return this.directionality?.value === 'rtl';
+    return this.directionality?.value === "rtl";
   }
 
   private setInitialValue(): void {

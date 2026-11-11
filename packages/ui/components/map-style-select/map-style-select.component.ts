@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from "@angular/common";
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -12,28 +12,38 @@ import {
   signal,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck, lucideChevronsUpDown } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCheck, lucideChevronsUpDown } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardBadgeComponent } from '@repo/ui/components/badge/badge.component';
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { ZardInputComponent } from '@repo/ui/components/input/input.component';
-import { ZARD_MAP_STYLE_CONFIG, ZardMapStyleService } from '@repo/ui/components/map/map-style.service';
+import { ZardBadgeComponent } from "@repo/ui/components/badge/badge.component";
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { ZardInputComponent } from "@repo/ui/components/input/input.component";
+import {
+  ZARD_MAP_STYLE_CONFIG,
+  ZardMapStyleService,
+} from "@repo/ui/components/map/map-style.service";
 import {
   ZARD_MAP_DEFAULT_PRESET_ID,
   ZARD_MAP_PROVIDERS,
   type ZardMapPreset,
   type ZardMapProviderInfo,
   type ZardMapSwatchPalette,
-} from '@repo/ui/components/map/map-styles';
-import type { ZardPopoverAlign, ZardPopoverDirective } from '@repo/ui/components/popover/popover.component';
-import { ZardPopoverImports } from '@repo/ui/components/popover/popover.imports';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/map/map-styles";
+import type {
+  ZardPopoverAlign,
+  ZardPopoverDirective,
+} from "@repo/ui/components/popover/popover.component";
+import { ZardPopoverImports } from "@repo/ui/components/popover/popover.imports";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { mapStyleOptionVariants, mapStyleSelectVariants, mapStyleSwatchVariants } from './map-style-select.variants';
+import {
+  mapStyleOptionVariants,
+  mapStyleSelectVariants,
+  mapStyleSwatchVariants,
+} from "./map-style-select.variants";
 
 let nextId = 0;
 
@@ -42,7 +52,7 @@ interface MapStyleGroup {
   readonly presets: readonly ZardMapPreset[];
 }
 
-const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<string, string> => ({
+const swatchVars = (prefix: "l" | "d", palette: ZardMapSwatchPalette): Record<string, string> => ({
   [`--${prefix}-land`]: palette.land,
   [`--${prefix}-water`]: palette.water,
   [`--${prefix}-park`]: palette.park,
@@ -58,7 +68,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
  * `provideZardMap()` is registered.
  */
 @Component({
-  selector: 'z-map-style-select',
+  selector: "z-map-style-select",
   imports: [
     NgTemplateOutlet,
     ZardBadgeComponent,
@@ -85,7 +95,12 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
         <span class="text-muted-foreground text-[10px] font-normal">{{ zAriaLabel() }}</span>
         <span class="text-xs font-medium">{{ triggerLabel() }}</span>
       </span>
-      <ng-icon name="lucideChevronsUpDown" size="14" class="text-muted-foreground" aria-hidden="true" />
+      <ng-icon
+        name="lucideChevronsUpDown"
+        size="14"
+        class="text-muted-foreground"
+        aria-hidden="true"
+      />
     </button>
 
     <ng-template #content>
@@ -101,7 +116,9 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
           class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-1.5 pt-0"
         >
           @for (group of groups(); track group.provider.id) {
-            <p class="text-muted-foreground px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase">
+            <p
+              class="text-muted-foreground px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase"
+            >
               {{ group.provider.label }}
             </p>
             @for (preset of group.presets; track preset.id) {
@@ -113,7 +130,9 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
                 [attr.data-selected]="preset.id === service.presetId()"
                 (click)="onSelect(preset.id, popover)"
               >
-                <ng-container *ngTemplateOutlet="swatchTpl; context: { $implicit: preset, size: 'default' }" />
+                <ng-container
+                  *ngTemplateOutlet="swatchTpl; context: { $implicit: preset, size: 'default' }"
+                />
                 <span class="flex min-w-0 flex-1 flex-col gap-1">
                   <span class="flex items-center gap-1.5 text-sm font-medium">
                     {{ preset.label }}
@@ -122,7 +141,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
                     }
                     @if (preset.theme; as theme) {
                       <z-badge zType="outline" class="px-1.5 py-0 text-[10px] font-normal">
-                        {{ theme === 'light' ? 'Light only' : 'Dark only' }}
+                        {{ theme === "light" ? "Light only" : "Dark only" }}
                       </z-badge>
                     }
                   </span>
@@ -145,7 +164,9 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
             (submit)="applyKey($event, popover)"
             (keydown.escape)="cancel()"
           >
-            <label class="text-xs font-medium" [for]="inputId">{{ providerOf(preset).label }} API key</label>
+            <label class="text-xs font-medium" [for]="inputId"
+              >{{ providerOf(preset).label }} API key</label
+            >
             <div class="flex gap-2">
               <input
                 #keyInput
@@ -159,11 +180,13 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
                 [attr.aria-invalid]="invalid() ? 'true' : null"
               />
               <button z-button zSize="sm" type="submit">Apply</button>
-              <button z-button zSize="sm" zType="ghost" type="button" (click)="cancel()">Cancel</button>
+              <button z-button zSize="sm" zType="ghost" type="button" (click)="cancel()">
+                Cancel
+              </button>
             </div>
             <p class="text-muted-foreground text-xs" [id]="hintId">
-              {{ preset.label }} needs a key. It is only used to request tiles from {{ providerOf(preset).label }} and
-              stays in this browser.
+              {{ preset.label }} needs a key. It is only used to request tiles from
+              {{ providerOf(preset).label }} and stays in this browser.
               @if (providerOf(preset).keyUrl; as keyUrl) {
                 <a
                   class="text-foreground underline underline-offset-4"
@@ -188,14 +211,25 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
         [class]="size === 'sm' ? smallSwatchClasses : swatchClasses"
         [style]="vars(preset)"
       >
-        <svg viewBox="0 0 96 64" preserveAspectRatio="xMidYMid slice" aria-hidden="true" class="block size-full">
+        <svg
+          viewBox="0 0 96 64"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+          class="block size-full"
+        >
           <rect width="96" height="64" class="fill-(--l-land) dark:fill-(--d-land)"></rect>
           <path
             d="M60 0h36v64H78c-4-8-12-10-14-18s6-14 2-22S58 8 60 0Z"
             class="fill-(--l-water) dark:fill-(--d-water)"
           ></path>
           <path d="M8 40l14-4 6 12-10 8-12-4Z" class="fill-(--l-park) dark:fill-(--d-park)"></path>
-          <ellipse cx="40" cy="14" rx="7" ry="4" class="fill-(--l-water) dark:fill-(--d-water)"></ellipse>
+          <ellipse
+            cx="40"
+            cy="14"
+            rx="7"
+            ry="4"
+            class="fill-(--l-water) dark:fill-(--d-water)"
+          ></ellipse>
           <g fill="none" stroke-linecap="round">
             <g stroke-width="1.6" class="stroke-(--l-road) dark:stroke-(--d-road)">
               <path d="M0 22h58M0 54h70M30 0v64M48 24v40M12 0v34"></path>
@@ -220,21 +254,21 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck, lucideChevronsUpDown })],
   host: {
-    'data-slot': 'map-style-select',
-    '[class]': 'classes()',
+    "data-slot": "map-style-select",
+    "[class]": "classes()",
   },
-  exportAs: 'zMapStyleSelect',
+  exportAs: "zMapStyleSelect",
 })
 export class ZardMapStyleSelectComponent {
   protected readonly service = inject(ZardMapStyleService);
   private readonly injector = inject(Injector);
-  private readonly keyInput = viewChild('keyInput', { read: ElementRef<HTMLInputElement> });
+  private readonly keyInput = viewChild("keyInput", { read: ElementRef<HTMLInputElement> });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   /** Accessible name of the picker, also its visible caption and the title of the popover. */
-  readonly zAriaLabel = input('Map style');
+  readonly zAriaLabel = input("Map style");
   /** Which edge of the trigger the list lines up with: `end` at the right of a toolbar, `start` at the left. */
-  readonly zAlign = input<ZardPopoverAlign>('end');
+  readonly zAlign = input<ZardPopoverAlign>("end");
 
   /** Emits the preset that is now in use, after a pick (and, for a key-based one, after its key was accepted). */
   readonly zStyleChange = output<ZardMapPreset>();
@@ -242,8 +276,8 @@ export class ZardMapStyleSelectComponent {
   protected readonly inputId = `z-map-style-key-${nextId++}`;
   protected readonly hintId = `${this.inputId}-hint`;
   protected readonly defaultPresetId = ZARD_MAP_DEFAULT_PRESET_ID;
-  protected readonly swatchClasses = mapStyleSwatchVariants({ zSize: 'default' });
-  protected readonly smallSwatchClasses = mapStyleSwatchVariants({ zSize: 'sm' });
+  protected readonly swatchClasses = mapStyleSwatchVariants({ zSize: "default" });
+  protected readonly smallSwatchClasses = mapStyleSwatchVariants({ zSize: "sm" });
   protected readonly optionClasses = mapStyleOptionVariants();
   protected readonly classes = computed(() => mergeClasses(mapStyleSelectVariants(), this.class()));
 
@@ -253,10 +287,10 @@ export class ZardMapStyleSelectComponent {
   protected readonly groups = computed<readonly MapStyleGroup[]>(() => {
     const presets = this.service.presets();
 
-    return ZARD_MAP_PROVIDERS.map(provider => ({
+    return ZARD_MAP_PROVIDERS.map((provider) => ({
       provider,
-      presets: presets.filter(preset => preset.provider === provider.id),
-    })).filter(group => group.presets.length > 0);
+      presets: presets.filter((preset) => preset.provider === provider.id),
+    })).filter((group) => group.presets.length > 0);
   });
 
   /** "Carto · Positron": the preset name alone is ambiguous, two providers ship a Positron. */
@@ -273,17 +307,20 @@ export class ZardMapStyleSelectComponent {
   }
 
   protected providerOf(preset: ZardMapPreset): ZardMapProviderInfo {
-    return ZARD_MAP_PROVIDERS.find(provider => provider.id === preset.provider) ?? ZARD_MAP_PROVIDERS[0];
+    return (
+      ZARD_MAP_PROVIDERS.find((provider) => provider.id === preset.provider) ??
+      ZARD_MAP_PROVIDERS[0]
+    );
   }
 
   /** The line under a preset's name: how it is served and whether it needs a key. */
   protected detail(preset: ZardMapPreset): string {
-    const kind = preset.provider === 'osm' ? 'Raster' : 'Vector';
-    let access = 'No key needed';
+    const kind = preset.provider === "osm" ? "Raster" : "Vector";
+    let access = "No key needed";
     if (preset.requiresKey) {
-      access = 'API key';
+      access = "API key";
     } else if (preset.devOnly) {
-      access = 'Dev only';
+      access = "Dev only";
     }
     return `${kind} · ${access}`;
   }
@@ -292,7 +329,7 @@ export class ZardMapStyleSelectComponent {
   protected vars(preset: ZardMapPreset): Record<string, string> {
     let vars = this.varsCache.get(preset.id);
     if (!vars) {
-      vars = { ...swatchVars('l', preset.swatch.light), ...swatchVars('d', preset.swatch.dark) };
+      vars = { ...swatchVars("l", preset.swatch.light), ...swatchVars("d", preset.swatch.dark) };
       this.varsCache.set(preset.id, vars);
     }
     return vars;
@@ -302,7 +339,7 @@ export class ZardMapStyleSelectComponent {
     this.invalid.set(false);
 
     const result = this.service.select(id);
-    if (result === 'selected') {
+    if (result === "selected") {
       this.pending.set(null);
       this.zStyleChange.emit(this.service.preset());
       popover?.hide();
@@ -310,8 +347,8 @@ export class ZardMapStyleSelectComponent {
     }
 
     // Nothing changed: the maps keep their basemap until the key arrives, and the popover stays open for it.
-    if (result === 'needs-key') {
-      this.pending.set(this.service.presets().find(preset => preset.id === id) ?? null);
+    if (result === "needs-key") {
+      this.pending.set(this.service.presets().find((preset) => preset.id === id) ?? null);
       // The form is not in the DOM until the next render.
       afterNextRender(() => this.keyInput()?.nativeElement.focus(), { injector: this.injector });
     }
@@ -324,13 +361,13 @@ export class ZardMapStyleSelectComponent {
       return;
     }
 
-    const key = this.keyInput()?.nativeElement.value ?? '';
+    const key = this.keyInput()?.nativeElement.value ?? "";
     if (!key.trim()) {
       this.invalid.set(true);
       return;
     }
 
-    if (this.service.select(preset.id, key) === 'selected') {
+    if (this.service.select(preset.id, key) === "selected") {
       this.pending.set(null);
       this.invalid.set(false);
       this.zStyleChange.emit(this.service.preset());

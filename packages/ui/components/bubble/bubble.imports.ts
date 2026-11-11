@@ -3,14 +3,14 @@ export {
   ZardBubbleContentComponent,
   ZardBubbleGroupComponent,
   ZardBubbleReactionsComponent,
-} from './bubble.component';
+} from "./bubble.component";
 
 import {
   ZardBubbleComponent,
   ZardBubbleContentComponent,
   ZardBubbleGroupComponent,
   ZardBubbleReactionsComponent,
-} from './bubble.component';
+} from "./bubble.component";
 
 export const ZardBubbleImports = [
   ZardBubbleGroupComponent,

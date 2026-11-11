@@ -6,16 +6,16 @@ import {
   input,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
-import type { SafeUrl } from '@angular/platform-browser';
+} from "@angular/core";
+import type { SafeUrl } from "@angular/platform-browser";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardAvatarComponent } from '@repo/ui/components/avatar/avatar.component';
-import { ZardBubbleComponent } from '@repo/ui/components/bubble/bubble.component';
-import type { ZardBubbleVariantVariants } from '@repo/ui/components/bubble/bubble.variants';
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardAvatarComponent } from "@repo/ui/components/avatar/avatar.component";
+import { ZardBubbleComponent } from "@repo/ui/components/bubble/bubble.component";
+import type { ZardBubbleVariantVariants } from "@repo/ui/components/bubble/bubble.variants";
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 import {
   messageAvatarVariants,
@@ -25,44 +25,44 @@ import {
   messageHeaderVariants,
   messageVariants,
   type ZardMessageAlignVariants,
-} from './message.variants';
+} from "./message.variants";
 
 @Component({
-  selector: 'z-message-group, [z-message-group]',
-  template: '<ng-content />',
+  selector: "z-message-group, [z-message-group]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message-group',
-    '[class]': 'classes()',
+    "data-slot": "message-group",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessageGroup',
+  exportAs: "zMessageGroup",
 })
 export class ZardMessageGroupComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(messageGroupVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-message-avatar, [z-message-avatar]',
-  template: '<ng-content />',
+  selector: "z-message-avatar, [z-message-avatar]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message-avatar',
-    '[class]': 'classes()',
+    "data-slot": "message-avatar",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessageAvatar',
+  exportAs: "zMessageAvatar",
 })
 export class ZardMessageAvatarComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(messageAvatarVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-message-header, [z-message-header]',
+  selector: "z-message-header, [z-message-header]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let header = zHeader();
@@ -74,20 +74,20 @@ export class ZardMessageAvatarComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message-header',
-    '[class]': 'classes()',
+    "data-slot": "message-header",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessageHeader',
+  exportAs: "zMessageHeader",
 })
 export class ZardMessageHeaderComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zHeader = input<string | TemplateRef<void>>();
 
   protected readonly classes = computed(() => mergeClasses(messageHeaderVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-message-footer, [z-message-footer]',
+  selector: "z-message-footer, [z-message-footer]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let footer = zFooter();
@@ -99,20 +99,20 @@ export class ZardMessageHeaderComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message-footer',
-    '[class]': 'classes()',
+    "data-slot": "message-footer",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessageFooter',
+  exportAs: "zMessageFooter",
 })
 export class ZardMessageFooterComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zFooter = input<string | TemplateRef<void>>();
 
   protected readonly classes = computed(() => mergeClasses(messageFooterVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-message-content, [z-message-content]',
+  selector: "z-message-content, [z-message-content]",
   /**
    * The header comes first and the footer last whatever order they are written in,
    * so the reading order stays avatar → header → surface → footer even when the
@@ -126,19 +126,19 @@ export class ZardMessageFooterComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message-content',
-    '[class]': 'classes()',
+    "data-slot": "message-content",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessageContent',
+  exportAs: "zMessageContent",
 })
 export class ZardMessageContentComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(messageContentVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-message, [z-message]',
+  selector: "z-message, [z-message]",
   imports: [
     ZardAvatarComponent,
     ZardBubbleComponent,
@@ -173,15 +173,15 @@ export class ZardMessageContentComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'message',
-    '[attr.data-align]': 'zAlign()',
-    '[class]': 'classes()',
+    "data-slot": "message",
+    "[attr.data-align]": "zAlign()",
+    "[class]": "classes()",
   },
-  exportAs: 'zMessage',
+  exportAs: "zMessage",
 })
 export class ZardMessageComponent {
-  readonly class = input<ClassValue>('');
-  readonly zAlign = input<ZardMessageAlignVariants>('start');
+  readonly class = input<ClassValue>("");
+  readonly zAlign = input<ZardMessageAlignVariants>("start");
 
   /**
    * Shorthand inputs. A message with no projected `z-message-content` builds the
@@ -193,15 +193,19 @@ export class ZardMessageComponent {
    * The avatar is a separate slot: `zSrc` / `zFallback` work either way, and a
    * projected `z-message-avatar` always wins over them.
    */
-  readonly zVariant = input<ZardBubbleVariantVariants>('default');
-  readonly zSrc = input<string | SafeUrl>('');
-  readonly zAlt = input<string>('');
-  readonly zFallback = input<string>('');
+  readonly zVariant = input<ZardBubbleVariantVariants>("default");
+  readonly zSrc = input<string | SafeUrl>("");
+  readonly zAlt = input<string>("");
+  readonly zFallback = input<string>("");
   readonly zHeader = input<string | TemplateRef<void>>();
   readonly zFooter = input<string | TemplateRef<void>>();
 
-  private readonly projectedAvatar = contentChild(ZardMessageAvatarComponent, { descendants: false });
-  private readonly projectedContent = contentChild(ZardMessageContentComponent, { descendants: false });
+  private readonly projectedAvatar = contentChild(ZardMessageAvatarComponent, {
+    descendants: false,
+  });
+  private readonly projectedContent = contentChild(ZardMessageContentComponent, {
+    descendants: false,
+  });
 
   protected readonly hasAvatar = computed(() => !!this.projectedAvatar());
   protected readonly hasContent = computed(() => !!this.projectedContent());

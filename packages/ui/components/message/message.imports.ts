@@ -5,7 +5,7 @@ export {
   ZardMessageFooterComponent,
   ZardMessageGroupComponent,
   ZardMessageHeaderComponent,
-} from './message.component';
+} from "./message.component";
 
 import {
   ZardMessageAvatarComponent,
@@ -14,7 +14,7 @@ import {
   ZardMessageFooterComponent,
   ZardMessageGroupComponent,
   ZardMessageHeaderComponent,
-} from './message.component';
+} from "./message.component";
 
 export const ZardMessageImports = [
   ZardMessageGroupComponent,

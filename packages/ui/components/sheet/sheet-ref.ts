@@ -1,9 +1,9 @@
-import type { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from "@angular/cdk/overlay";
 
-import { ZardOverlayRefBase } from '@repo/ui/core';
+import { ZardOverlayRefBase } from "@repo/ui/core";
 
-import type { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
-import { SHEET_DURATION } from './sheet-panel.component';
+import type { ZardSheetContainerComponent, ZardSheetOptions } from "./sheet-container.component";
+import { SHEET_DURATION } from "./sheet-panel.component";
 
 /**
  * Reference to a sheet opened via {@link ZardSheetService}.

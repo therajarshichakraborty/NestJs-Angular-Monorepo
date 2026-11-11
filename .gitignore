@@ -18,7 +18,6 @@ out/
 .vuepress/.node_modules
 .vuepress/.cache
 .output/
-.vercel/
 .netlify/
 .serverless/
 .env
@@ -39,7 +38,7 @@ lerna-debug.log*
 .yarn/install-state.gz
 .pnpm-store/
 .corepack/
-.vscode/
+.github/
 .idea/
 *.suo
 *.ntvs*
@@ -55,7 +54,3 @@ coverage/
 playwright-report/
 blob-report/
 test-results/
-
-logs/
-!packages/logs/
-*.log

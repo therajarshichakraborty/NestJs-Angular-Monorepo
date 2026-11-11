@@ -7,27 +7,25 @@ import {
   inject,
   input,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { resizablePanelVariants } from '@repo/ui/components/resizable/resizable.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { resizablePanelVariants } from "@repo/ui/components/resizable/resizable.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-resizable-panel',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-resizable-panel",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'resizable-panel',
-    '[class]': 'classes()',
-    '[attr.data-collapsed]': 'isCollapsed()',
-    '[attr.data-panel]': 'true',
+    "data-slot": "resizable-panel",
+    "[class]": "classes()",
+    "[attr.data-collapsed]": "isCollapsed()",
+    "[attr.data-panel]": "true",
   },
-  exportAs: 'zResizablePanel',
+  exportAs: "zResizablePanel",
 })
 export class ZardResizablePanelComponent {
   readonly elementRef = inject(ElementRef);
@@ -37,12 +35,12 @@ export class ZardResizablePanelComponent {
   readonly zMax = input<number | string>(100);
   readonly zCollapsible = input(false, { transform: booleanAttribute });
   readonly zResizable = input(true, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly isCollapsed = computed(() => {
     const element = this.elementRef.nativeElement as HTMLElement;
-    const width = Number.parseFloat(element.style.width || '0');
-    const height = Number.parseFloat(element.style.height || '0');
+    const width = Number.parseFloat(element.style.width || "0");
+    const height = Number.parseFloat(element.style.height || "0");
     return width === 0 || height === 0;
   });
 

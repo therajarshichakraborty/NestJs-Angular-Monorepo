@@ -1,5 +1,11 @@
 import { createPaginationMeta } from "@repo/lib";
-import type { PaginatedResult, PaginationQuery, UpdateUserInput, User, UserRole } from "@repo/types";
+import type {
+  PaginatedResult,
+  PaginationQuery,
+  UpdateUserInput,
+  User,
+  UserRole,
+} from "@repo/types";
 import type { Kysely } from "kysely";
 
 import { mapUserRowToUser } from "../mappers/user.mapper";
@@ -20,17 +26,29 @@ export class UserRepository {
   }
 
   public async findById(userId: string): Promise<User | undefined> {
-    const row = await this.database.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
+    const row = await this.database
+      .selectFrom("users")
+      .selectAll()
+      .where("id", "=", userId)
+      .executeTakeFirst();
     return row ? mapUserRowToUser(row) : undefined;
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {
-    const row = await this.database.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst();
+    const row = await this.database
+      .selectFrom("users")
+      .selectAll()
+      .where("email", "=", email)
+      .executeTakeFirst();
     return row ? mapUserRowToUser(row) : undefined;
   }
 
   public async findRowByEmail(email: string): Promise<UserRow | undefined> {
-    return this.database.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst();
+    return this.database
+      .selectFrom("users")
+      .selectAll()
+      .where("email", "=", email)
+      .executeTakeFirst();
   }
 
   public async findMany(pagination: PaginationQuery): Promise<PaginatedResult<User>> {
@@ -96,7 +114,10 @@ export class UserRepository {
   }
 
   public async delete(userId: string): Promise<boolean> {
-    const result = await this.database.deleteFrom("users").where("id", "=", userId).executeTakeFirst();
+    const result = await this.database
+      .deleteFrom("users")
+      .where("id", "=", userId)
+      .executeTakeFirst();
     return result.numDeletedRows > 0n;
   }
 }

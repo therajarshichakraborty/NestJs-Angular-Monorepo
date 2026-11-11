@@ -9,20 +9,24 @@ import {
   model,
   output,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { toggleVariants, type ZardToggleSizeVariants, type ZardToggleTypeVariants } from './toggle.variants';
+import {
+  toggleVariants,
+  type ZardToggleSizeVariants,
+  type ZardToggleTypeVariants,
+} from "./toggle.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
-  selector: 'z-toggle',
+  selector: "z-toggle",
   template: `
     <button
       type="button"
@@ -47,23 +51,23 @@ type OnChangeType = (value: boolean) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '(mouseenter)': 'handleHover()',
+    "(mouseenter)": "handleHover()",
   },
-  exportAs: 'zToggle',
+  exportAs: "zToggle",
 })
 export class ZardToggleComponent implements ControlValueAccessor {
   readonly zValue = model(false);
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zType = input<ZardToggleTypeVariants>('default');
-  readonly zSize = input<ZardToggleSizeVariants>('default');
+  readonly zType = input<ZardToggleTypeVariants>("default");
+  readonly zSize = input<ZardToggleSizeVariants>("default");
   readonly zAriaLabel = input.required<string>();
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly zToggleClick = output<void>();
   readonly zToggleHover = output<void>();
   readonly zToggleChange = output<boolean>();
 
-  protected readonly state = computed(() => (this.zValue() ? 'on' : 'off'));
+  protected readonly state = computed(() => (this.zValue() ? "on" : "off"));
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 
@@ -85,7 +89,7 @@ export class ZardToggleComponent implements ControlValueAccessor {
       return;
     }
 
-    this.zValue.update(v => !v);
+    this.zValue.update((v) => !v);
 
     this.zToggleClick.emit();
     this.zToggleChange.emit(this.zValue());

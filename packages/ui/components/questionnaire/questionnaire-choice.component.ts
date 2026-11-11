@@ -9,16 +9,16 @@ import {
   input,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCheck } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardQuestionnaireItemComponent } from './questionnaire-item.component';
-import { ZARD_QUESTIONNAIRE_CHOICE, type ZardQuestionnaireChoiceRef } from './questionnaire.tokens';
+import { ZardQuestionnaireItemComponent } from "./questionnaire-item.component";
+import { ZARD_QUESTIONNAIRE_CHOICE, type ZardQuestionnaireChoiceRef } from "./questionnaire.tokens";
 import {
   questionnaireChoiceControlVariants,
   questionnaireChoiceIndicatorCheckVariants,
@@ -27,10 +27,10 @@ import {
   questionnaireChoiceLabelVariants,
   questionnaireChoiceShortcutVariants,
   questionnaireChoiceVariants,
-} from './questionnaire.variants';
+} from "./questionnaire.variants";
 
 @Component({
-  selector: 'z-questionnaire-choice',
+  selector: "z-questionnaire-choice",
   imports: [NgIcon],
   template: `
     <label class="contents">
@@ -46,7 +46,11 @@ import {
         [class]="controlClasses"
         #control
       />
-      <span aria-hidden="true" data-slot="questionnaire-choice-indicator" [class]="indicatorClasses">
+      <span
+        aria-hidden="true"
+        data-slot="questionnaire-choice-indicator"
+        [class]="indicatorClasses"
+      >
         <span data-slot="questionnaire-choice-indicator-dot" [class]="indicatorDotClasses"></span>
         <span data-slot="questionnaire-choice-indicator-check" [class]="indicatorCheckClasses">
           <ng-icon name="lucideCheck" class="size-full" />
@@ -56,36 +60,47 @@ import {
         <ng-content />
       </span>
       @if (shortcut(); as label) {
-        <span data-slot="questionnaire-choice-shortcut" aria-hidden="true" [class]="shortcutClasses">
+        <span
+          data-slot="questionnaire-choice-shortcut"
+          aria-hidden="true"
+          [class]="shortcutClasses"
+        >
           {{ label.toUpperCase() }}
         </span>
       }
     </label>
   `,
-  providers: [{ provide: ZARD_QUESTIONNAIRE_CHOICE, useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent) }],
+  providers: [
+    {
+      provide: ZARD_QUESTIONNAIRE_CHOICE,
+      useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
-    'data-slot': 'questionnaire-choice',
-    '[attr.data-disabled]': 'disabledState() ? "" : null',
-    '[attr.data-invalid]': 'item.isInvalid() ? "" : null',
-    '[class]': 'classes()',
+    "data-slot": "questionnaire-choice",
+    "[attr.data-disabled]": 'disabledState() ? "" : null',
+    "[attr.data-invalid]": 'item.isInvalid() ? "" : null',
+    "[class]": "classes()",
   },
-  exportAs: 'zQuestionnaireChoice',
+  exportAs: "zQuestionnaireChoice",
 })
 export class ZardQuestionnaireChoiceComponent implements ZardQuestionnaireChoiceRef {
   readonly item = inject(ZardQuestionnaireItemComponent);
-  private readonly control = viewChild.required<ElementRef<HTMLInputElement>>('control');
+  private readonly control = viewChild.required<ElementRef<HTMLInputElement>>("control");
 
   readonly zValue = input.required<string>();
   readonly checked = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly disabledState = computed(() => this.zDisabled() || this.item.isDisabled());
   protected readonly shortcut = computed(() => this.item.shortcutFor(this));
-  protected readonly classes = computed(() => mergeClasses(questionnaireChoiceVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(questionnaireChoiceVariants(), this.class()),
+  );
   protected readonly controlClasses = questionnaireChoiceControlVariants();
   protected readonly indicatorClasses = questionnaireChoiceIndicatorVariants();
   protected readonly indicatorDotClasses = questionnaireChoiceIndicatorDotVariants();

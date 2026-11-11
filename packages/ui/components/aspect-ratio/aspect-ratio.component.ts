@@ -1,28 +1,32 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { aspectRatioVariants } from './aspect-ratio.variants';
+import { aspectRatioVariants } from "./aspect-ratio.variants";
 
 @Component({
-  selector: 'z-aspect-ratio, [z-aspect-ratio]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-aspect-ratio, [z-aspect-ratio]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'aspect-ratio',
-    '[style.aspectRatio]': 'zRatio()',
-    '[class]': 'classes()',
+    "data-slot": "aspect-ratio",
+    "[style.aspectRatio]": "zRatio()",
+    "[class]": "classes()",
   },
-  exportAs: 'zAspectRatio',
+  exportAs: "zAspectRatio",
 })
 export class ZardAspectRatioComponent {
   readonly zRatio = input<number | string>(1);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() => mergeClasses(aspectRatioVariants(), this.class()));
 }

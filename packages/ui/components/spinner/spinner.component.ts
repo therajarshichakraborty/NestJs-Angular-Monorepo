@@ -5,15 +5,15 @@ import {
   input,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core/directives/string-template-outlet.directive';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core/directives/string-template-outlet.directive";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-spinner',
+  selector: "z-spinner",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let icon = zIcon();
@@ -38,18 +38,18 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'inline-flex',
-    role: 'status',
-    '[attr.aria-label]': 'zAriaLabel()',
+    class: "inline-flex",
+    role: "status",
+    "[attr.aria-label]": "zAriaLabel()",
   },
-  exportAs: 'zSpinner',
+  exportAs: "zSpinner",
 })
 export class ZardSpinnerComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zIcon = input<TemplateRef<{ $implicit: string }> | undefined>(undefined);
   /** Announced by screen readers. An input because the library ships no translations. */
-  readonly zAriaLabel = input('Loading');
+  readonly zAriaLabel = input("Loading");
 
-  protected readonly classes = computed(() => mergeClasses('size-4 animate-spin', this.class()));
+  protected readonly classes = computed(() => mergeClasses("size-4 animate-spin", this.class()));
   protected readonly iconContext = computed(() => ({ $implicit: this.classes() }));
 }

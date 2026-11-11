@@ -1,6 +1,6 @@
-import { Injectable, type Type } from '@angular/core';
+import { Injectable, type Type } from "@angular/core";
 
-import { toast, type ExternalToast, type PromiseData, type PromiseT } from 'ngx-sonner';
+import { toast, type ExternalToast, type PromiseData, type PromiseT } from "ngx-sonner";
 
 /**
  * Type-safe Angular wrapper around the underlying `ngx-sonner` toast API.
@@ -19,7 +19,7 @@ import { toast, type ExternalToast, type PromiseData, type PromiseT } from 'ngx-
  *   error: 'Failed.',
  * });
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ZardSonnerService {
   /** Dispatch a default toast. Returns the toast id. */
   show(message: string | Type<unknown>, options?: ExternalToast): string | number {

@@ -5,11 +5,11 @@ import {
   input,
   numberAttribute,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import type { ZardChartTooltipIndicator, ZardChartTooltipTrigger } from './chart.types';
+import type { ZardChartTooltipIndicator, ZardChartTooltipTrigger } from "./chart.types";
 
 /**
  * Declares the tooltip the parent `z-chart` should build.
@@ -19,24 +19,24 @@ import type { ZardChartTooltipIndicator, ZardChartTooltipTrigger } from './chart
  * `tooltip.formatter`.
  */
 @Component({
-  selector: 'z-chart-tooltip',
-  template: '',
+  selector: "z-chart-tooltip",
+  template: "",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { 'data-slot': 'chart-tooltip', class: 'hidden' },
-  exportAs: 'zChartTooltip',
+  host: { "data-slot": "chart-tooltip", class: "hidden" },
+  exportAs: "zChartTooltip",
 })
 export class ZardChartTooltipComponent {
-  readonly class = input<ClassValue>('');
-  readonly zIndicator = input<ZardChartTooltipIndicator>('dot');
+  readonly class = input<ClassValue>("");
+  readonly zIndicator = input<ZardChartTooltipIndicator>("dot");
   readonly zHideLabel = input(false, { transform: booleanAttribute });
   readonly zHideIndicator = input(false, { transform: booleanAttribute });
   readonly zLabelKey = input<string>();
   readonly zNameKey = input<string>();
   readonly zLabelFormatter = input<(value: string) => string>();
   readonly zValueFormatter = input<(value: number, name: string) => string>();
-  readonly zTrigger = input<ZardChartTooltipTrigger>('axis');
-  readonly zLabelClass = input<ClassValue>('');
+  readonly zTrigger = input<ZardChartTooltipTrigger>("axis");
+  readonly zLabelClass = input<ClassValue>("");
   /**
    * Draws the axis pointer under the tooltip — a line on curves, a band on bars.
    * Off by default, like shadcn's `<ChartTooltip cursor={false} />`.

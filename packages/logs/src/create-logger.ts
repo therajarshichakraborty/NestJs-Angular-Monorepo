@@ -24,7 +24,9 @@ export interface CreateLoggerOptions {
 }
 
 function pickMostVerboseLevel(firstLevel: LogLevel, secondLevel: LogLevel): LogLevel {
-  return LOG_LEVEL_PRIORITY[firstLevel] >= LOG_LEVEL_PRIORITY[secondLevel] ? firstLevel : secondLevel;
+  return LOG_LEVEL_PRIORITY[firstLevel] >= LOG_LEVEL_PRIORITY[secondLevel]
+    ? firstLevel
+    : secondLevel;
 }
 
 export function createLogger(options: CreateLoggerOptions): AppLogger {
@@ -37,7 +39,9 @@ export function createLogger(options: CreateLoggerOptions): AppLogger {
 
   if (enableFiles) {
     ensureLogDirectories(logDirectory);
-    transports.push(...createFileTransports({ directory: logDirectory, service: options.service, level }));
+    transports.push(
+      ...createFileTransports({ directory: logDirectory, service: options.service, level }),
+    );
   }
 
   if (enableConsole) {

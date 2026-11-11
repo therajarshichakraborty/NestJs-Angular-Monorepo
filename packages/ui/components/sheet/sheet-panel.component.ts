@@ -1,4 +1,4 @@
-import { FocusTrapFactory } from '@angular/cdk/a11y';
+import { FocusTrapFactory } from "@angular/cdk/a11y";
 import {
   afterNextRender,
   booleanAttribute,
@@ -11,22 +11,22 @@ import {
   input,
   output,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideX } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
+import { sheetVariants, type ZardSheetVariants } from "./sheet.variants";
 
 /** How long the enter and leave transitions run, in ms. Mirrors the CSS. */
 export const SHEET_DURATION = 200;
 
-export type ZardSheetSide = NonNullable<ZardSheetVariants['zSide']>;
-export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
+export type ZardSheetSide = NonNullable<ZardSheetVariants["zSide"]>;
+export type ZardSheetSize = NonNullable<ZardSheetVariants["zSize"]>;
 
 /**
  * The sliding panel of a sheet: styling per side and size, the enter and leave transitions,
@@ -36,7 +36,7 @@ export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
  * @internal Compose `z-sheet` instead of using this directly.
  */
 @Component({
-  selector: 'z-sheet-panel',
+  selector: "z-sheet-panel",
   imports: [ZardButtonComponent, NgIcon],
   template: `
     @if (zClosable()) {
@@ -67,37 +67,37 @@ export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
     }
 
     @starting-style {
-      z-sheet-panel[data-side='right'] {
+      z-sheet-panel[data-side="right"] {
         opacity: 0;
         translate: 2.5rem 0;
       }
-      z-sheet-panel[data-side='left'] {
+      z-sheet-panel[data-side="left"] {
         opacity: 0;
         translate: -2.5rem 0;
       }
-      z-sheet-panel[data-side='top'] {
+      z-sheet-panel[data-side="top"] {
         opacity: 0;
         translate: 0 -2.5rem;
       }
-      z-sheet-panel[data-side='bottom'] {
+      z-sheet-panel[data-side="bottom"] {
         opacity: 0;
         translate: 0 2.5rem;
       }
     }
 
-    z-sheet-panel[data-state='closed'][data-side='right'] {
+    z-sheet-panel[data-state="closed"][data-side="right"] {
       opacity: 0;
       translate: 2.5rem 0;
     }
-    z-sheet-panel[data-state='closed'][data-side='left'] {
+    z-sheet-panel[data-state="closed"][data-side="left"] {
       opacity: 0;
       translate: -2.5rem 0;
     }
-    z-sheet-panel[data-state='closed'][data-side='top'] {
+    z-sheet-panel[data-state="closed"][data-side="top"] {
       opacity: 0;
       translate: 0 -2.5rem;
     }
-    z-sheet-panel[data-state='closed'][data-side='bottom'] {
+    z-sheet-panel[data-state="closed"][data-side="bottom"] {
       opacity: 0;
       translate: 0 2.5rem;
     }
@@ -106,20 +106,20 @@ export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
-    'data-slot': 'sheet-content',
-    role: 'dialog',
-    'aria-modal': 'true',
-    tabindex: '-1',
-    '[attr.data-side]': 'zSide()',
-    '[attr.data-state]': 'zState()',
-    '[attr.aria-labelledby]': 'zLabelledBy()',
-    '[attr.aria-describedby]': 'zDescribedBy()',
-    '[class]': 'classes()',
-    '[style.width]': 'zWidth() || null',
-    '[style.height]': 'zHeight() || null',
-    '[style.--z-sheet-duration.ms]': 'zDuration()',
+    "data-slot": "sheet-content",
+    role: "dialog",
+    "aria-modal": "true",
+    tabindex: "-1",
+    "[attr.data-side]": "zSide()",
+    "[attr.data-state]": "zState()",
+    "[attr.aria-labelledby]": "zLabelledBy()",
+    "[attr.aria-describedby]": "zDescribedBy()",
+    "[class]": "classes()",
+    "[style.width]": "zWidth() || null",
+    "[style.height]": "zHeight() || null",
+    "[style.--z-sheet-duration.ms]": "zDuration()",
   },
-  exportAs: 'zSheetPanel',
+  exportAs: "zSheetPanel",
 })
 export class ZardSheetPanelComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -127,9 +127,9 @@ export class ZardSheetPanelComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   /** Edge of the screen the sheet slides from. */
-  readonly zSide = input<ZardSheetSide>('right');
+  readonly zSide = input<ZardSheetSide>("right");
   /** Preset width (left/right) or height (top/bottom). Ignored once `zWidth` or `zHeight` is set. */
-  readonly zSize = input<ZardSheetSize>('default');
+  readonly zSize = input<ZardSheetSize>("default");
   /** Explicit width, for left/right sheets. */
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
@@ -139,16 +139,16 @@ export class ZardSheetPanelComponent {
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(SHEET_DURATION);
   /** `closed` plays the leave transition; the owner disposes the overlay once it ends. */
-  readonly zState = input<'open' | 'closed'>('open');
+  readonly zState = input<"open" | "closed">("open");
   readonly zLabelledBy = input<string | null>(null);
   readonly zDescribedBy = input<string | null>(null);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** The corner close button was pressed. */
   readonly closeRequested = output<void>();
 
   protected readonly classes = computed(() => {
-    const zSize = this.zWidth() || this.zHeight() ? 'custom' : this.zSize();
+    const zSize = this.zWidth() || this.zHeight() ? "custom" : this.zSize();
     return mergeClasses(sheetVariants({ zSide: this.zSide(), zSize }), this.class());
   });
 

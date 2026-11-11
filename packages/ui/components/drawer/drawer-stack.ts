@@ -1,4 +1,4 @@
-import { computed, signal, type Signal } from '@angular/core';
+import { computed, signal, type Signal } from "@angular/core";
 
 /** Panels currently on screen, oldest first. */
 const panels = signal<readonly object[]>([]);
@@ -10,11 +10,11 @@ export const DRAWER_STACK_STEP = 0.05;
 export const DRAWER_STACK_PEEK = 16;
 
 export function pushDrawerPanel(panel: object): void {
-  panels.update(current => (current.includes(panel) ? current : [...current, panel]));
+  panels.update((current) => (current.includes(panel) ? current : [...current, panel]));
 }
 
 export function popDrawerPanel(panel: object): void {
-  panels.update(current => current.filter(entry => entry !== panel));
+  panels.update((current) => current.filter((entry) => entry !== panel));
 }
 
 /** True while any drawer is already on screen — a new one opening on top is nested. */

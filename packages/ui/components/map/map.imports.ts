@@ -19,7 +19,7 @@ import {
   MarkerTooltipComponent,
   RouteMarkerComponent,
   RouteProgressComponent,
-} from 'ng-mapcn';
+} from "ng-mapcn";
 
 /**
  * The map is powered by ng-mapcn, so its elements keep the upstream selectors (`ng-map`,

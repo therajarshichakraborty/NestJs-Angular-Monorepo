@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import type { BooleanInput } from '@angular/cdk/coercion';
-import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import type { BooleanInput } from "@angular/cdk/coercion";
+import { CdkMenuTrigger } from "@angular/cdk/menu";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -20,23 +20,26 @@ import {
   type TemplateRef,
   untracked,
   ViewContainerRef,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronDown } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
 import {
   navigationMenuTriggerIconVariants,
   navigationMenuTriggerVariants,
-} from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardNavigationMenuManagerService } from './navigation-menu-manager.service';
-import { getNavigationMenuPositions, type ZardNavigationMenuPlacement } from './navigation-menu-positions';
-import { ZardNavigationMenuService } from './navigation-menu.service';
+import { ZardNavigationMenuManagerService } from "./navigation-menu-manager.service";
+import {
+  getNavigationMenuPositions,
+  type ZardNavigationMenuPlacement,
+} from "./navigation-menu-positions";
+import { ZardNavigationMenuService } from "./navigation-menu.service";
 
-export type ZardNavigationMenuTriggerMode = 'click' | 'hover';
+export type ZardNavigationMenuTriggerMode = "click" | "hover";
 
 /**
  * Opens the content bound to `[zNavigationMenuTriggerFor]`. It works in two modes:
@@ -50,26 +53,26 @@ export type ZardNavigationMenuTriggerMode = 'click' | 'hover';
  * is a no-op while `menuTemplateRef` is null.
  */
 @Directive({
-  selector: '[z-navigation-menu-trigger]',
+  selector: "[z-navigation-menu-trigger]",
   providers: [provideIcons({ lucideChevronDown })],
   host: {
-    role: 'button',
-    'data-slot': 'navigation-menu-trigger',
-    '[class]': 'classes()',
-    '[attr.tabindex]': "'0'",
-    '[attr.aria-haspopup]': "'menu'",
-    '[attr.aria-expanded]': 'isOpen()',
-    '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
-    '[attr.data-disabled]': "zDisabled() ? '' : undefined",
-    '[style.cursor]': "'pointer'",
-    '(click)': 'onClick($event)',
-    '(keydown)': 'onKeydown($event)',
+    role: "button",
+    "data-slot": "navigation-menu-trigger",
+    "[class]": "classes()",
+    "[attr.tabindex]": "'0'",
+    "[attr.aria-haspopup]": "'menu'",
+    "[attr.aria-expanded]": "isOpen()",
+    "[attr.data-state]": "isOpen() ? 'open' : 'closed'",
+    "[attr.data-disabled]": "zDisabled() ? '' : undefined",
+    "[style.cursor]": "'pointer'",
+    "(click)": "onClick($event)",
+    "(keydown)": "onKeydown($event)",
   },
   hostDirectives: [CdkMenuTrigger],
-  exportAs: 'zNavigationMenuTrigger',
+  exportAs: "zNavigationMenuTrigger",
 })
 export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
-  private static readonly TRIGGER_SELECTOR = '[z-navigation-menu-trigger]';
+  private static readonly TRIGGER_SELECTOR = "[z-navigation-menu-trigger]";
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly document = inject(DOCUMENT);
@@ -83,7 +86,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private readonly service = inject(ZardNavigationMenuService, { optional: true });
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
-  private readonly cleanupFunctions: Array<() => void> = [];
+  private readonly cleanupFunctions: (() => void)[] = [];
   private index = -1;
   /** Mirrors the CDK overlay state, whose own `isOpen()` is a plain method and so not reactive. */
   private readonly overlayOpen = signal(false);
@@ -92,12 +95,12 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zTrigger = input<ZardNavigationMenuTriggerMode>();
   readonly zHoverDelay = input<number>(100);
-  readonly zPlacement = input<ZardNavigationMenuPlacement>('bottomLeft');
+  readonly zPlacement = input<ZardNavigationMenuPlacement>("bottomLeft");
   readonly zShowChevron = input<boolean | undefined, BooleanInput | undefined>(undefined, {
-    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+    transform: (value) => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** True only inside a root whose `zViewport` is on — the only case the CDK trigger stays inert. */
   private readonly isViewportMode = computed(() => this.service?.viewport() ?? false);
@@ -107,7 +110,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
    * visually neutral, so the existing dropdown-style consumers keep rendering exactly as before.
    */
   protected readonly classes = computed(() =>
-    this.service ? mergeClasses(navigationMenuTriggerVariants(), this.class()) : mergeClasses(this.class()),
+    this.service
+      ? mergeClasses(navigationMenuTriggerVariants(), this.class())
+      : mergeClasses(this.class()),
   );
 
   protected readonly isOpen = computed(() =>
@@ -115,7 +120,10 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   );
 
   private readonly menuPositions = computed(() =>
-    getNavigationMenuPositions(this.zPlacement(), (this.directionality?.valueSignal() ?? 'ltr') === 'rtl'),
+    getNavigationMenuPositions(
+      this.zPlacement(),
+      (this.directionality?.valueSignal() ?? "ltr") === "rtl",
+    ),
   );
 
   constructor() {
@@ -162,7 +170,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 
-    if (this.resolvedTrigger() === 'hover' && !this.isMobileDevice()) {
+    if (this.resolvedTrigger() === "hover" && !this.isMobileDevice()) {
       this.initializeHoverBehavior();
     }
   }
@@ -171,7 +179,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.cancelScheduledClose();
     this.menuManager.unregisterHoverMenu(this);
     this.service?.close(this.index);
-    this.cleanupFunctions.forEach(cleanup => cleanup());
+    this.cleanupFunctions.forEach((cleanup) => cleanup());
     this.cleanupFunctions.length = 0;
   }
 
@@ -201,7 +209,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   /** Hover is the navigation-menu default; standalone triggers keep opening on click. */
   private resolvedTrigger(): ZardNavigationMenuTriggerMode {
-    return this.zTrigger() ?? (this.service ? 'hover' : 'click');
+    return this.zTrigger() ?? (this.service ? "hover" : "click");
   }
 
   private shouldRenderChevron(): boolean {
@@ -243,17 +251,17 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     }
 
     switch (event.key) {
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         event.preventDefault();
         this.toggle();
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
         this.open();
         this.focusFirstLink();
         break;
-      case 'Escape':
+      case "Escape":
         if (!this.service?.isActive(this.index)) {
           return;
         }
@@ -288,12 +296,12 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private renderChevron(): void {
     // The injector is explicit so NgIcon resolves the icon against this directive's `provideIcons`.
     const iconRef = this.viewContainerRef.createComponent(NgIcon, { injector: this.injector });
-    iconRef.setInput('name', 'lucideChevronDown');
+    iconRef.setInput("name", "lucideChevronDown");
 
     // `class` is a host attribute on NgIcon, not an input, so it is set on the element itself.
     const icon = iconRef.location.nativeElement as HTMLElement;
     icon.className = navigationMenuTriggerIconVariants();
-    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute("aria-hidden", "true");
     this.elementRef.nativeElement.appendChild(icon);
 
     this.cleanupFunctions.push(() => iconRef.destroy());
@@ -311,7 +319,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private setupTriggerListeners(): void {
     const element = this.elementRef.nativeElement;
 
-    this.addEventListenerWithCleanup(element, 'mouseenter', () => {
+    this.addEventListenerWithCleanup(element, "mouseenter", () => {
       if (this.zDisabled()) {
         return;
       }
@@ -332,7 +340,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       this.cdkTrigger.open();
     });
 
-    this.addEventListenerWithCleanup(element, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    this.addEventListenerWithCleanup(element, "mouseleave", (event) =>
+      this.scheduleCloseIfNeeded(event as MouseEvent),
+    );
   }
 
   /** Feeds `data-state` and the chevron rotation while the CDK owns the popup. */
@@ -374,7 +384,10 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     const openSubscription = this.cdkTrigger.opened.subscribe(() => {
       // After the render, not on a timer: the CDK only registers the child menu once change
       // detection has run, and until then there is no popup to attach the listeners to.
-      afterNextRender({ read: () => this.setupMenuContentListeners() }, { injector: this.injector });
+      afterNextRender(
+        { read: () => this.setupMenuContentListeners() },
+        { injector: this.injector },
+      );
     });
 
     const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
@@ -402,8 +415,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       return;
     }
 
-    this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(menuContent, 'mouseleave', event =>
+    this.addEventListenerWithCleanup(menuContent, "mouseenter", () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(menuContent, "mouseleave", (event) =>
       this.scheduleCloseIfNeeded(event as MouseEvent),
     );
   }
@@ -476,7 +489,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     }
 
     const { navigator } = window;
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
     // Check for mobile user agent
     const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;

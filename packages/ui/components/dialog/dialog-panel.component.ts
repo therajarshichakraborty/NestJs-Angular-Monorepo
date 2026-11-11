@@ -1,4 +1,4 @@
-import { FocusTrapFactory } from '@angular/cdk/a11y';
+import { FocusTrapFactory } from "@angular/cdk/a11y";
 import {
   afterNextRender,
   booleanAttribute,
@@ -11,16 +11,16 @@ import {
   input,
   output,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideX } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { dialogVariants } from './dialog.variants';
+import { dialogVariants } from "./dialog.variants";
 
 /** How long the enter and leave transitions run, in ms. Mirrors the CSS. */
 export const DIALOG_DURATION = 100;
@@ -33,7 +33,7 @@ export const DIALOG_DURATION = 100;
  * @internal Compose `z-dialog` instead of using this directly.
  */
 @Component({
-  selector: 'z-dialog-panel',
+  selector: "z-dialog-panel",
   imports: [ZardButtonComponent, NgIcon],
   template: `
     @if (zClosable()) {
@@ -70,7 +70,7 @@ export const DIALOG_DURATION = 100;
       }
     }
 
-    z-dialog-panel[data-state='closed'] {
+    z-dialog-panel[data-state="closed"] {
       opacity: 0;
       transform: scale(0.9);
       transition:
@@ -82,18 +82,18 @@ export const DIALOG_DURATION = 100;
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
-    'data-slot': 'dialog-content',
-    role: 'dialog',
-    'aria-modal': 'true',
-    tabindex: '-1',
-    '[attr.data-state]': 'zState()',
-    '[attr.aria-labelledby]': 'zLabelledBy()',
-    '[attr.aria-describedby]': 'zDescribedBy()',
-    '[class]': 'classes()',
-    '[style.width]': 'zWidth() || null',
-    '[style.--z-dialog-duration.ms]': 'zDuration()',
+    "data-slot": "dialog-content",
+    role: "dialog",
+    "aria-modal": "true",
+    tabindex: "-1",
+    "[attr.data-state]": "zState()",
+    "[attr.aria-labelledby]": "zLabelledBy()",
+    "[attr.aria-describedby]": "zDescribedBy()",
+    "[class]": "classes()",
+    "[style.width]": "zWidth() || null",
+    "[style.--z-dialog-duration.ms]": "zDuration()",
   },
-  exportAs: 'zDialogPanel',
+  exportAs: "zDialogPanel",
 })
 export class ZardDialogPanelComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -107,10 +107,10 @@ export class ZardDialogPanelComponent {
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(DIALOG_DURATION);
   /** `closed` plays the leave transition; the owner disposes the overlay once it ends. */
-  readonly zState = input<'open' | 'closed'>('open');
+  readonly zState = input<"open" | "closed">("open");
   readonly zLabelledBy = input<string | null>(null);
   readonly zDescribedBy = input<string | null>(null);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** The corner close button was pressed. */
   readonly closeRequested = output<void>();

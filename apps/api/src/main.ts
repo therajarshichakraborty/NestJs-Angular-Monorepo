@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { getEnvironment, logger } from '@repo/lib';
+import { NestFactory } from "@nestjs/core";
+import { getEnvironment, logger } from "@repo/lib";
 
-import { AppModule } from './app.module';
-import { ApiExceptionFilter } from './common/api-exception.filter';
-import { NestLoggerAdapter } from './common/nest-logger.adapter';
-import { OPENAPI_DOCS_PATH, setupOpenApi } from './openapi';
+import { AppModule } from "./app.module";
+import { ApiExceptionFilter } from "./common/api-exception.filter";
+import { NestLoggerAdapter } from "./common/nest-logger.adapter";
+import { OPENAPI_DOCS_PATH, setupOpenApi } from "./openapi";
 
 async function bootstrap(): Promise<void> {
   const environment = getEnvironment();
@@ -23,6 +23,6 @@ async function bootstrap(): Promise<void> {
 }
 
 bootstrap().catch((error: unknown) => {
-  logger.error('API failed to start', error);
+  logger.error("API failed to start", error);
   process.exit(1);
 });

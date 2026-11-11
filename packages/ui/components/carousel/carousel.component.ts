@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,26 +11,31 @@ import {
   type InputSignal,
   type Signal,
   inject,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight, lucideCircleSmall } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
-import type { EmblaCarouselType, EmblaEventType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel';
-import { EmblaCarouselDirective } from 'embla-carousel-angular';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronLeft, lucideChevronRight, lucideCircleSmall } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
+import type {
+  EmblaCarouselType,
+  EmblaEventType,
+  EmblaOptionsType,
+  EmblaPluginType,
+} from "embla-carousel";
+import { EmblaCarouselDirective } from "embla-carousel-angular";
 
-import { ZardButtonComponent } from '@repo/ui/components/button';
+import { ZardButtonComponent } from "@repo/ui/components/button";
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
-} from '@repo/ui/components/carousel/carousel.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/carousel/carousel.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-carousel',
+  selector: "z-carousel",
   imports: [EmblaCarouselDirective, ZardButtonComponent, NgIcon],
   template: `
     <div class="relative">
@@ -49,7 +54,7 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
         <ng-content />
 
         @let controls = zControls();
-        @if (controls === 'button') {
+        @if (controls === "button") {
           <button
             type="button"
             z-button
@@ -72,7 +77,7 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
           >
             <ng-icon name="lucideChevronRight" class="size-4!" />
           </button>
-        } @else if (controls === 'dot') {
+        } @else if (controls === "dot") {
           <div class="mt-2 flex justify-center gap-1">
             @for (dot of dots(); track $index) {
               <button
@@ -88,7 +93,9 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
                 <ng-icon
                   name="lucideCircleSmall"
                   [strokeWidth]="0"
-                  [class]="$index === selectedIndex() ? '[&_svg]:fill-primary' : '[&_svg]:fill-border'"
+                  [class]="
+                    $index === selectedIndex() ? '[&_svg]:fill-primary' : '[&_svg]:fill-border'
+                  "
                 />
               </button>
             }
@@ -107,11 +114,11 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
     }),
   ],
   host: {
-    'data-slot': 'carousel',
-    '(keydown.arrowleft.prevent)': 'onArrowLeft()',
-    '(keydown.arrowright.prevent)': 'onArrowRight()',
+    "data-slot": "carousel",
+    "(keydown.arrowleft.prevent)": "onArrowLeft()",
+    "(keydown.arrowright.prevent)": "onArrowRight()",
   },
-  exportAs: 'zCarousel',
+  exportAs: "zCarousel",
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
@@ -119,11 +126,11 @@ export class ZardCarouselComponent {
   // and it exists during SSR, where reading computed styles throws.
   private readonly directionality = inject(Directionality);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
   readonly zPlugins: InputSignal<EmblaPluginType[]> = input<EmblaPluginType[]>([]);
-  readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
-  readonly zControls = input<ZardCarouselControlsVariants>('button');
+  readonly zOrientation = input<ZardCarouselOrientationVariants>("horizontal");
+  readonly zControls = input<ZardCarouselControlsVariants>("button");
   readonly zInited = output<EmblaCarouselType>();
   readonly zSelected = output<void>();
 
@@ -131,28 +138,28 @@ export class ZardCarouselComponent {
   protected readonly canScrollPrev = signal<boolean>(false);
   protected readonly canScrollNext = signal<boolean>(false);
   protected readonly scrollSnaps = signal<number[]>([]);
-  protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
+  protected readonly subscribeToEvents: EmblaEventType[] = ["init", "select", "reInit"];
   protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
     ...this.zOptions(),
-    axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+    axis: this.zOrientation() === "horizontal" ? "x" : "y",
     direction: this.directionality.valueSignal(),
   }));
 
-  protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
+  protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill("."));
 
   #index = -1;
 
   onEmblaChange(type: EmblaEventType, emblaApi: EmblaCarouselType): void {
-    if (type === 'init' || type === 'reInit') {
+    if (type === "init" || type === "reInit") {
       this.scrollSnaps.set(emblaApi.scrollSnapList());
       this.checkNavigation(emblaApi);
-      if (type === 'init') {
+      if (type === "init") {
         this.zInited.emit(emblaApi);
       }
       return;
     }
 
-    if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {
+    if (type === "select" && emblaApi.selectedScrollSnap() !== this.#index) {
       this.checkNavigation(emblaApi);
       this.zSelected.emit();
     }
@@ -160,7 +167,7 @@ export class ZardCarouselComponent {
 
   /** Horizontal arrow keys follow the visual order: in RTL the next slide is on the left. */
   protected onArrowLeft(): void {
-    if (this.directionality.value === 'rtl') {
+    if (this.directionality.value === "rtl") {
       this.slideNext();
     } else {
       this.slidePrevious();
@@ -168,7 +175,7 @@ export class ZardCarouselComponent {
   }
 
   protected onArrowRight(): void {
-    if (this.directionality.value === 'rtl') {
+    if (this.directionality.value === "rtl") {
       this.slidePrevious();
     } else {
       this.slideNext();

@@ -6,7 +6,7 @@ import {
   ZardCardFooterComponent,
   ZardCardHeaderComponent,
   ZardCardTitleComponent,
-} from '@repo/ui/components/card/card.component';
+} from "@repo/ui/components/card/card.component";
 
 export const ZardCardImports = [
   ZardCardComponent,

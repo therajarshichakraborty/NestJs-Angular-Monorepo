@@ -9,7 +9,7 @@ export {
   ZardFieldSeparatorComponent,
   ZardFieldSetComponent,
   ZardFieldTitleComponent,
-} from './field.component';
+} from "./field.component";
 
 import {
   ZardFieldComponent,
@@ -22,7 +22,7 @@ import {
   ZardFieldSeparatorComponent,
   ZardFieldSetComponent,
   ZardFieldTitleComponent,
-} from './field.component';
+} from "./field.component";
 
 export const ZardFieldImports = [
   ZardFieldSetComponent,

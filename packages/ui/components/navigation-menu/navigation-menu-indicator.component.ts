@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,46 +9,48 @@ import {
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { navigationMenuIndicatorVariants } from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { navigationMenuIndicatorVariants } from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardNavigationMenuService } from './navigation-menu.service';
+import { ZardNavigationMenuService } from "./navigation-menu.service";
 
 /** The arrow that slides along the bar to point at the trigger currently owning the viewport. */
 @Component({
-  selector: 'z-navigation-menu-indicator, [z-navigation-menu-indicator]',
+  selector: "z-navigation-menu-indicator, [z-navigation-menu-indicator]",
   template: `
     <div class="bg-border relative top-[60%] size-2 rotate-45 rounded-tl-sm shadow-md"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'navigation-menu-indicator',
-    'aria-hidden': 'true',
-    '[attr.data-state]': "visible() ? 'visible' : 'hidden'",
-    '[style.translate]': 'geometry().translate',
-    '[style.width.px]': 'geometry().width',
-    '[style.opacity]': 'visible() ? 1 : 0',
+    "[class]": "classes()",
+    "data-slot": "navigation-menu-indicator",
+    "aria-hidden": "true",
+    "[attr.data-state]": "visible() ? 'visible' : 'hidden'",
+    "[style.translate]": "geometry().translate",
+    "[style.width.px]": "geometry().width",
+    "[style.opacity]": "visible() ? 1 : 0",
   },
-  exportAs: 'zNavigationMenuIndicator',
+  exportAs: "zNavigationMenuIndicator",
 })
 export class ZardNavigationMenuIndicatorComponent {
   private readonly service = inject(ZardNavigationMenuService);
   private readonly platformId = inject(PLATFORM_ID);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** Kept as the last known position so hiding fades out in place instead of jumping to zero. */
-  private readonly measured = signal({ translate: '0px', width: 0 });
+  private readonly measured = signal({ translate: "0px", width: 0 });
 
   protected readonly visible = computed(() => this.service.isOpen());
   protected readonly geometry = this.measured.asReadonly();
-  protected readonly classes = computed(() => mergeClasses(navigationMenuIndicatorVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(navigationMenuIndicatorVariants(), this.class()),
+  );
 
   constructor() {
     effect(() => {

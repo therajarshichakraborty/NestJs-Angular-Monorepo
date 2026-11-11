@@ -1,13 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardCommandComponent } from '@repo/ui/components/command/command.component';
-import { commandSeparatorVariants } from '@repo/ui/components/command/command.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardCommandComponent } from "@repo/ui/components/command/command.component";
+import { commandSeparatorVariants } from "@repo/ui/components/command/command.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-command-divider',
+  selector: "z-command-divider",
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator" data-slot="command-separator"></div>
@@ -15,14 +22,16 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zCommandDivider',
+  exportAs: "zCommandDivider",
 })
 export class ZardCommandDividerComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(commandSeparatorVariants(), this.class()),
+  );
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {
@@ -32,7 +41,7 @@ export class ZardCommandDividerComponent {
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search, always show dividers
-    if (searchTerm === '') {
+    if (searchTerm === "") {
       return true;
     }
 

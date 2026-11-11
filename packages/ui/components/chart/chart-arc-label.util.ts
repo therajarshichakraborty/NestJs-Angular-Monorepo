@@ -35,7 +35,7 @@ function measureContext(): CanvasRenderingContext2D | null {
   }
 
   try {
-    ruler = globalThis.document?.createElement('canvas').getContext('2d') ?? null;
+    ruler = globalThis.document?.createElement("canvas").getContext("2d") ?? null;
   } catch {
     ruler = null;
   }
@@ -56,9 +56,10 @@ function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry):
 
   let travelled = (START_OFFSET_DEGREES * Math.PI * radius) / 180;
 
-  return characters.map(character => {
+  return characters.map((character) => {
     const { width } = context.measureText(character);
-    const angle = geometry.startAngle + ((sign * (travelled + width / 2)) / radius) * (180 / Math.PI);
+    const angle =
+      geometry.startAngle + ((sign * (travelled + width / 2)) / radius) * (180 / Math.PI);
     const radians = (angle * Math.PI) / 180;
     travelled += width;
 
@@ -67,7 +68,7 @@ function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry):
     const tangentY = -Math.cos(radians) * sign;
 
     return {
-      type: 'text',
+      type: "text",
       x: geometry.cx + Math.cos(radians) * radius,
       y: geometry.cy - Math.sin(radians) * radius,
       rotation: -Math.atan2(tangentY, tangentX),
@@ -77,24 +78,31 @@ function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry):
         text: character,
         fill: geometry.fill,
         font: geometry.font,
-        align: 'center',
-        verticalAlign: 'middle',
+        align: "center",
+        verticalAlign: "middle",
       },
     };
   });
 }
 
 /** Every glyph of every label, ready to hand to ECharts as `graphic` elements. */
-export function buildArcLabels(texts: readonly string[], geometry: ZardArcLabelGeometry): TextElement[] {
+export function buildArcLabels(
+  texts: readonly string[],
+  geometry: ZardArcLabelGeometry,
+): TextElement[] {
   return texts.flatMap((text, index) => glyphsOf(text, geometry.radii[index] ?? 0, geometry));
 }
 
 /** ECharts sizes a polar radius against half the shorter side; percentages resolve the same way. */
-export function resolveRadius(value: string | number | undefined, base: number, fallback: number): number {
-  if (typeof value === 'number') {
+export function resolveRadius(
+  value: string | number | undefined,
+  base: number,
+  fallback: number,
+): number {
+  if (typeof value === "number") {
     return value;
   }
-  if (typeof value === 'string' && value.endsWith('%')) {
+  if (typeof value === "string" && value.endsWith("%")) {
     const percent = Number.parseFloat(value);
     return Number.isFinite(percent) ? (percent / 100) * base : fallback;
   }

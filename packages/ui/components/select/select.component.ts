@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -6,10 +6,10 @@ import {
   OverlayModule,
   OverlayPositionBuilder,
   type OverlayRef,
-} from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { ViewportRuler } from '@angular/cdk/scrolling';
-import { isPlatformBrowser } from '@angular/common';
+} from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { ViewportRuler } from "@angular/cdk/scrolling";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -37,18 +37,18 @@ import {
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown, lucideChevronUp } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronDown, lucideChevronUp } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
+import { filter } from "rxjs";
 
-import { ZardBadgeComponent } from '@repo/ui/components/badge';
-import { ZardSelectGroupComponent } from '@repo/ui/components/select/select-group.component';
-import { ZardSelectItemComponent } from '@repo/ui/components/select/select-item.component';
+import { ZardBadgeComponent } from "@repo/ui/components/badge";
+import { ZardSelectGroupComponent } from "@repo/ui/components/select/select-group.component";
+import { ZardSelectItemComponent } from "@repo/ui/components/select/select-item.component";
 import {
   selectContentVariants,
   selectScrollButtonVariants,
@@ -57,8 +57,8 @@ import {
   selectViewportVariants,
   type ZardSelectAlignVariants,
   type ZardSelectPositionVariants,
-} from '@repo/ui/components/select/select.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/select/select.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string | string[]) => void;
@@ -69,7 +69,7 @@ const VIEWPORT_MARGIN = 8;
 let nextSelectId = 0;
 
 @Component({
-  selector: 'z-select, [z-select]',
+  selector: "z-select, [z-select]",
   imports: [OverlayModule, ZardBadgeComponent, NgIcon],
   template: `
     <button
@@ -118,7 +118,9 @@ let nextSelectId = 0;
         [attr.aria-multiselectable]="zMultiple() ? 'true' : null"
         [style.--z-select-trigger-height]="triggerHeightStyle()"
         [style.--z-select-trigger-width]="triggerWidthStyle()"
-        (keydown.{arrowdown,arrowup,enter,space,escape,home,end,pageup,pagedown}.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end,pageup,pagedown}.prevent)="
+          onDropdownKeydown($event)
+        "
         (mousemove)="onDropdownMouseMove($event)"
         (wheel)="stopScrollOptions()"
         (touchmove)="stopScrollOptions()"
@@ -180,17 +182,17 @@ let nextSelectId = 0;
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronDown, lucideChevronUp })],
   host: {
-    'data-slot': 'select',
-    tabindex: '-1',
-    '[attr.data-active]': 'isFocus() ? "" : null',
-    '[attr.data-disabled]': 'disabledState() ? "" : null',
-    '[attr.data-invalid]': 'zInvalid() ? "" : null',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[class]': 'classes()',
-    '(focus)': 'onHostFocus($event)',
-    '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
+    "data-slot": "select",
+    tabindex: "-1",
+    "[attr.data-active]": 'isFocus() ? "" : null',
+    "[attr.data-disabled]": 'disabledState() ? "" : null',
+    "[attr.data-invalid]": 'zInvalid() ? "" : null',
+    "[attr.data-state]": 'isOpen() ? "open" : "closed"',
+    "[class]": "classes()",
+    "(focus)": "onHostFocus($event)",
+    "(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)": "onTriggerKeydown($event)",
   },
-  exportAs: 'zSelect',
+  exportAs: "zSelect",
 })
 export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
@@ -204,24 +206,24 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
   private readonly directionality = inject(Directionality, { optional: true });
 
-  readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
-  readonly optionsViewport = viewChild<ElementRef<HTMLElement>>('optionsViewport');
+  readonly dropdownTemplate = viewChild.required<TemplateRef<void>>("dropdownTemplate");
+  readonly optionsViewport = viewChild<ElementRef<HTMLElement>>("optionsViewport");
   readonly selectGroups = contentChildren(ZardSelectGroupComponent, { descendants: true });
   readonly selectItems = contentChildren(ZardSelectItemComponent, { descendants: true });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
 
-  readonly class = input<ClassValue>('');
-  readonly zAlign = input<ZardSelectAlignVariants>('center');
+  readonly class = input<ClassValue>("");
+  readonly zAlign = input<ZardSelectAlignVariants>("center");
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
-  readonly zLabel = input<string>('');
+  readonly zLabel = input<string>("");
   readonly zMaxLabelCount = input(1, { transform: numberAttribute });
   readonly zMultiple = input(false, { transform: booleanAttribute });
-  readonly zPlaceholder = input<string>('Select an option...');
-  readonly zPosition = input<ZardSelectPositionVariants>('item-aligned');
-  readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
+  readonly zPlaceholder = input<string>("Select an option...");
+  readonly zPosition = input<ZardSelectPositionVariants>("item-aligned");
+  readonly zValue = model<string | string[]>(this.zMultiple() ? [] : "");
 
   readonly zSelectionChange = output<string | string[]>();
 
@@ -232,7 +234,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected readonly hasScrollableContent = signal(false);
   protected readonly canScrollUp = signal(false);
   protected readonly canScrollDown = signal(false);
-  protected readonly overlaySide = signal<'top' | 'bottom' | 'left' | 'right'>('bottom');
+  protected readonly overlaySide = signal<"top" | "bottom" | "left" | "right">("bottom");
   protected readonly triggerHeight = signal(0);
   protected readonly triggerWidth = signal(0);
   protected readonly disabledState = linkedSignal(() => this.zDisabled());
@@ -251,7 +253,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
     // A `[dir]` switch while the list is open closes it: it reopens with the new direction.
     this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      this.overlayRef?.setDirection(this.directionality?.value ?? "ltr");
       if (this.isOpen()) {
         this.close(false);
       }
@@ -260,7 +262,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
   protected readonly hasValue = computed(() => {
     const value = this.zValue();
-    return Array.isArray(value) ? value.length > 0 : value !== '';
+    return Array.isArray(value) ? value.length > 0 : value !== "";
   });
 
   protected readonly triggerHeightStyle = computed(() => `${this.triggerHeight()}px`);
@@ -290,7 +292,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     return this.provideLabelForSingleSelectMode(selectedValue as string);
   });
 
-  protected readonly triggerAriaLabel = computed(() => this.selectedLabels().join(', ') || this.zPlaceholder());
+  protected readonly triggerAriaLabel = computed(
+    () => this.selectedLabels().join(", ") || this.zPlaceholder(),
+  );
 
   private onChange: OnChangeType = (_value: string | string[]) => {
     // ControlValueAccessor onChange callback
@@ -309,16 +313,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     mergeClasses(selectViewportVariants({ zPosition: this.zPosition() })),
   );
 
-  protected readonly scrollButtonClasses = computed(() => mergeClasses(selectScrollButtonVariants()));
+  protected readonly scrollButtonClasses = computed(() =>
+    mergeClasses(selectScrollButtonVariants()),
+  );
   protected readonly valueClasses = computed(() =>
     mergeClasses(
-      'flex min-w-0 flex-1 items-center gap-2',
-      this.zMultiple() ? 'flex-wrap overflow-visible' : 'overflow-hidden',
+      "flex min-w-0 flex-1 items-center gap-2",
+      this.zMultiple() ? "flex-wrap overflow-visible" : "overflow-hidden",
     ),
   );
 
   protected readonly triggerClasses = computed(() =>
-    mergeClasses(selectTriggerVariants({}), this.zMultiple() && 'h-auto min-h-8 py-1'),
+    mergeClasses(selectTriggerVariants({}), this.zMultiple() && "h-auto min-h-8 py-1"),
   );
 
   ngOnDestroy() {
@@ -333,15 +339,15 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
     const { key } = event as KeyboardEvent;
     switch (key) {
-      case 'Enter':
-      case ' ':
-      case 'ArrowDown':
-      case 'ArrowUp':
+      case "Enter":
+      case " ":
+      case "ArrowDown":
+      case "ArrowUp":
         if (!this.isOpen()) {
           this.open();
         }
         break;
-      case 'Escape':
+      case "Escape":
         if (this.isOpen()) {
           event.stopPropagation();
           this.close();
@@ -357,31 +363,31 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     this.hoverNavigationEnabled = false;
 
     switch (key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         this.navigateItems(1, items);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         this.navigateItems(-1, items);
         break;
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         this.selectFocusedItem(items);
         break;
-      case 'Escape':
+      case "Escape":
         e.stopPropagation();
         this.close();
         this.focusButton();
         break;
-      case 'Home':
+      case "Home":
         this.focusFirstItem(items);
         break;
-      case 'End':
+      case "End":
         this.focusLastItem(items);
         break;
-      case 'PageDown':
+      case "PageDown":
         this.navigateItems(5, items);
         break;
-      case 'PageUp':
+      case "PageUp":
         this.navigateItems(-5, items);
         break;
     }
@@ -404,16 +410,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    if (value === undefined || value === null || value === '') {
+    if (value === undefined || value === null || value === "") {
       if (isDevMode()) {
-        console.warn('Attempted to select item with invalid value:', { value, label });
+        console.warn("Attempted to select item with invalid value:", { value, label });
       }
       return;
     }
 
-    this.zValue.update(selectedValues => {
+    this.zValue.update((selectedValues) => {
       if (Array.isArray(selectedValues)) {
-        return selectedValues.includes(value) ? selectedValues.filter(v => v !== value) : [...selectedValues, value];
+        return selectedValues.includes(value)
+          ? selectedValues.filter((v) => v !== value)
+          : [...selectedValues, value];
       }
 
       return value;
@@ -433,17 +441,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private updateItems(items: readonly ZardSelectItemComponent[]): void {
-    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
+    const hostWidth = this.elementRef.nativeElement.offsetWidth ?? 0;
     const isCompact = hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD;
     this.isCompact.set(isCompact);
     // Setup select host reference for each item
     for (const [index, item] of items.entries()) {
       item.setSelectHost({
-        selectedValue: () => (this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string]),
+        selectedValue: () =>
+          this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string],
         selectItem: (value: string, label: string) => this.selectItem(value, label),
         navigateTo: () => this.navigateTo(item, index),
       });
-      item.zMode.set(isCompact ? 'compact' : 'normal');
+      item.zMode.set(isCompact ? "compact" : "normal");
     }
   }
 
@@ -470,7 +479,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
    * genuine hover is applied — by then `mouseenter` has already been turned away.
    */
   protected onDropdownMouseMove(event: MouseEvent): void {
-    const moved = !this.lastPointer || this.lastPointer.x !== event.clientX || this.lastPointer.y !== event.clientY;
+    const moved = this.lastPointer?.x !== event.clientX || this.lastPointer?.y !== event.clientY;
     this.lastPointer = { x: event.clientX, y: event.clientY };
 
     if (!moved || this.hoverNavigationEnabled) {
@@ -479,14 +488,16 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
     this.hoverNavigationEnabled = true;
 
-    const target = (event.target as HTMLElement | null)?.closest<HTMLElement>('z-select-item, [z-select-item]');
+    const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
+      "z-select-item, [z-select-item]",
+    );
     if (!target) {
       return;
     }
 
     const items = this.getSelectItems(true);
     const index = items.indexOf(target);
-    if (index !== -1 && target.dataset['disabled'] === undefined) {
+    if (index !== -1 && target.dataset["disabled"] === undefined) {
       this.highlightItem(index);
     }
   }
@@ -518,7 +529,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     }
 
     const maxScroll = Math.max(viewport.scrollHeight - viewport.clientHeight, 0);
-    const nextScrollTop = Math.min(Math.max(viewport.scrollTop + direction * this.getScrollStep(), 0), maxScroll);
+    const nextScrollTop = Math.min(
+      Math.max(viewport.scrollTop + direction * this.getScrollStep(), 0),
+      maxScroll,
+    );
     viewport.scrollTop = nextScrollTop;
     this.updateScrollableState();
 
@@ -582,7 +596,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     this.canScrollUp.set(nextCanScrollUp);
     this.canScrollDown.set(nextCanScrollDown);
 
-    if ((nextCanScrollUp && !previousCanScrollUp) || (nextCanScrollDown && !previousCanScrollDown)) {
+    if (
+      (nextCanScrollUp && !previousCanScrollUp) ||
+      (nextCanScrollDown && !previousCanScrollDown)
+    ) {
       this.scrollFocusedItemIntoView();
     }
   }
@@ -590,7 +607,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private getScrollStep(): number {
     const items = this.getSelectItems();
     const focusedItem = this.focusedIndex() >= 0 ? items[this.focusedIndex()] : undefined;
-    const selectedItem = items.find(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+    const selectedItem = items.find(
+      (item) => item.getAttribute("value") === this.getPrimarySelectedValue(),
+    );
     const itemHeight = (selectedItem ?? focusedItem ?? items[0])?.offsetHeight ?? 0;
 
     return itemHeight > 0 ? itemHeight : 32;
@@ -607,7 +626,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         index++;
       }
       if (labelsToShowCount && this.zMaxLabelCount() && index === this.zMaxLabelCount()) {
-        labels.push(`${labelsToShowCount} more item${labelsToShowCount > 1 ? 's' : ''} selected`);
+        labels.push(`${labelsToShowCount} more item${labelsToShowCount > 1 ? "s" : ""} selected`);
         break;
       }
     }
@@ -642,8 +661,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
-    const trigger = this.elementRef.nativeElement.querySelector('button');
+    const hostWidth = this.elementRef.nativeElement.offsetWidth ?? 0;
+    const trigger = this.elementRef.nativeElement.querySelector("button");
     const triggerHeight = trigger?.offsetHeight ?? 0;
     this.triggerWidth.set(hostWidth);
     this.triggerHeight.set(triggerHeight);
@@ -652,13 +671,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       this.overlayRef.detach();
     }
 
-    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
+    this.overlayRef.setDirection(this.directionality?.value ?? "ltr");
     this.overlayRef.updatePositionStrategy(this.createPositionStrategy());
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
 
     this.overlayRef.attach(this.portal);
     this.overlayRef.updateSize({
-      ...(this.zPosition() === 'popper' ? { minWidth: hostWidth } : { width: hostWidth }),
+      ...(this.zPosition() === "popper" ? { minWidth: hostWidth } : { width: hostWidth }),
       maxHeight: this.getAvailableContentHeight(),
     });
     this.isOpen.set(true);
@@ -703,17 +722,17 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private getMatchingItem(value: string): ZardSelectItemComponent | undefined {
-    return this.selectItems()?.find(item => item.zValue() === value);
+    return this.selectItems()?.find((item) => item.zValue() === value);
   }
 
   private determinePortalWidthOnOpen(portalWidth: number): void {
     runInInjectionContext(this.injector, () => {
       afterNextRender(() => {
-        if (!this.overlayRef || !this.overlayRef.hasAttached()) {
+        if (!this.overlayRef?.hasAttached()) {
           return;
         }
 
-        if (this.zPosition() === 'popper') {
+        if (this.zPosition() === "popper") {
           this.updateScrollableState();
           this.setFocusOnOpen();
           return;
@@ -750,8 +769,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         const [selectItem] = selectItems;
         if (isOverflow && selectItem) {
           const elementStyles = getComputedStyle(selectItem.elementRef.nativeElement);
-          const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
-          const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
+          const leftPadding =
+            Number.parseFloat(elementStyles.getPropertyValue("padding-left")) || 0;
+          const rightPadding =
+            Number.parseFloat(elementStyles.getPropertyValue("padding-right")) || 0;
           itemMaxWidth += leftPadding + rightPadding;
         }
 
@@ -766,20 +787,25 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private alignSelectedItemToTrigger(): void {
-    if (this.zPosition() !== 'item-aligned' || !this.overlayRef?.hasAttached()) {
+    if (this.zPosition() !== "item-aligned" || !this.overlayRef?.hasAttached()) {
       return;
     }
 
     // A null offset means the selected item cannot sit over the trigger without pushing the
     // dropdown off screen, so the anchored placement is used instead and flips above the trigger.
-    this.overlayRef.updatePositionStrategy(this.createPositionStrategy(this.getItemAlignedOffset() ?? undefined));
+    this.overlayRef.updatePositionStrategy(
+      this.createPositionStrategy(this.getItemAlignedOffset() ?? undefined),
+    );
   }
 
   private getItemAlignedOffset(): { bottom: number; top: number } | null {
-    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('[data-slot="select-content"]');
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>(
+      '[data-slot="select-content"]',
+    );
     const selectedItem =
-      this.getSelectItems(true).find(item => item.getAttribute('value') === this.getPrimarySelectedValue()) ??
-      this.getSelectItems()[0];
+      this.getSelectItems(true).find(
+        (item) => item.getAttribute("value") === this.getPrimarySelectedValue(),
+      ) ?? this.getSelectItems()[0];
     const trigger = (this.elementRef.nativeElement as HTMLElement).querySelector<HTMLElement>(
       '[data-slot="select-trigger"]',
     );
@@ -790,7 +816,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
     const triggerRect = trigger.getBoundingClientRect();
     const triggerHeight = trigger.offsetHeight || triggerRect.height || this.triggerHeight();
-    const itemHeight = selectedItem.offsetHeight || selectedItem.getBoundingClientRect().height || triggerHeight;
+    const itemHeight =
+      selectedItem.offsetHeight || selectedItem.getBoundingClientRect().height || triggerHeight;
     const contentHeight = content.offsetHeight || content.getBoundingClientRect().height;
     const selectedItemOffsetTop = selectedItem.offsetTop;
     const itemCenterOffset = (triggerHeight - itemHeight) / 2;
@@ -802,7 +829,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     // cover the trigger against the viewport edge instead of opening next to it.
     const viewportHeight = this.viewportRuler.getViewportSize().height;
     const contentTop = triggerRect.bottom + bottom;
-    if (contentTop < VIEWPORT_MARGIN || contentTop + contentHeight > viewportHeight - VIEWPORT_MARGIN) {
+    if (
+      contentTop < VIEWPORT_MARGIN ||
+      contentTop + contentHeight > viewportHeight - VIEWPORT_MARGIN
+    ) {
       return null;
     }
 
@@ -826,9 +856,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private trackOverlaySide(positionStrategy: FlexibleConnectedPositionStrategy): void {
-    positionStrategy.positionChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(change => {
-      this.overlaySide.set(change.connectionPair.overlayY === 'bottom' ? 'top' : 'bottom');
-    });
+    positionStrategy.positionChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((change) => {
+        this.overlaySide.set(change.connectionPair.overlayY === "bottom" ? "top" : "bottom");
+      });
   }
 
   /** Height the dropdown may occupy without overflowing the viewport. */
@@ -837,7 +869,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     return Math.max(Math.min(MAX_CONTENT_HEIGHT, viewportHeight - VIEWPORT_MARGIN * 2), 0);
   }
 
-  private connectedPositions(itemAlignedOffset?: { bottom: number; top: number }): ConnectedPosition[] {
+  private connectedPositions(itemAlignedOffset?: {
+    bottom: number;
+    top: number;
+  }): ConnectedPosition[] {
     const originX = this.zAlign();
     const overlayX = this.zAlign();
     const bottomOffsetY = itemAlignedOffset?.bottom ?? 4;
@@ -846,16 +881,16 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     return [
       {
         originX,
-        originY: 'bottom',
+        originY: "bottom",
         overlayX,
-        overlayY: 'top',
+        overlayY: "top",
         offsetY: bottomOffsetY,
       },
       {
         originX,
-        originY: 'top',
+        originY: "top",
         overlayX,
-        overlayY: 'bottom',
+        overlayY: "bottom",
         offsetY: topOffsetY,
       },
     ];
@@ -872,7 +907,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
-          direction: this.directionality?.value ?? 'ltr',
+          direction: this.directionality?.value ?? "ltr",
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           maxHeight: MAX_CONTENT_HEIGHT,
@@ -880,7 +915,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         this.overlayRef
           .outsidePointerEvents()
           .pipe(
-            filter(event => !this.elementRef.nativeElement.contains(event.target)),
+            filter((event) => !this.elementRef.nativeElement.contains(event.target)),
             takeUntilDestroyed(this.destroyRef),
           )
           .subscribe(() => {
@@ -888,7 +923,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
             this.close();
           });
       } catch (error) {
-        console.error('Error creating overlay:', error);
+        console.error("Error creating overlay:", error);
       }
     }
   }
@@ -905,9 +940,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return [];
     }
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
-      item => ignoreFilter || item.dataset['disabled'] === undefined,
-    );
+    return Array.from(
+      dropdownElement.querySelectorAll<HTMLElement>("z-select-item, [z-select-item]"),
+    ).filter((item) => ignoreFilter || item.dataset["disabled"] === undefined);
   }
 
   /**
@@ -923,7 +958,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    const selectedIndex = items.findIndex(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+    const selectedIndex = items.findIndex(
+      (item) => item.getAttribute("value") === this.getPrimarySelectedValue(),
+    );
 
     this.focusedIndex.set(selectedIndex === -1 ? 0 : selectedIndex);
   }
@@ -943,12 +980,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return focusedIndex;
     }
 
-    const highlighted = items.findIndex(item => item.hasAttribute('data-highlighted'));
+    const highlighted = items.findIndex((item) => item.hasAttribute("data-highlighted"));
     if (highlighted !== -1) {
       return highlighted;
     }
 
-    return items.findIndex(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+    return items.findIndex((item) => item.getAttribute("value") === this.getPrimarySelectedValue());
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -957,7 +994,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     }
 
     const currentIndex = this.resolveCurrentIndex(items);
-    let nextIndex = currentIndex === -1 ? (direction > 0 ? 0 : items.length - 1) : currentIndex + direction;
+    let nextIndex =
+      currentIndex === -1 ? (direction > 0 ? 0 : items.length - 1) : currentIndex + direction;
 
     nextIndex %= items.length;
     if (nextIndex < 0) {
@@ -972,12 +1010,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     const currentIndex = this.focusedIndex();
     if (currentIndex >= 0 && currentIndex < items.length) {
       const item = items[currentIndex];
-      const value = item.getAttribute('value');
-      const label = item.textContent?.trim() ?? '';
+      const value = item.getAttribute("value");
+      const label = item.textContent?.trim() ?? "";
 
       if (value === null || value === undefined) {
         if (isDevMode()) {
-          console.warn('No value attribute found on selected item:', item);
+          console.warn("No value attribute found on selected item:", item);
         }
         return;
       }
@@ -1006,9 +1044,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       const item = items[index];
       if (index === focusedIndex) {
         item.focus();
-        item.setAttribute('data-highlighted', '');
+        item.setAttribute("data-highlighted", "");
       } else {
-        item.removeAttribute('data-highlighted');
+        item.removeAttribute("data-highlighted");
       }
     }
     this.updateScrollableState();
@@ -1017,21 +1055,21 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private clearItemFocus(): void {
     this.focusedIndex.set(-1);
     for (const item of this.getSelectItems(true)) {
-      item.removeAttribute('data-highlighted');
+      item.removeAttribute("data-highlighted");
     }
     this.focusDropdown();
   }
 
   private scrollFocusedItemIntoView(): void {
-    const focusedItem = this.getSelectItems(true).find(item => item === document.activeElement);
-    focusedItem?.scrollIntoView?.({ block: 'nearest' });
+    const focusedItem = this.getSelectItems(true).find((item) => item === document.activeElement);
+    focusedItem?.scrollIntoView?.({ block: "nearest" });
   }
 
   private focusDropdown() {
     if (this.overlayRef?.hasAttached()) {
-      const dropdownElement = this.overlayRef.overlayElement.querySelector(
+      const dropdownElement = this.overlayRef.overlayElement.querySelector<HTMLElement>(
         '[data-slot="select-content"]',
-      ) as HTMLElement;
+      );
       if (dropdownElement) {
         dropdownElement.focus();
       }
@@ -1039,14 +1077,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private focusButton() {
-    const button = this.elementRef.nativeElement.querySelector('button');
+    const button = this.elementRef.nativeElement.querySelector("button");
     if (button) {
       button.focus();
     }
   }
 
   private blurButton() {
-    const button = this.elementRef.nativeElement.querySelector('button');
+    const button = this.elementRef.nativeElement.querySelector("button");
     if (button) {
       button.blur();
     }
@@ -1075,7 +1113,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private getPrimarySelectedValue(): string {
     const selectedValue = this.zValue();
     if (Array.isArray(selectedValue)) {
-      return selectedValue[0] ?? '';
+      return selectedValue[0] ?? "";
     }
 
     return selectedValue;
@@ -1086,7 +1124,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     if (this.zMultiple()) {
       this.zValue.set(Array.isArray(value) ? value : value ? [value] : []);
     } else {
-      this.zValue.set(value ?? '');
+      this.zValue.set(value ?? "");
     }
   }
 

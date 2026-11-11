@@ -6,7 +6,7 @@ import {
   ZardPaginationItemComponent,
   ZardPaginationNextComponent,
   ZardPaginationPreviousComponent,
-} from '@repo/ui/components/pagination/pagination.component';
+} from "@repo/ui/components/pagination/pagination.component";
 
 export const ZardPaginationImports = [
   ZardPaginationContentComponent,

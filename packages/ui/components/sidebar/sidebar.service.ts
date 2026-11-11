@@ -1,17 +1,17 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { computed, inject, Injectable, PLATFORM_ID, REQUEST, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
+import { computed, inject, Injectable, PLATFORM_ID, REQUEST, signal } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 
-import { map, of } from 'rxjs';
+import { map, of } from "rxjs";
 
 import {
   ZARD_SIDEBAR_COOKIE_MAX_AGE,
   ZARD_SIDEBAR_COOKIE_NAME,
   ZARD_SIDEBAR_MOBILE_BREAKPOINT,
-} from '@repo/ui/components/sidebar/sidebar.constants';
+} from "@repo/ui/components/sidebar/sidebar.constants";
 
-export type ZardSidebarState = 'expanded' | 'collapsed';
+export type ZardSidebarState = "expanded" | "collapsed";
 
 /**
  * Controls a single sidebar. The Angular counterpart of shadcn's `useSidebar()` hook.
@@ -46,17 +46,19 @@ export class ZardSidebarService {
 
   readonly isMobile = toSignal(
     this.isBrowser
-      ? this.breakpointObserver.observe(ZARD_SIDEBAR_MOBILE_BREAKPOINT).pipe(map(result => result.matches))
+      ? this.breakpointObserver
+          .observe(ZARD_SIDEBAR_MOBILE_BREAKPOINT)
+          .pipe(map((result) => result.matches))
       : of(false),
     { initialValue: false },
   );
 
   readonly open = computed(() => this.controlledOpen() ?? this.internalOpen());
   readonly openMobile = this.internalOpenMobile.asReadonly();
-  readonly state = computed<ZardSidebarState>(() => (this.open() ? 'expanded' : 'collapsed'));
+  readonly state = computed<ZardSidebarState>(() => (this.open() ? "expanded" : "collapsed"));
 
   setOpen(value: boolean | ((open: boolean) => boolean)): void {
-    const openState = typeof value === 'function' ? value(this.open()) : value;
+    const openState = typeof value === "function" ? value(this.open()) : value;
 
     // In controlled mode the consumer owns the state — only report the request.
     if (this.controlledOpen() === undefined) {
@@ -73,9 +75,9 @@ export class ZardSidebarService {
 
   toggleSidebar(): void {
     if (this.isMobile()) {
-      this.internalOpenMobile.update(open => !open);
+      this.internalOpenMobile.update((open) => !open);
     } else {
-      this.setOpen(open => !open);
+      this.setOpen((open) => !open);
     }
   }
 
@@ -109,12 +111,12 @@ export class ZardSidebarService {
   }
 
   private readPersistedOpen(): boolean | undefined {
-    const cookies = this.isBrowser ? this.document.cookie : this.request?.headers?.get('cookie');
+    const cookies = this.isBrowser ? this.document.cookie : this.request?.headers?.get("cookie");
     if (!cookies) {
       return undefined;
     }
 
     const match = new RegExp(`(?:^|;\\s*)${ZARD_SIDEBAR_COOKIE_NAME}=(true|false)`).exec(cookies);
-    return match ? match[1] === 'true' : undefined;
+    return match ? match[1] === "true" : undefined;
   }
 }

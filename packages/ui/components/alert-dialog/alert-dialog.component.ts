@@ -1,7 +1,7 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { Overlay, OverlayConfig, type OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { isPlatformBrowser } from "@angular/common";
 import {
   afterNextRender,
   booleanAttribute,
@@ -23,16 +23,19 @@ import {
   ViewContainerRef,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
-import { filter, takeUntil } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter, takeUntil } from "rxjs";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { nextAlertDialogId, ZardAlertDialogHost } from './alert-dialog-host';
-import { ALERT_DIALOG_DURATION, ZardAlertDialogPanelComponent } from './alert-dialog-panel.component';
+import { nextAlertDialogId, ZardAlertDialogHost } from "./alert-dialog-host";
+import {
+  ALERT_DIALOG_DURATION,
+  ZardAlertDialogPanelComponent,
+} from "./alert-dialog-panel.component";
 import {
   ALERT_DIALOG_BACKDROP_CLASSES,
   alertDialogDescriptionVariants,
@@ -41,9 +44,9 @@ import {
   alertDialogMediaVariants,
   alertDialogTitleVariants,
   type ZardAlertDialogSizeVariants,
-} from './alert-dialog.variants';
+} from "./alert-dialog.variants";
 
-const ESCAPE_KEYS = ['Escape', 'Esc'];
+const ESCAPE_KEYS = ["Escape", "Esc"];
 
 /**
  * A modal that interrupts the user with a decision, composed in the template.
@@ -65,7 +68,7 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
  * `ZardAlertDialogService.create()` opens the same panel from code.
  */
 @Component({
-  selector: 'z-alert-dialog',
+  selector: "z-alert-dialog",
   imports: [ZardAlertDialogPanelComponent],
   template: `
     <ng-template #panel>
@@ -85,11 +88,13 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardAlertDialogComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardAlertDialogHost, useExisting: forwardRef(() => ZardAlertDialogComponent) }],
+  providers: [
+    { provide: ZardAlertDialogHost, useExisting: forwardRef(() => ZardAlertDialogComponent) },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zAlertDialog',
+  host: { style: "display: contents" },
+  exportAs: "zAlertDialog",
 })
 export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   private readonly overlay = inject(Overlay);
@@ -98,12 +103,12 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly panel = viewChild.required<TemplateRef<void>>('panel');
+  private readonly panel = viewChild.required<TemplateRef<void>>("panel");
 
   /** Open state, two-way bound. */
   readonly zVisible = model(false);
   /** Visual size. `default` widens on sm+ and lays media and title side by side; `sm` stays compact and centered. */
-  readonly zSize = input<ZardAlertDialogSizeVariants>('default');
+  readonly zSize = input<ZardAlertDialogSizeVariants>("default");
   /** Explicit width; leave unset for the size preset. */
   readonly zWidth = input<string | undefined>(undefined);
   /** Whether a click on the mask closes the alert dialog. Off by default: the user has to decide. */
@@ -111,7 +116,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(ALERT_DIALOG_DURATION);
   /** Custom classes applied to the panel. */
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   /** Emitted once the alert dialog is attached to the DOM. */
   readonly zAfterOpen = output<void>();
@@ -121,7 +126,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
 
   private overlayRef: OverlayRef | null = null;
   private disposeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -154,16 +159,16 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
     // Re-opening mid-exit: keep the same overlay and reverse the transition.
     if (this.overlayRef) {
       this.clearDisposeTimer();
-      this.state.set('open');
+      this.state.set("open");
       return;
     }
 
     this.previouslyFocused = document.activeElement as HTMLElement | null;
-    this.state.set('open');
+    this.state.set("open");
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
-        direction: this.directionality?.value ?? 'ltr',
+        direction: this.directionality?.value ?? "ltr",
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -176,7 +181,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
     // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
     this.directionality?.change
       .pipe(takeUntil(overlayRef.detachments()))
-      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? "ltr"));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -187,8 +192,8 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
     });
     overlayRef
       .keydownEvents()
-      .pipe(filter(event => ESCAPE_KEYS.includes(event.key)))
-      .subscribe(event => {
+      .pipe(filter((event) => ESCAPE_KEYS.includes(event.key)))
+      .subscribe((event) => {
         event.preventDefault();
         this.requestClose();
       });
@@ -201,7 +206,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
       return;
     }
 
-    this.state.set('closed');
+    this.state.set("closed");
     this.overlayRef.detachBackdrop();
     this.disposeTimer = setTimeout(() => this.dispose(), this.zDuration());
   }
@@ -237,46 +242,46 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
 }
 
 @Component({
-  selector: 'z-alert-dialog-header, [z-alert-dialog-header]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-alert-dialog-header, [z-alert-dialog-header]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-header',
-    '[class]': 'classes()',
+    "data-slot": "alert-dialog-header",
+    "[class]": "classes()",
   },
-  exportAs: 'zAlertDialogHeader',
+  exportAs: "zAlertDialogHeader",
 })
 export class ZardAlertDialogHeaderComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(alertDialogHeaderVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogHeaderVariants(), this.class()),
+  );
 }
 
 /** Media slot above the title, usually an icon. The header lays it next to the title on `default` size. */
 @Component({
-  selector: 'z-alert-dialog-media, [z-alert-dialog-media]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-alert-dialog-media, [z-alert-dialog-media]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-media',
-    '[class]': 'classes()',
+    "data-slot": "alert-dialog-media",
+    "[class]": "classes()",
   },
-  exportAs: 'zAlertDialogMedia',
+  exportAs: "zAlertDialogMedia",
 })
 export class ZardAlertDialogMediaComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(alertDialogMediaVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogMediaVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-alert-dialog-title, [z-alert-dialog-title]',
+  selector: "z-alert-dialog-title, [z-alert-dialog-title]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let title = zTitle();
@@ -288,22 +293,24 @@ export class ZardAlertDialogMediaComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-title',
-    role: 'heading',
-    'aria-level': '2',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "alert-dialog-title",
+    role: "heading",
+    "aria-level": "2",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zAlertDialogTitle',
+  exportAs: "zAlertDialogTitle",
 })
 export class ZardAlertDialogTitleComponent {
   private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextAlertDialogId('title');
-  protected readonly classes = computed(() => mergeClasses(alertDialogTitleVariants(), this.class()));
+  protected readonly id = nextAlertDialogId("title");
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogTitleVariants(), this.class()),
+  );
 
   constructor() {
     // Registered after the first render: the panel reads this id through an input binding,
@@ -319,7 +326,7 @@ export class ZardAlertDialogTitleComponent {
 }
 
 @Component({
-  selector: 'z-alert-dialog-description, [z-alert-dialog-description]',
+  selector: "z-alert-dialog-description, [z-alert-dialog-description]",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @let description = zDescription();
@@ -331,20 +338,22 @@ export class ZardAlertDialogTitleComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-description',
-    '[attr.id]': 'id',
-    '[class]': 'classes()',
+    "data-slot": "alert-dialog-description",
+    "[attr.id]": "id",
+    "[class]": "classes()",
   },
-  exportAs: 'zAlertDialogDescription',
+  exportAs: "zAlertDialogDescription",
 })
 export class ZardAlertDialogDescriptionComponent {
   private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDescription = input<string | TemplateRef<void>>();
 
-  protected readonly id = nextAlertDialogId('description');
-  protected readonly classes = computed(() => mergeClasses(alertDialogDescriptionVariants(), this.class()));
+  protected readonly id = nextAlertDialogId("description");
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogDescriptionVariants(), this.class()),
+  );
 
   constructor() {
     afterNextRender(() => this.alertDialog?.descriptionId.set(this.id));
@@ -358,32 +367,32 @@ export class ZardAlertDialogDescriptionComponent {
 }
 
 @Component({
-  selector: 'z-alert-dialog-footer, [z-alert-dialog-footer]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-alert-dialog-footer, [z-alert-dialog-footer]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-footer',
-    '[class]': 'classes()',
+    "data-slot": "alert-dialog-footer",
+    "[class]": "classes()",
   },
-  exportAs: 'zAlertDialogFooter',
+  exportAs: "zAlertDialogFooter",
 })
 export class ZardAlertDialogFooterComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(alertDialogFooterVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogFooterVariants(), this.class()),
+  );
 }
 
 /** Closes the alert dialog it is projected into — declarative or service-opened alike. */
 @Directive({
-  selector: '[z-alert-dialog-close]',
+  selector: "[z-alert-dialog-close]",
   host: {
-    'data-slot': 'alert-dialog-close',
-    '(click)': 'onClick()',
+    "data-slot": "alert-dialog-close",
+    "(click)": "onClick()",
   },
-  exportAs: 'zAlertDialogClose',
+  exportAs: "zAlertDialogClose",
 })
 export class ZardAlertDialogCloseDirective {
   private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });

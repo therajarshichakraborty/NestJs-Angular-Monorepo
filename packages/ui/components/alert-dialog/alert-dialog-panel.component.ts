@@ -1,4 +1,4 @@
-import { FocusTrapFactory } from '@angular/cdk/a11y';
+import { FocusTrapFactory } from "@angular/cdk/a11y";
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -9,13 +9,13 @@ import {
   inject,
   input,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { alertDialogVariants, type ZardAlertDialogSizeVariants } from './alert-dialog.variants';
+import { alertDialogVariants, type ZardAlertDialogSizeVariants } from "./alert-dialog.variants";
 
 /** How long the enter and leave transitions run, in ms. Mirrors the CSS. */
 export const ALERT_DIALOG_DURATION = 100;
@@ -28,10 +28,8 @@ export const ALERT_DIALOG_DURATION = 100;
  * @internal Compose `z-alert-dialog` instead of using this directly.
  */
 @Component({
-  selector: 'z-alert-dialog-panel',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-alert-dialog-panel",
+  template: ` <ng-content /> `,
   styles: `
     z-alert-dialog-panel {
       --z-alert-dialog-duration: 100ms;
@@ -49,7 +47,7 @@ export const ALERT_DIALOG_DURATION = 100;
       }
     }
 
-    z-alert-dialog-panel[data-state='closed'] {
+    z-alert-dialog-panel[data-state="closed"] {
       opacity: 0;
       transform: scale(0.9);
       transition:
@@ -60,19 +58,19 @@ export const ALERT_DIALOG_DURATION = 100;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'alert-dialog-content',
-    role: 'alertdialog',
-    'aria-modal': 'true',
-    tabindex: '-1',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-state]': 'zState()',
-    '[attr.aria-labelledby]': 'zLabelledBy()',
-    '[attr.aria-describedby]': 'zDescribedBy()',
-    '[class]': 'classes()',
-    '[style.width]': 'zWidth() || null',
-    '[style.--z-alert-dialog-duration.ms]': 'zDuration()',
+    "data-slot": "alert-dialog-content",
+    role: "alertdialog",
+    "aria-modal": "true",
+    tabindex: "-1",
+    "[attr.data-size]": "zSize()",
+    "[attr.data-state]": "zState()",
+    "[attr.aria-labelledby]": "zLabelledBy()",
+    "[attr.aria-describedby]": "zDescribedBy()",
+    "[class]": "classes()",
+    "[style.width]": "zWidth() || null",
+    "[style.--z-alert-dialog-duration.ms]": "zDuration()",
   },
-  exportAs: 'zAlertDialogPanel',
+  exportAs: "zAlertDialogPanel",
 })
 export class ZardAlertDialogPanelComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -80,18 +78,20 @@ export class ZardAlertDialogPanelComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   /** Visual size. `default` widens on sm+ and lays media and title side by side; `sm` stays compact and centered. */
-  readonly zSize = input<ZardAlertDialogSizeVariants>('default');
+  readonly zSize = input<ZardAlertDialogSizeVariants>("default");
   /** Explicit width; leave unset for the size preset. */
   readonly zWidth = input<string | undefined>(undefined);
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(ALERT_DIALOG_DURATION);
   /** `closed` plays the leave transition; the owner disposes the overlay once it ends. */
-  readonly zState = input<'open' | 'closed'>('open');
+  readonly zState = input<"open" | "closed">("open");
   readonly zLabelledBy = input<string | null>(null);
   readonly zDescribedBy = input<string | null>(null);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(alertDialogVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(alertDialogVariants({ zSize: this.zSize() }), this.class()),
+  );
 
   constructor() {
     afterNextRender(() => {

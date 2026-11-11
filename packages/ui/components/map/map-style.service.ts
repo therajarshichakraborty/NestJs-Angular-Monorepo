@@ -1,5 +1,5 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { computed, inject, Injectable, InjectionToken, PLATFORM_ID, signal } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
+import { computed, inject, Injectable, InjectionToken, PLATFORM_ID, signal } from "@angular/core";
 
 import {
   findZardMapPreset,
@@ -8,7 +8,7 @@ import {
   type ZardMapPreset,
   type ZardMapProvider,
   type ZardMapStyles,
-} from './map-styles';
+} from "./map-styles";
 
 // This file must not import `ng-mapcn`: the picker and any non-lazy code inject the service, and ng-mapcn is not
 // tree-shakeable (it pulls all of MapLibre). `provideZardMap()` is the only bridge between the two.
@@ -30,17 +30,19 @@ export interface ZardMapStyleConfig {
 }
 
 /** Why `select()` did not change the basemap. */
-export type ZardMapSelectResult = 'selected' | 'unknown-preset' | 'needs-key';
+export type ZardMapSelectResult = "selected" | "unknown-preset" | "needs-key";
 
-export const ZARD_MAP_STYLE_CONFIG = new InjectionToken<ZardMapStyleConfig>('ZARD_MAP_STYLE_CONFIG');
+export const ZARD_MAP_STYLE_CONFIG = new InjectionToken<ZardMapStyleConfig>(
+  "ZARD_MAP_STYLE_CONFIG",
+);
 
-const DEFAULT_STORAGE_KEY = 'zard-map-style';
+const DEFAULT_STORAGE_KEY = "zard-map-style";
 
 /**
  * The active basemap of every map, shared from the root injector by all the routes that register `provideZardMap()`.
  * Selecting a preset swaps, live, every `<ng-map>` without a `[styles]` of its own.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ZardMapStyleService {
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -63,7 +65,8 @@ export class ZardMapStyleService {
   /** The preset in use. A key-based preset without a key is not "in use": the default stands in until it has one. */
   readonly preset = computed<ZardMapPreset>(() => {
     const presets = this.presetsState();
-    const fallback = findZardMapPreset(ZARD_MAP_DEFAULT_PRESET_ID, presets) ?? presets[0] ?? ZARD_MAP_PRESETS[0];
+    const fallback =
+      findZardMapPreset(ZARD_MAP_DEFAULT_PRESET_ID, presets) ?? presets[0] ?? ZARD_MAP_PRESETS[0];
     const preset = findZardMapPreset(this.presetIdState(), presets) ?? fallback;
 
     return this.canUse(preset, this.keysState()) ? preset : fallback;
@@ -90,12 +93,12 @@ export class ZardMapStyleService {
       this.presetsState.set(config.presets);
     }
     if (config.persist && !this.storageKey) {
-      this.storageKey = typeof config.persist === 'string' ? config.persist : DEFAULT_STORAGE_KEY;
+      this.storageKey = typeof config.persist === "string" ? config.persist : DEFAULT_STORAGE_KEY;
     }
 
     const stored = this.read();
     // A key given in config is the developer's; one typed into the picker is the user's. The developer's wins.
-    this.keysState.update(current => ({ ...current, ...stored.keys, ...config.keys }));
+    this.keysState.update((current) => ({ ...current, ...stored.keys, ...config.keys }));
 
     if (this.initialized) {
       return;
@@ -120,7 +123,7 @@ export class ZardMapStyleService {
   select(id: string, key?: string): ZardMapSelectResult {
     const preset = findZardMapPreset(id, this.presetsState());
     if (!preset) {
-      return 'unknown-preset';
+      return "unknown-preset";
     }
 
     const typed = key?.trim();
@@ -128,18 +131,18 @@ export class ZardMapStyleService {
       this.setKey(preset.provider, typed);
     }
     if (!this.canUse(preset, this.keysState())) {
-      return 'needs-key';
+      return "needs-key";
     }
 
     this.presetIdState.set(preset.id);
     this.write();
-    return 'selected';
+    return "selected";
   }
 
   /** Stores the key of a provider. An empty key forgets it, and a preset that needed it falls back to the default. */
   setKey(provider: ZardMapProvider, key: string): void {
     const trimmed = key.trim();
-    this.keysState.update(current => {
+    this.keysState.update((current) => {
       const next = { ...current };
       if (trimmed) {
         next[provider] = trimmed;
@@ -215,13 +218,13 @@ function parseKeys(raw: string | null): ZardMapKeys {
 
   try {
     const parsed: unknown = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       return {};
     }
 
     const keys: ZardMapKeys = {};
     for (const [provider, key] of Object.entries(parsed)) {
-      if (typeof key === 'string' && key.trim()) {
+      if (typeof key === "string" && key.trim()) {
         keys[provider as ZardMapProvider] = key.trim();
       }
     }

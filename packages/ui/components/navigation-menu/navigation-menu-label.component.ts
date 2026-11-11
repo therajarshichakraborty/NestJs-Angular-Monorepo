@@ -1,4 +1,4 @@
-import type { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from "@angular/cdk/coercion";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -6,29 +6,27 @@ import {
   computed,
   input,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { navigationMenuLabelVariants } from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { navigationMenuLabelVariants } from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-navigation-menu-label, [z-navigation-menu-label]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-navigation-menu-label, [z-navigation-menu-label]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'navigation-menu-label',
-    '[attr.data-inset]': 'inset() || null',
+    "[class]": "classes()",
+    "data-slot": "navigation-menu-label",
+    "[attr.data-inset]": "inset() || null",
   },
-  exportAs: 'zNavigationMenuLabel',
+  exportAs: "zNavigationMenuLabel",
 })
 export class ZardNavigationMenuLabelComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly inset = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
 
   protected readonly classes = computed(() =>

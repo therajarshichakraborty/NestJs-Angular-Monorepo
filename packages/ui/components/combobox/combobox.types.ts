@@ -1,6 +1,6 @@
-import type { Signal } from '@angular/core';
+import type { Signal } from "@angular/core";
 
-import type { IconName } from '@ng-icons/core';
+import type { IconName } from "@ng-icons/core";
 
 export interface ZardComboboxOption {
   value: string;
@@ -14,10 +14,10 @@ export interface ZardComboboxGroup {
   options: ZardComboboxOption[];
 }
 
-export type ZardComboboxFilterVariants = 'contains' | 'startsWith' | 'none';
-export type ZardComboboxSideVariants = 'top' | 'bottom';
-export type ZardComboboxAlignVariants = 'start' | 'center' | 'end';
-export type ZardComboboxAnchorKind = 'input' | 'chips' | 'trigger';
+export type ZardComboboxFilterVariants = "contains" | "startsWith" | "none";
+export type ZardComboboxSideVariants = "top" | "bottom";
+export type ZardComboboxAlignVariants = "start" | "center" | "end";
+export type ZardComboboxAnchorKind = "input" | "chips" | "trigger";
 
 /**
  * Minimal contract every `z-combobox-item` exposes to the root component.

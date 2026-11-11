@@ -9,7 +9,7 @@ export {
   ZardItemMediaComponent,
   ZardItemSeparatorComponent,
   ZardItemTitleComponent,
-} from './item.component';
+} from "./item.component";
 
 import {
   ZardItemActionsComponent,
@@ -22,7 +22,7 @@ import {
   ZardItemMediaComponent,
   ZardItemSeparatorComponent,
   ZardItemTitleComponent,
-} from './item.component';
+} from "./item.component";
 
 export const ZardItemImports = [
   ZardItemGroupComponent,

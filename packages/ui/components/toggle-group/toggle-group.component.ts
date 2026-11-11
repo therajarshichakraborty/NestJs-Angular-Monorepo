@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -10,20 +10,20 @@ import {
   output,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { NgIcon, type IconName } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon, type IconName } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
 import {
   toggleVariants,
   type ZardToggleSizeVariants,
   type ZardToggleTypeVariants,
-} from '@repo/ui/components/toggle/toggle.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/toggle/toggle.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { toggleGroupItemVariants, toggleGroupVariants } from './toggle-group.variants';
+import { toggleGroupItemVariants, toggleGroupVariants } from "./toggle-group.variants";
 
 export interface ZardToggleGroupItem {
   value: string;
@@ -38,7 +38,7 @@ type OnTouchedType = () => void;
 type OnChangeType = (value: string | string[]) => void;
 
 @Component({
-  selector: 'z-toggle-group',
+  selector: "z-toggle-group",
   imports: [NgIcon, NgTemplateOutlet],
   template: `
     <div
@@ -92,27 +92,30 @@ type OnChangeType = (value: string | string[]) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'zToggleGroup',
+  exportAs: "zToggleGroup",
 })
 export class ZardToggleGroupComponent implements ControlValueAccessor {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDefaultValue = input<string | string[]>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zMode = input<'single' | 'multiple'>('multiple');
-  readonly zItemClass = input<ClassValue>('');
+  readonly zMode = input<"single" | "multiple">("multiple");
+  readonly zItemClass = input<ClassValue>("");
   readonly zItems = input<ZardToggleGroupItem[]>([]);
-  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly zSize = input<ZardToggleSizeVariants>('default');
+  readonly zOrientation = input<"horizontal" | "vertical">("horizontal");
+  readonly zSize = input<ZardToggleSizeVariants>("default");
   /** Gap between items in spacing units; `0` joins them into one bar. */
   readonly zSpacing = input(2);
-  readonly zType = input<ZardToggleTypeVariants>('default');
+  readonly zType = input<ZardToggleTypeVariants>("default");
   readonly zValue = input<string | string[]>();
 
   readonly valueChange = output<string | string[]>();
 
   protected readonly disabledState = linkedSignal(() => this.zDisabled());
   // Reset whenever zValue changes, so a new controlled value wins over earlier clicks or writeValue calls
-  private readonly internalValue = linkedSignal<string | string[] | undefined, string | string[] | undefined>({
+  private readonly internalValue = linkedSignal<
+    string | string[] | undefined,
+    string | string[] | undefined
+  >({
     source: this.zValue,
     computation: () => undefined,
   });
@@ -145,12 +148,12 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
       return defaultVal;
     }
 
-    return this.zMode() === 'single' ? '' : [];
+    return this.zMode() === "single" ? "" : [];
   });
 
   protected isItemPressed(itemValue: string): boolean {
     const current = this.currentValue();
-    if (this.zMode() === 'single') {
+    if (this.zMode() === "single") {
       return current === itemValue;
     }
     return Array.isArray(current) && current.includes(itemValue);
@@ -169,12 +172,12 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
     const currentValue = this.currentValue();
     let newValue: string | string[];
 
-    if (this.zMode() === 'single') {
-      newValue = currentValue === item.value ? '' : item.value;
+    if (this.zMode() === "single") {
+      newValue = currentValue === item.value ? "" : item.value;
     } else {
       const currentArray = Array.isArray(currentValue) ? currentValue : [];
       if (currentArray.includes(item.value)) {
-        newValue = currentArray.filter(v => v !== item.value);
+        newValue = currentArray.filter((v) => v !== item.value);
       } else {
         newValue = [...currentArray, item.value];
       }

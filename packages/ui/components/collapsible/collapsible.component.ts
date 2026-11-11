@@ -11,13 +11,16 @@ import {
   output,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { collapsibleContentVariants, collapsibleVariants } from '@repo/ui/components/collapsible/collapsible.variants';
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import {
+  collapsibleContentVariants,
+  collapsibleVariants,
+} from "@repo/ui/components/collapsible/collapsible.variants";
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 /**
  * A directive rather than a component: it renders no markup of its own, and being a directive is
@@ -26,23 +29,24 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
  * (NG0300).
  */
 @Directive({
-  selector: 'z-collapsible, [z-collapsible]',
+  selector: "z-collapsible, [z-collapsible]",
   host: {
-    'data-slot': 'collapsible',
-    '[class]': 'classes()',
-    '[attr.data-state]': "open() ? 'open' : 'closed'",
-    '[attr.data-disabled]': "zDisabled() ? '' : null",
+    "data-slot": "collapsible",
+    "[class]": "classes()",
+    "[attr.data-state]": "open() ? 'open' : 'closed'",
+    "[attr.data-disabled]": "zDisabled() ? '' : null",
   },
   hostDirectives: [ZardIdDirective],
-  exportAs: 'zCollapsible',
+  exportAs: "zCollapsible",
 })
 export class ZardCollapsibleDirective {
   private readonly uniqueId = inject(ZardIdDirective);
-  private readonly isElement = inject(ElementRef<HTMLElement>).nativeElement.tagName.toLowerCase() === 'z-collapsible';
+  private readonly isElement =
+    inject(ElementRef<HTMLElement>).nativeElement.tagName.toLowerCase() === "z-collapsible";
 
   readonly zOpen = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly zOpenChange = output<boolean>();
 
@@ -79,25 +83,25 @@ export class ZardCollapsibleDirective {
 }
 
 @Directive({
-  selector: '[z-collapsible-trigger]',
+  selector: "[z-collapsible-trigger]",
   host: {
-    'data-slot': 'collapsible-trigger',
-    type: 'button',
-    '[attr.aria-controls]': 'collapsible.contentId()',
-    '[attr.aria-expanded]': 'collapsible.open()',
-    '[attr.data-state]': "collapsible.open() ? 'open' : 'closed'",
-    '[attr.data-disabled]': "collapsible.zDisabled() ? '' : null",
-    '[attr.disabled]': 'collapsible.zDisabled() ? true : null',
-    '(click)': 'collapsible.toggle()',
+    "data-slot": "collapsible-trigger",
+    type: "button",
+    "[attr.aria-controls]": "collapsible.contentId()",
+    "[attr.aria-expanded]": "collapsible.open()",
+    "[attr.data-state]": "collapsible.open() ? 'open' : 'closed'",
+    "[attr.data-disabled]": "collapsible.zDisabled() ? '' : null",
+    "[attr.disabled]": "collapsible.zDisabled() ? true : null",
+    "(click)": "collapsible.toggle()",
   },
-  exportAs: 'zCollapsibleTrigger',
+  exportAs: "zCollapsibleTrigger",
 })
 export class ZardCollapsibleTriggerDirective {
   protected readonly collapsible = inject(ZardCollapsibleDirective);
 }
 
 @Component({
-  selector: 'z-collapsible-content',
+  selector: "z-collapsible-content",
   template: `
     <div class="overflow-hidden">
       <ng-content />
@@ -106,17 +110,17 @@ export class ZardCollapsibleTriggerDirective {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'collapsible-content',
-    '[class]': 'classes()',
-    '[id]': 'collapsible.contentId()',
-    '[attr.data-state]': "collapsible.open() ? 'open' : 'closed'",
+    "data-slot": "collapsible-content",
+    "[class]": "classes()",
+    "[id]": "collapsible.contentId()",
+    "[attr.data-state]": "collapsible.open() ? 'open' : 'closed'",
   },
-  exportAs: 'zCollapsibleContent',
+  exportAs: "zCollapsibleContent",
 })
 export class ZardCollapsibleContentComponent {
   protected readonly collapsible = inject(ZardCollapsibleDirective);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
     mergeClasses(collapsibleContentVariants({ isOpen: this.collapsible.open() }), this.class()),

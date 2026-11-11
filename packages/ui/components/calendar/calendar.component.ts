@@ -16,41 +16,41 @@ import {
   type TemplateRef,
   viewChildren,
   ViewEncapsulation,
-} from '@angular/core';
-import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
-import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+} from "@angular/core";
+import { outputFromObservable, outputToObservable } from "@angular/core/rxjs-interop";
+import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from "@angular/forms";
 
-import type { ClassValue } from 'clsx';
-import { filter, map } from 'rxjs';
+import type { ClassValue } from "clsx";
+import { filter, map } from "rxjs";
 
-import { ZardCalendarGridComponent } from '@repo/ui/components/calendar/calendar-grid.component';
-import { ZardCalendarNavigationComponent } from '@repo/ui/components/calendar/calendar-navigation.component';
+import { ZardCalendarGridComponent } from "@repo/ui/components/calendar/calendar-grid.component";
+import { ZardCalendarNavigationComponent } from "@repo/ui/components/calendar/calendar-navigation.component";
 import type {
   CalendarDayTemplateContext,
   CalendarMode,
   CalendarValue,
   ZardCalendarCaptionLayout,
-} from '@repo/ui/components/calendar/calendar.types';
+} from "@repo/ui/components/calendar/calendar.types";
 import {
   generateCalendarDays,
   getSelectedDatesArray,
   isSameDay,
   makeSafeDate,
   normalizeCalendarValue,
-} from '@repo/ui/components/calendar/calendar.utils';
+} from "@repo/ui/components/calendar/calendar.utils";
 import {
   calendarMonthsVariants,
   calendarMonthVariants,
   calendarVariants,
-} from '@repo/ui/components/calendar/calendar.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+} from "@repo/ui/components/calendar/calendar.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { ZardCalendarI18nService } from './calendar-i18n.service';
-import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.variants';
+import { ZardCalendarI18nService } from "./calendar-i18n.service";
+import type { ZardButtonTypeVariants } from "@repo/ui/components/button/button.variants";
 
 @Component({
-  selector: 'z-calendar, [z-calendar]',
+  selector: "z-calendar, [z-calendar]",
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   template: `
     <div [class]="monthsClasses()">
@@ -99,11 +99,11 @@ import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.v
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'calendar',
-    '[class]': 'classes()',
-    '[attr.tabindex]': '0',
+    "data-slot": "calendar",
+    "[class]": "classes()",
+    "[attr.tabindex]": "0",
   },
-  exportAs: 'zCalendar',
+  exportAs: "zCalendar",
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
@@ -134,14 +134,14 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   }
 
   // Public inputs
-  readonly class = input<ClassValue>('');
-  readonly zMode = input<CalendarMode>('single');
+  readonly class = input<ClassValue>("");
+  readonly zMode = input<CalendarMode>("single");
   readonly value = model<CalendarValue>(null);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
-  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
-  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>("label");
+  readonly zButtonVariant = input<ZardButtonTypeVariants>("ghost");
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
@@ -156,7 +156,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   // Public outputs
   readonly dateChange = outputFromObservable(
     outputToObservable(this.value).pipe(
-      map(v => normalizeCalendarValue(v)),
+      map((v) => normalizeCalendarValue(v)),
       filter((v): v is NonNullable<CalendarValue> => v !== null),
     ),
   );
@@ -175,7 +175,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     }
 
     // For single mode, val is Date | null
-    if (mode === 'single') {
+    if (mode === "single") {
       return val as Date;
     }
 
@@ -187,8 +187,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     return new Date();
   });
 
-  protected readonly currentMonthValue = linkedSignal(() => this.currentDate().getMonth().toString());
-  protected readonly currentYearValue = linkedSignal(() => this.currentDate().getFullYear().toString());
+  protected readonly currentMonthValue = linkedSignal(() =>
+    this.currentDate().getMonth().toString(),
+  );
+  protected readonly currentYearValue = linkedSignal(() =>
+    this.currentDate().getFullYear().toString(),
+  );
 
   protected readonly classes = computed(() => mergeClasses(calendarVariants(), this.class()));
 
@@ -251,7 +255,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   protected onMonthChange(monthIndex: string, monthOffset = 0): void {
     if (!monthIndex?.trim()) {
       if (isDevMode()) {
-        console.warn('Invalid month index received:', monthIndex);
+        console.warn("Invalid month index received:", monthIndex);
       }
       return;
     }
@@ -259,7 +263,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const parsedMonth = Number.parseInt(monthIndex, 10);
     if (Number.isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
       if (isDevMode()) {
-        console.warn('Invalid month value:', monthIndex, 'parsed as:', parsedMonth);
+        console.warn("Invalid month value:", monthIndex, "parsed as:", parsedMonth);
       }
       return;
     }
@@ -271,7 +275,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   protected onYearChange(year: string, monthOffset = 0): void {
     if (!year?.trim()) {
       if (isDevMode()) {
-        console.warn('Invalid year received:', year);
+        console.warn("Invalid year received:", year);
       }
       return;
     }
@@ -279,7 +283,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const parsedYear = Number.parseInt(year, 10);
     if (Number.isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
       if (isDevMode()) {
-        console.warn('Invalid year value:', year, 'parsed as:', parsedYear);
+        console.warn("Invalid year value:", year, "parsed as:", parsedYear);
       }
       return;
     }
@@ -366,11 +370,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const mode = this.zMode();
     const currentValue = this.normalizedValue();
 
-    if (mode === 'single') {
+    if (mode === "single") {
       this.value.set(date);
-    } else if (mode === 'multiple') {
+    } else if (mode === "multiple") {
       const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
-      const existingIndex = selectedDates.findIndex(d => isSameDay(d, date));
+      const existingIndex = selectedDates.findIndex((d) => isSameDay(d, date));
 
       if (existingIndex >= 0) {
         // Remove date if already selected
@@ -381,7 +385,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       }
 
       this.value.set(selectedDates.length > 0 ? selectedDates : null);
-    } else if (mode === 'range') {
+    } else if (mode === "range") {
       const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
 
       if (selectedDates.length === 0) {
@@ -410,16 +414,16 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.onTouched();
   }
 
-  private resetFocusAfterNavigation(position = 'default', dayOfWeek = -1): void {
+  private resetFocusAfterNavigation(position = "default", dayOfWeek = -1): void {
     const days = this.calendarDays();
     let targetIndex = -1;
 
     switch (position) {
-      case 'first':
+      case "first":
         // Focus first enabled day
-        targetIndex = days.findIndex(day => !day.isDisabled);
+        targetIndex = days.findIndex((day) => !day.isDisabled);
         break;
-      case 'last':
+      case "last":
         // Focus last enabled day
         for (let i = days.length - 1; i >= 0; i--) {
           if (!days[i].isDisabled) {
@@ -428,13 +432,13 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           }
         }
         break;
-      case 'firstWeek':
+      case "firstWeek":
         // Focus same day of week in first week
         if (dayOfWeek >= 0 && dayOfWeek < 7) {
           targetIndex = this.findEnabledInRange(dayOfWeek, 0, days);
         }
         break;
-      case 'lastWeek':
+      case "lastWeek":
         // Focus same day of week in last week
         if (dayOfWeek >= 0) {
           const lastWeekStart = Math.floor((days.length - 1) / 7) * 7;
@@ -444,12 +448,16 @@ export class ZardCalendarComponent implements ControlValueAccessor {
         break;
       default: {
         // Default priority: selected > today > first enabled
-        const selectedIndex = days.findIndex(day => day.isSelected);
-        const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
-        const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
+        const selectedIndex = days.findIndex((day) => day.isSelected);
+        const todayIndex = days.findIndex((day) => day.isToday && day.isCurrentMonth);
+        const firstEnabledIndex = days.findIndex((day) => day.isCurrentMonth && !day.isDisabled);
 
         targetIndex =
-          selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : Math.max(firstEnabledIndex, 0);
+          selectedIndex >= 0
+            ? selectedIndex
+            : todayIndex >= 0
+              ? todayIndex
+              : Math.max(firstEnabledIndex, 0);
         break;
       }
     }
@@ -459,7 +467,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     }
   }
 
-  private findEnabledInRange(start: number, fallback: number, days: { isDisabled: boolean }[]): number {
+  private findEnabledInRange(
+    start: number,
+    fallback: number,
+    days: { isDisabled: boolean }[],
+  ): number {
     const clampedStart = Math.max(0, Math.min(start, days.length - 1));
     const clampedFallback = Math.max(0, Math.min(fallback, days.length - 1));
 

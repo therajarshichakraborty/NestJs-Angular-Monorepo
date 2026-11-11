@@ -8,7 +8,7 @@ import {
   ZardSliderRangeComponent,
   ZardSliderThumbComponent,
   ZardSliderTrackComponent,
-} from '@repo/ui/components/slider/slider.component';
+} from "@repo/ui/components/slider/slider.component";
 
 /** Every part of the slider component, for a template that uses more than one. */
 export const ZardSliderImports = [

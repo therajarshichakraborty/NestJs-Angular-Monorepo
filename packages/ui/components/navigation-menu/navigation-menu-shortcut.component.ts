@@ -1,25 +1,31 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { navigationMenuShortcutVariants } from '@repo/ui/components/navigation-menu/navigation-menu.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { navigationMenuShortcutVariants } from "@repo/ui/components/navigation-menu/navigation-menu.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-navigation-menu-shortcut, [z-navigation-menu-shortcut]',
-  template: `
-    <ng-content />
-  `,
+  selector: "z-navigation-menu-shortcut, [z-navigation-menu-shortcut]",
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    'data-slot': 'navigation-menu-shortcut',
+    "[class]": "classes()",
+    "data-slot": "navigation-menu-shortcut",
   },
-  exportAs: 'zNavigationMenuShortcut',
+  exportAs: "zNavigationMenuShortcut",
 })
 export class ZardNavigationMenuShortcutComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
-  protected readonly classes = computed(() => mergeClasses(navigationMenuShortcutVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(navigationMenuShortcutVariants(), this.class()),
+  );
 }

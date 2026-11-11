@@ -11,14 +11,21 @@ export const createUsersTableMigration: Migration = {
       .addColumn("full_name", "varchar(120)", (column) => column.notNull())
       .addColumn("password_hash", "text", (column) => column.notNull())
       .addColumn("role", "varchar(20)", (column) =>
-        column.notNull().defaultTo("member").check(sql`role in ('admin', 'member')`),
+        column
+          .notNull()
+          .defaultTo("member")
+          .check(sql`role in ('admin', 'member')`),
       )
       .addColumn("is_active", "boolean", (column) => column.notNull().defaultTo(true))
       .addColumn("created_at", "timestamptz", (column) => column.notNull().defaultTo(sql`now()`))
       .addColumn("updated_at", "timestamptz", (column) => column.notNull().defaultTo(sql`now()`))
       .execute();
 
-    await database.schema.createIndex("users_created_at_index").on("users").column("created_at").execute();
+    await database.schema
+      .createIndex("users_created_at_index")
+      .on("users")
+      .column("created_at")
+      .execute();
   },
 
   async down(database: Kysely<unknown>): Promise<void> {

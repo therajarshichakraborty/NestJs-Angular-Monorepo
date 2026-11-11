@@ -1,4 +1,4 @@
-import type { EChartsOption } from 'echarts';
+import type { EChartsOption } from "echarts";
 
 /** Human-readable metadata for a data key: label, color and optional icon. */
 export interface ZardChartConfigItem {
@@ -15,21 +15,21 @@ export interface ZardChartConfigItem {
 /** Maps every data key to its label, color and icon. Decoupled from the data itself. */
 export type ZardChartConfig = Record<string, ZardChartConfigItem>;
 
-export type ZardChartType = 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial';
+export type ZardChartType = "area" | "bar" | "line" | "pie" | "radar" | "radial";
 
-export type ZardChartTooltipIndicator = 'dot' | 'line' | 'dashed';
+export type ZardChartTooltipIndicator = "dot" | "line" | "dashed";
 
-export type ZardChartTooltipTrigger = 'axis' | 'item';
+export type ZardChartTooltipTrigger = "axis" | "item";
 
-export type ZardChartGrid = boolean | 'horizontal' | 'vertical';
+export type ZardChartGrid = boolean | "horizontal" | "vertical";
 
-export type ZardChartStackOffset = 'none' | 'expand';
+export type ZardChartStackOffset = "none" | "expand";
 
-export type ZardChartRadialVariant = 'bar' | 'gauge';
+export type ZardChartRadialVariant = "bar" | "gauge";
 
-export type ZardChartRadarShape = 'polygon' | 'circle';
+export type ZardChartRadarShape = "polygon" | "circle";
 
-export type ZardChartRenderer = 'canvas' | 'svg';
+export type ZardChartRenderer = "canvas" | "svg";
 
 /** A single data row. Keys are data keys, values are numbers, strings or a `fill` color. */
 export type ZardChartDatum = Record<string, unknown>;
@@ -40,7 +40,7 @@ export interface ZardChartSeries {
   type?: ZardChartType;
   stack?: string;
   smooth?: boolean | number;
-  step?: 'start' | 'middle' | 'end';
+  step?: "start" | "middle" | "end";
   radius?: number | number[];
   showSymbol?: boolean;
   /** Stroke width of the line, or of a radar web's outline. */

@@ -1,31 +1,31 @@
-import type { ConnectedPosition } from '@angular/cdk/overlay';
+import type { ConnectedPosition } from "@angular/cdk/overlay";
 
 /**
  * Which edge of the trigger the menu is anchored to. Mirrors Radix's `side`: `left`/`right` are physical,
  * `inline-start`/`inline-end` follow the direction of the trigger (a submenu opens on `inline-end`).
  */
-export type ZardDropdownSide = 'top' | 'right' | 'bottom' | 'left' | 'inline-start' | 'inline-end';
+export type ZardDropdownSide = "top" | "right" | "bottom" | "left" | "inline-start" | "inline-end";
 
 /** How the menu is aligned along that edge. Mirrors Radix's `align`; `start`/`end` follow the direction. */
-export type ZardDropdownAlign = 'start' | 'center' | 'end';
+export type ZardDropdownAlign = "start" | "center" | "end";
 
 /** The side the menu flips to when the preferred one does not fit. */
 const OPPOSITE_SIDE: Record<ZardDropdownSide, ZardDropdownSide> = {
-  top: 'bottom',
-  bottom: 'top',
-  left: 'right',
-  right: 'left',
-  'inline-start': 'inline-end',
-  'inline-end': 'inline-start',
+  top: "bottom",
+  bottom: "top",
+  left: "right",
+  right: "left",
+  "inline-start": "inline-end",
+  "inline-end": "inline-start",
 };
 
-const isVertical = (side: ZardDropdownSide) => side === 'top' || side === 'bottom';
+const isVertical = (side: ZardDropdownSide) => side === "top" || side === "bottom";
 
 /** Whether the menu ends up on the physical left of the trigger. */
 export function isDropdownSideLeft(side: ZardDropdownSide, rtl: boolean): boolean {
-  if (side === 'left') return true;
-  if (side === 'right') return false;
-  return (side === 'inline-start') !== rtl;
+  if (side === "left") return true;
+  if (side === "right") return false;
+  return (side === "inline-start") !== rtl;
 }
 
 /**
@@ -46,22 +46,22 @@ function toConnectedPosition(
   if (isVertical(side)) {
     return {
       originX: align,
-      originY: side === 'bottom' ? 'bottom' : 'top',
+      originY: side === "bottom" ? "bottom" : "top",
       overlayX: align,
-      overlayY: side === 'bottom' ? 'top' : 'bottom',
-      offsetY: side === 'bottom' ? offset : -offset,
+      overlayY: side === "bottom" ? "top" : "bottom",
+      offsetY: side === "bottom" ? offset : -offset,
     };
   }
 
-  const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
+  const verticalAlign = { start: "top", center: "center", end: "bottom" } as const;
   const onLeft = isDropdownSideLeft(side, rtl);
   // CDK `start` is the physical left in LTR and the physical right in RTL.
   const cdkStart = onLeft !== rtl;
 
   return {
-    originX: cdkStart ? 'start' : 'end',
+    originX: cdkStart ? "start" : "end",
     originY: verticalAlign[align],
-    overlayX: cdkStart ? 'end' : 'start',
+    overlayX: cdkStart ? "end" : "start",
     overlayY: verticalAlign[align],
     offsetX: onLeft ? -offset : offset,
   };
@@ -77,12 +77,16 @@ export function buildDropdownPositions(
   offset: number,
   rtl = false,
 ): ConnectedPosition[] {
-  const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
+  const fallbackAligns: ZardDropdownAlign[] = (["start", "center", "end"] as const).filter(
+    (value) => value !== align,
+  );
 
   return [
     toConnectedPosition(side, align, offset, rtl),
     toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl)),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl)),
+    ...fallbackAligns.map((fallbackAlign) => toConnectedPosition(side, fallbackAlign, offset, rtl)),
+    ...fallbackAligns.map((fallbackAlign) =>
+      toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl),
+    ),
   ];
 }

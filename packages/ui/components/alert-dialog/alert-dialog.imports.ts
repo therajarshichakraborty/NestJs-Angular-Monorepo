@@ -6,7 +6,7 @@ import {
   ZardAlertDialogHeaderComponent,
   ZardAlertDialogMediaComponent,
   ZardAlertDialogTitleComponent,
-} from '@repo/ui/components/alert-dialog/alert-dialog.component';
+} from "@repo/ui/components/alert-dialog/alert-dialog.component";
 
 /** Every part of the declarative alert dialog, for a template that composes one. */
 export const ZardAlertDialogImports = [

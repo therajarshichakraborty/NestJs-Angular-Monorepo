@@ -8,24 +8,24 @@ import {
   output,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCheck } from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
 
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { checkboxLabelVariants, checkboxVariants } from './checkbox.variants';
+import { checkboxLabelVariants, checkboxVariants } from "./checkbox.variants";
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
-  selector: 'z-checkbox, [z-checkbox]',
+  selector: "z-checkbox, [z-checkbox]",
   imports: [NgIcon, ZardIdDirective],
   template: `
     <span class="relative flex" zardId="checkbox" #z="zardId">
@@ -64,22 +64,23 @@ type OnChangeType = (value: boolean) => void;
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
-    'data-slot': 'checkbox',
-    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
-    '[attr.aria-disabled]': 'disabled() ? "true" : null',
-    '[attr.aria-invalid]': 'zInvalid() ? "true" : null',
-    '[attr.data-checked]': "checked() ? '' : null",
-    '[attr.data-state]': "checked() ? 'checked' : 'unchecked'",
+    "data-slot": "checkbox",
+    "[class]":
+      "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
+    "[attr.aria-disabled]": 'disabled() ? "true" : null',
+    "[attr.aria-invalid]": 'zInvalid() ? "true" : null',
+    "[attr.data-checked]": "checked() ? '' : null",
+    "[attr.data-state]": "checked() ? 'checked' : 'unchecked'",
   },
-  exportAs: 'zCheckbox',
+  exportAs: "zCheckbox",
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
   readonly checkChange = output<boolean>();
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
-  readonly zId = input<string>('');
+  readonly zId = input<string>("");
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;
@@ -116,7 +117,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
       return;
     }
 
-    this.checked.update(v => !v);
+    this.checked.update((v) => !v);
     this.onChange(this.checked());
     this.checkChange.emit(this.checked());
   }

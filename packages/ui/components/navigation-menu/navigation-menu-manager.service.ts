@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import type { ZardNavigationMenuTriggerDirective } from './navigation-menu-trigger.directive';
+import type { ZardNavigationMenuTriggerDirective } from "./navigation-menu-trigger.directive";
 
 /**
  * Global guard for hover triggers running in overlay mode — opening one closes the previous.
@@ -8,7 +8,7 @@ import type { ZardNavigationMenuTriggerDirective } from './navigation-menu-trigg
  * scoped to each root.
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ZardNavigationMenuManagerService {
   private activeHoverMenu: ZardNavigationMenuTriggerDirective | null = null;

@@ -1,6 +1,6 @@
-import type { ZardDayOfWeek } from '@repo/ui/core/i18n';
+import type { ZardDayOfWeek } from "@repo/ui/core/i18n";
 
-export type CalendarMode = 'single' | 'multiple' | 'range';
+export type CalendarMode = "single" | "multiple" | "range";
 export type CalendarValue = Date | Date[] | null;
 
 /**
@@ -11,7 +11,7 @@ export type CalendarValue = Date | Date[] | null;
  * - `dropdown-months` — a month select, year as text
  * - `dropdown-years` — month as text, a year select
  */
-export type ZardCalendarCaptionLayout = 'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years';
+export type ZardCalendarCaptionLayout = "label" | "dropdown" | "dropdown-months" | "dropdown-years";
 
 export interface CalendarDay {
   date: Date;

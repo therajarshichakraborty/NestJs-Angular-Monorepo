@@ -16,25 +16,28 @@ import {
   signal,
   untracked,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import type { ZardButtonTypeVariants } from '@repo/ui/components/button';
-import { comboboxValueVariants, comboboxVariants } from '@repo/ui/components/combobox/combobox.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
-import { noopFn } from '@repo/ui/utils/noop';
+import type { ZardButtonTypeVariants } from "@repo/ui/components/button";
+import {
+  comboboxValueVariants,
+  comboboxVariants,
+} from "@repo/ui/components/combobox/combobox.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
+import { noopFn } from "@repo/ui/utils/noop";
 
 import {
   ZardComboboxContentComponent,
   ZardComboboxEmptyComponent,
   ZardComboboxListComponent,
-} from './combobox-content.component';
-import { ZardComboboxGroupComponent, ZardComboboxLabelComponent } from './combobox-group.component';
-import { ZardComboboxInputComponent } from './combobox-input.component';
-import { ZardComboboxItemComponent } from './combobox-item.component';
+} from "./combobox-content.component";
+import { ZardComboboxGroupComponent, ZardComboboxLabelComponent } from "./combobox-group.component";
+import { ZardComboboxInputComponent } from "./combobox-input.component";
+import { ZardComboboxItemComponent } from "./combobox-item.component";
 import {
   type ZardComboboxAlignVariants,
   type ZardComboboxAnchorKind,
@@ -44,10 +47,10 @@ import {
   type ZardComboboxOption,
   ZardComboboxRoot,
   type ZardComboboxSideVariants,
-} from './combobox.types';
-import { type ZardComboboxWidthVariants } from './combobox.variants';
+} from "./combobox.types";
+import { type ZardComboboxWidthVariants } from "./combobox.variants";
 
-export type { ZardComboboxGroup, ZardComboboxOption } from './combobox.types';
+export type { ZardComboboxGroup, ZardComboboxOption } from "./combobox.types";
 
 type OnChangeType = (value: string | string[] | null) => void;
 type OnTouchedType = () => void;
@@ -55,7 +58,7 @@ type OnTouchedType = () => void;
 let nextComboboxId = 0;
 
 @Component({
-  selector: 'z-combobox, [z-combobox]',
+  selector: "z-combobox, [z-combobox]",
   imports: [
     NgIcon,
     ZardComboboxContentComponent,
@@ -82,7 +85,11 @@ let nextComboboxId = 0;
                 <z-combobox-label>{{ group.label }}</z-combobox-label>
               }
               @for (option of group.options; track option.value) {
-                <z-combobox-item [zValue]="option.value" [zLabel]="option.label" [zDisabled]="option.disabled ?? false">
+                <z-combobox-item
+                  [zValue]="option.value"
+                  [zLabel]="option.label"
+                  [zDisabled]="option.disabled ?? false"
+                >
                   @if (option.icon; as icon) {
                     <ng-icon [name]="icon" />
                   }
@@ -92,7 +99,11 @@ let nextComboboxId = 0;
             </z-combobox-group>
           } @empty {
             @for (option of options(); track option.value) {
-              <z-combobox-item [zValue]="option.value" [zLabel]="option.label" [zDisabled]="option.disabled ?? false">
+              <z-combobox-item
+                [zValue]="option.value"
+                [zLabel]="option.label"
+                [zDisabled]="option.disabled ?? false"
+              >
                 @if (option.icon; as icon) {
                   <ng-icon [name]="icon" />
                 }
@@ -118,31 +129,31 @@ let nextComboboxId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'combobox',
-    '[attr.data-auto-highlight]': 'zAutoHighlight() ? "" : null',
-    '[attr.data-disabled]': 'disabled() ? "" : null',
-    '[attr.data-invalid]': 'zInvalid() ? "" : null',
-    '[attr.data-multiple]': 'zMultiple() ? "" : null',
-    '[attr.data-state]': 'open() ? "open" : "closed"',
-    '[class]': 'classes()',
-    '(keydown)': 'handleKeydown($event)',
+    "data-slot": "combobox",
+    "[attr.data-auto-highlight]": 'zAutoHighlight() ? "" : null',
+    "[attr.data-disabled]": 'disabled() ? "" : null',
+    "[attr.data-invalid]": 'zInvalid() ? "" : null',
+    "[attr.data-multiple]": 'zMultiple() ? "" : null',
+    "[attr.data-state]": 'open() ? "open" : "closed"',
+    "[class]": "classes()",
+    "(keydown)": "handleKeydown($event)",
   },
-  exportAs: 'zCombobox',
+  exportAs: "zCombobox",
 })
 export class ZardComboboxComponent implements ControlValueAccessor, ZardComboboxRoot {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
-  readonly class = input<ClassValue>('');
-  readonly zWidth = input<ZardComboboxWidthVariants>('default');
-  readonly placeholder = input<string>('Select...');
-  readonly searchPlaceholder = input<string>('Search...');
-  readonly emptyText = input<string>('No results found.');
+  readonly class = input<ClassValue>("");
+  readonly zWidth = input<ZardComboboxWidthVariants>("default");
+  readonly placeholder = input<string>("Select...");
+  readonly searchPlaceholder = input<string>("Search...");
+  readonly emptyText = input<string>("No results found.");
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly searchable = input(true, { transform: booleanAttribute });
   readonly options = input<ZardComboboxOption[]>([]);
   readonly groups = input<ZardComboboxGroup[]>([]);
-  readonly ariaLabel = input<string>('');
-  readonly ariaDescribedBy = input<string>('');
+  readonly ariaLabel = input<string>("");
+  readonly ariaDescribedBy = input<string>("");
 
   /**
    * Legacy value input kept for backwards compatibility. It is synchronised into `zValue`.
@@ -154,15 +165,15 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
    * @deprecated The trigger is no longer a `z-button`, so this input has no visual effect.
    * It is kept only so existing templates keep compiling.
    */
-  readonly buttonVariant = input<ZardButtonTypeVariants>('outline');
+  readonly buttonVariant = input<ZardButtonTypeVariants>("outline");
 
   readonly zValue = model<string | string[] | null>(null);
   readonly zOpen = model(false);
   readonly zMultiple = input(false, { transform: booleanAttribute });
-  readonly zFilter = input<ZardComboboxFilterVariants>('contains');
+  readonly zFilter = input<ZardComboboxFilterVariants>("contains");
   readonly zFilterFn = input<((label: string, query: string) => boolean) | null>(null);
-  readonly zSide = input<ZardComboboxSideVariants>('bottom');
-  readonly zAlign = input<ZardComboboxAlignVariants>('start');
+  readonly zSide = input<ZardComboboxSideVariants>("bottom");
+  readonly zAlign = input<ZardComboboxAlignVariants>("start");
   readonly zSideOffset = input(6, { transform: numberAttribute });
   readonly zAlignOffset = input(0, { transform: numberAttribute });
   readonly zAutoHighlight = input(false, { transform: booleanAttribute });
@@ -178,7 +189,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 
   readonly disabled = linkedSignal(() => this.zDisabled());
   readonly open = this.zOpen.asReadonly();
-  readonly query = signal('');
+  readonly query = signal("");
 
   private readonly items = signal<readonly ZardComboboxItemRef[]>([]);
   private readonly highlightedIndex = signal(-1);
@@ -191,7 +202,11 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 
   readonly hasChips = computed(() => this.chipsAnchor() !== null);
   readonly anchorElement = computed<HTMLElement | null>(
-    () => this.chipsAnchor() ?? this.inputAnchor() ?? this.triggerAnchor() ?? this.elementRef.nativeElement,
+    () =>
+      this.chipsAnchor() ??
+      this.inputAnchor() ??
+      this.triggerAnchor() ??
+      this.elementRef.nativeElement,
   );
 
   readonly selectedValues = computed<readonly string[]>(() => {
@@ -205,7 +220,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
   readonly hasValue = computed(() => this.selectedValues().length > 0);
 
   readonly visibleItems = computed<readonly ZardComboboxItemRef[]>(() =>
-    this.items().filter(item => this.matchesQuery(item.label())),
+    this.items().filter((item) => this.matchesQuery(item.label())),
   );
 
   readonly highlightedItem = computed<ZardComboboxItemRef | null>(() => {
@@ -215,11 +230,13 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 
   readonly selectedLabel = computed(() =>
     this.selectedValues()
-      .map(value => this.labelOf(value))
-      .join(', '),
+      .map((value) => this.labelOf(value))
+      .join(", "),
   );
 
-  protected readonly classes = computed(() => mergeClasses(comboboxVariants({ zWidth: this.zWidth() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(comboboxVariants({ zWidth: this.zWidth() }), this.class()),
+  );
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;
@@ -259,14 +276,14 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     const mode = this.zFilter();
-    if (mode === 'none') {
+    if (mode === "none") {
       return true;
     }
 
     const haystack = label.toLowerCase();
     const needle = query.toLowerCase();
 
-    return mode === 'startsWith' ? haystack.startsWith(needle) : haystack.includes(needle);
+    return mode === "startsWith" ? haystack.startsWith(needle) : haystack.includes(needle);
   }
 
   isSelected(value: string): boolean {
@@ -279,16 +296,16 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
       return option.label;
     }
 
-    const item = this.items().find(candidate => candidate.zValue() === value);
+    const item = this.items().find((candidate) => candidate.zValue() === value);
     return item?.label() ?? value;
   }
 
   registerItem(item: ZardComboboxItemRef): void {
-    this.items.update(items => [...items, item]);
+    this.items.update((items) => [...items, item]);
   }
 
   unregisterItem(item: ZardComboboxItemRef): void {
-    this.items.update(items => items.filter(candidate => candidate !== item));
+    this.items.update((items) => items.filter((candidate) => candidate !== item));
   }
 
   registerInput(element: HTMLInputElement | null): void {
@@ -299,12 +316,12 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
   }
 
   registerAnchor(element: HTMLElement, kind: ZardComboboxAnchorKind): void {
-    if (kind === 'chips') {
+    if (kind === "chips") {
       this.chipsAnchor.set(element);
       return;
     }
 
-    if (kind === 'trigger') {
+    if (kind === "trigger") {
       this.triggerAnchor.set(element);
       return;
     }
@@ -317,9 +334,11 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
       return;
     }
 
-    this.query.set('');
+    this.query.set("");
     this.zOpen.set(true);
-    this.highlightedIndex.set(this.visibleItems().findIndex(item => this.isSelected(item.zValue())));
+    this.highlightedIndex.set(
+      this.visibleItems().findIndex((item) => this.isSelected(item.zValue())),
+    );
   }
 
   closePanel(): void {
@@ -333,7 +352,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 
     this.zOpen.set(false);
     this.highlightedIndex.set(-1);
-    this.query.set('');
+    this.query.set("");
 
     if (restoreTriggerFocus) {
       this.inputElement.set(null);
@@ -345,7 +364,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     this.query.set(query);
 
     if (this.zAutoHighlight()) {
-      this.highlightEdge('first');
+      this.highlightEdge("first");
     } else {
       this.highlightedIndex.set(-1);
     }
@@ -360,7 +379,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     this.highlightedIndex.set(this.visibleItems().indexOf(item));
-    item.element.scrollIntoView?.({ block: 'nearest' });
+    item.element.scrollIntoView?.({ block: "nearest" });
   }
 
   selectItem(item: ZardComboboxItemRef): void {
@@ -373,8 +392,10 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     if (this.zMultiple()) {
       const current = this.selectedValues();
       const isAdding = !current.includes(value);
-      this.commit(isAdding ? [...current, value] : current.filter(candidate => candidate !== value));
-      this.setQuery('');
+      this.commit(
+        isAdding ? [...current, value] : current.filter((candidate) => candidate !== value),
+      );
+      this.setQuery("");
       if (isAdding) {
         this.emitSelected(value, item);
       }
@@ -398,7 +419,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     this.commit(this.zMultiple() ? [] : null);
-    this.query.set('');
+    this.query.set("");
   }
 
   removeValue(value: string): void {
@@ -407,7 +428,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     if (this.zMultiple()) {
-      this.commit(this.selectedValues().filter(candidate => candidate !== value));
+      this.commit(this.selectedValues().filter((candidate) => candidate !== value));
       return;
     }
 
@@ -455,7 +476,7 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     // A standalone trigger already toggles through its native click, which Enter and Space fire.
-    if ((event.key === 'Enter' || event.key === ' ') && event.target === this.triggerAnchor()) {
+    if ((event.key === "Enter" || event.key === " ") && event.target === this.triggerAnchor()) {
       return;
     }
 
@@ -465,21 +486,21 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     }
 
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
         this.openPanel();
-        this.highlightEdge('first');
+        this.highlightEdge("first");
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault();
         this.openPanel();
-        this.highlightEdge('last');
+        this.highlightEdge("last");
         break;
-      case 'Enter':
+      case "Enter":
         event.preventDefault();
         this.openPanel();
         break;
-      case 'Escape':
+      case "Escape":
         if (this.hasValue()) {
           event.preventDefault();
           this.clear();
@@ -490,23 +511,23 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 
   private onKeydownWhileOpen(event: KeyboardEvent): void {
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
         this.moveHighlight(1);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault();
         this.moveHighlight(-1);
         break;
-      case 'Home':
+      case "Home":
         event.preventDefault();
-        this.highlightEdge('first');
+        this.highlightEdge("first");
         break;
-      case 'End':
+      case "End":
         event.preventDefault();
-        this.highlightEdge('last');
+        this.highlightEdge("last");
         break;
-      case 'Enter': {
+      case "Enter": {
         event.preventDefault();
         const item = this.highlightedItem();
         if (item) {
@@ -514,12 +535,12 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
         }
         break;
       }
-      case 'Escape':
+      case "Escape":
         event.preventDefault();
         this.closePanel();
         this.focusInput();
         break;
-      case 'Tab':
+      case "Tab":
         this.closePanel();
         break;
     }
@@ -544,17 +565,17 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
     this.highlightItem(items[nextIndex]);
   }
 
-  private highlightEdge(edge: 'first' | 'last'): void {
+  private highlightEdge(edge: "first" | "last"): void {
     const items = this.selectableItems();
     if (items.length === 0) {
       return;
     }
 
-    this.highlightItem(edge === 'first' ? items[0] : items[items.length - 1]);
+    this.highlightItem(edge === "first" ? items[0] : items[items.length - 1]);
   }
 
   private selectableItems(): ZardComboboxItemRef[] {
-    return this.visibleItems().filter(item => !item.zDisabled());
+    return this.visibleItems().filter((item) => !item.zDisabled());
   }
 
   private commit(value: string | string[] | null): void {
@@ -563,18 +584,20 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
   }
 
   private emitSelected(value: string, item: ZardComboboxItemRef): void {
-    this.zComboSelected.emit(this.findOption(value) ?? { value, label: item.label(), disabled: item.zDisabled() });
+    this.zComboSelected.emit(
+      this.findOption(value) ?? { value, label: item.label(), disabled: item.zDisabled() },
+    );
   }
 
   private findOption(value: string): ZardComboboxOption | undefined {
     for (const group of this.groups()) {
-      const found = group.options.find(option => option.value === value);
+      const found = group.options.find((option) => option.value === value);
       if (found) {
         return found;
       }
     }
 
-    return this.options().find(option => option.value === value);
+    return this.options().find((option) => option.value === value);
   }
 
   writeValue(value: string | string[] | null): void {
@@ -603,23 +626,25 @@ export class ZardComboboxComponent implements ControlValueAccessor, ZardCombobox
 }
 
 @Component({
-  selector: 'z-combobox-value, [z-combobox-value]',
-  template: '{{ text() }}',
+  selector: "z-combobox-value, [z-combobox-value]",
+  template: "{{ text() }}",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'combobox-value',
-    '[attr.data-placeholder]': 'root.hasValue() ? null : ""',
-    '[class]': 'classes()',
+    "data-slot": "combobox-value",
+    "[attr.data-placeholder]": 'root.hasValue() ? null : ""',
+    "[class]": "classes()",
   },
-  exportAs: 'zComboboxValue',
+  exportAs: "zComboboxValue",
 })
 export class ZardComboboxValueComponent {
   protected readonly root = inject(ZardComboboxRoot);
 
-  readonly class = input<ClassValue>('');
-  readonly placeholder = input<string>('');
+  readonly class = input<ClassValue>("");
+  readonly placeholder = input<string>("");
 
-  protected readonly text = computed(() => this.root.selectedLabel() || this.placeholder() || this.root.placeholder());
+  protected readonly text = computed(
+    () => this.root.selectedLabel() || this.placeholder() || this.root.placeholder(),
+  );
   protected readonly classes = computed(() => mergeClasses(comboboxValueVariants(), this.class()));
 }

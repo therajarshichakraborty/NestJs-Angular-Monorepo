@@ -1,23 +1,23 @@
-import { computed, Directive, input } from '@angular/core';
+import { computed, Directive, input } from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { nativeSelectVariants, type ZardNativeSelectSizeVariants } from './native-select.variants';
+import { nativeSelectVariants, type ZardNativeSelectSizeVariants } from "./native-select.variants";
 
 @Directive({
-  selector: 'select[z-native-select]',
+  selector: "select[z-native-select]",
   host: {
-    'data-slot': 'native-select',
-    '[attr.data-size]': 'zSize()',
-    '[class]': 'classes()',
+    "data-slot": "native-select",
+    "[attr.data-size]": "zSize()",
+    "[class]": "classes()",
   },
-  exportAs: 'zNativeSelect',
+  exportAs: "zNativeSelect",
 })
 export class ZardNativeSelectDirective {
-  readonly zSize = input<ZardNativeSelectSizeVariants>('default');
-  readonly class = input<ClassValue>('');
+  readonly zSize = input<ZardNativeSelectSizeVariants>("default");
+  readonly class = input<ClassValue>("");
 
   protected readonly classes = computed(() =>
     mergeClasses(nativeSelectVariants({ zSize: this.zSize() }), this.class()),

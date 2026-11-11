@@ -1,8 +1,12 @@
-import { inject, type Provider, type Signal } from '@angular/core';
+import { inject, type Provider, type Signal } from "@angular/core";
 
-import { type MapLabels, type MapStylesConfig, provideMapLabels, provideMapStyles } from 'ng-mapcn';
+import { type MapLabels, type MapStylesConfig, provideMapLabels, provideMapStyles } from "ng-mapcn";
 
-import { ZARD_MAP_STYLE_CONFIG, ZardMapStyleService, type ZardMapStyleConfig } from './map-style.service';
+import {
+  ZARD_MAP_STYLE_CONFIG,
+  ZardMapStyleService,
+  type ZardMapStyleConfig,
+} from "./map-style.service";
 
 type ZardMapSource<T> = T | Signal<T | undefined> | (() => Signal<T | undefined>);
 

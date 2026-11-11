@@ -1,14 +1,21 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import { Directionality } from "@angular/cdk/bidi";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { progressVariants } from './progress.variants';
+import { progressVariants } from "./progress.variants";
 
 @Component({
-  selector: 'z-progress',
+  selector: "z-progress",
   template: `
     <div
       data-slot="progress-indicator"
@@ -19,19 +26,19 @@ import { progressVariants } from './progress.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'progress',
-    role: 'progressbar',
-    'aria-valuemin': '0',
-    'aria-valuemax': '100',
-    '[attr.aria-valuenow]': 'clampedValue()',
-    '[class]': 'classes()',
+    "data-slot": "progress",
+    role: "progressbar",
+    "aria-valuemin": "0",
+    "aria-valuemax": "100",
+    "[attr.aria-valuenow]": "clampedValue()",
+    "[class]": "classes()",
   },
-  exportAs: 'zProgress',
+  exportAs: "zProgress",
 })
 export class ZardProgressComponent {
   private readonly directionality = inject(Directionality);
   readonly value = input(0);
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected readonly clampedValue = computed(() => {
     const v = this.value();
@@ -48,7 +55,9 @@ export class ZardProgressComponent {
   protected readonly indicatorTransform = computed(() => {
     const remaining = 100 - this.clampedValue();
 
-    return this.directionality.valueSignal() === 'rtl' ? `translateX(${remaining}%)` : `translateX(-${remaining}%)`;
+    return this.directionality.valueSignal() === "rtl"
+      ? `translateX(${remaining}%)`
+      : `translateX(-${remaining}%)`;
   });
 
   protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));

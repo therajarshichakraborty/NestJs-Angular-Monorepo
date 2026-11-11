@@ -1,0 +1,29 @@
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","service":"api","timestamp":"2026-11-11T14:14:01.951Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","service":"api","timestamp":"2026-11-11T14:14:01.964Z"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","service":"api","timestamp":"2026-11-11T14:14:02.001Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/, GET} route","service":"api","timestamp":"2026-11-11T14:14:02.006Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","service":"api","timestamp":"2026-11-11T14:14:02.010Z"}
+{"level":"info","message":"API is listening on http://localhost:3000","service":"api","timestamp":"2026-11-11T14:14:02.014Z"}
+{"level":"info","message":"OpenAPI docs at http://localhost:3000/docs","service":"api","timestamp":"2026-11-11T14:14:02.015Z"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","service":"api","timestamp":"2026-11-11T14:16:00.661Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","service":"api","timestamp":"2026-11-11T14:16:00.672Z"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","service":"api","timestamp":"2026-11-11T14:16:00.692Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/, GET} route","service":"api","timestamp":"2026-11-11T14:16:00.696Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","service":"api","timestamp":"2026-11-11T14:16:00.698Z"}
+{"level":"info","message":"API is listening on http://localhost:3000","service":"api","timestamp":"2026-11-11T14:16:00.704Z"}
+{"level":"info","message":"OpenAPI docs at http://localhost:3000/docs","service":"api","timestamp":"2026-11-11T14:16:00.705Z"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","service":"api","timestamp":"2026-11-11T14:18:08.319Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","service":"api","timestamp":"2026-11-11T14:18:08.331Z"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","service":"api","timestamp":"2026-11-11T14:18:08.346Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/, GET} route","service":"api","timestamp":"2026-11-11T14:18:08.351Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","service":"api","timestamp":"2026-11-11T14:18:08.354Z"}
+{"level":"info","message":"API is listening on http://localhost:3000","service":"api","timestamp":"2026-11-11T14:18:08.362Z"}
+{"level":"info","message":"OpenAPI docs at http://localhost:3000/docs","service":"api","timestamp":"2026-11-11T14:18:08.362Z"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","service":"api","timestamp":"2026-11-11T14:22:27.029Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","service":"api","timestamp":"2026-11-11T14:22:27.037Z"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","service":"api","timestamp":"2026-11-11T14:22:27.047Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/, GET} route","service":"api","timestamp":"2026-11-11T14:22:27.049Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","service":"api","timestamp":"2026-11-11T14:22:27.051Z"}
+{"level":"info","message":"API is listening on http://localhost:3000","service":"api","timestamp":"2026-11-11T14:22:27.054Z"}
+{"level":"info","message":"OpenAPI docs at http://localhost:3000/docs","service":"api","timestamp":"2026-11-11T14:22:27.054Z"}
+{"level":"warn","message":"Cannot GET /favicon.ico","method":"GET","service":"api","statusCode":404,"timestamp":"2026-11-11T14:23:19.459Z","url":"/favicon.ico"}

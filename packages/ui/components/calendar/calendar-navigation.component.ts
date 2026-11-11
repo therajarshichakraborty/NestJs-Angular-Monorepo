@@ -7,15 +7,15 @@ import {
   input,
   output,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from "@ng-icons/lucide";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardCalendarI18nService } from './calendar-i18n.service';
-import type { ZardCalendarCaptionLayout } from './calendar.types';
+import { ZardCalendarI18nService } from "./calendar-i18n.service";
+import type { ZardCalendarCaptionLayout } from "./calendar.types";
 import {
   calendarCaptionLabelVariants,
   calendarCaptionVariants,
@@ -25,12 +25,12 @@ import {
   calendarNavButtonVariants,
   calendarNavSpacerVariants,
   calendarNavVariants,
-} from './calendar.variants';
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.variants';
+} from "./calendar.variants";
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import type { ZardButtonTypeVariants } from "@repo/ui/components/button/button.variants";
 
 @Component({
-  selector: 'z-calendar-navigation',
+  selector: "z-calendar-navigation",
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <div [class]="navClasses()">
@@ -68,7 +68,7 @@ import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.v
     </div>
 
     <div data-slot="calendar-caption" [class]="captionClasses()">
-      @if (zCaptionLayout() === 'label') {
+      @if (zCaptionLayout() === "label") {
         <span [class]="captionLabelClasses()">{{ monthYearLabel() }}</span>
       } @else {
         <div [class]="dropdownsClasses()">
@@ -85,7 +85,9 @@ import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.v
                 [attr.aria-label]="labels().chooseMonth ?? 'Choose the month'"
               >
                 @for (month of months(); track month; let monthIndex = $index) {
-                  <option [value]="monthIndex" [selected]="monthIndex === selectedMonthIndex()">{{ month }}</option>
+                  <option [value]="monthIndex" [selected]="monthIndex === selectedMonthIndex()">
+                    {{ month }}
+                  </option>
                 }
               </select>
 
@@ -107,7 +109,9 @@ import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.v
                 [attr.aria-label]="labels().chooseYear ?? 'Choose the year'"
               >
                 @for (year of availableYears(); track year) {
-                  <option [value]="year" [selected]="year.toString() === currentYear()">{{ year }}</option>
+                  <option [value]="year" [selected]="year.toString() === currentYear()">
+                    {{ year }}
+                  </option>
                 }
               </select>
 
@@ -127,9 +131,9 @@ import type { ZardButtonTypeVariants } from '@repo/ui/components/button/button.v
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronDown, lucideChevronLeft, lucideChevronRight })],
   host: {
-    class: 'block w-full',
+    class: "block w-full",
   },
-  exportAs: 'zCalendarNavigation',
+  exportAs: "zCalendarNavigation",
 })
 export class ZardCalendarNavigationComponent {
   private readonly calendarI18n = inject(ZardCalendarI18nService);
@@ -140,8 +144,8 @@ export class ZardCalendarNavigationComponent {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
-  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
-  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>("label");
+  readonly zButtonVariant = input<ZardButtonTypeVariants>("ghost");
   /**
    * In a multi-month calendar only the first month owns the previous arrow and only the last
    * one owns the next arrow. The hidden side keeps a spacer so the caption stays centered.
@@ -162,20 +166,26 @@ export class ZardCalendarNavigationComponent {
   protected readonly navSpacerClasses = computed(() => mergeClasses(calendarNavSpacerVariants()));
   protected readonly captionClasses = computed(() => mergeClasses(calendarCaptionVariants()));
   protected readonly dropdownsClasses = computed(() => mergeClasses(calendarDropdownsVariants()));
-  protected readonly dropdownRootClasses = computed(() => mergeClasses(calendarDropdownRootVariants()));
+  protected readonly dropdownRootClasses = computed(() =>
+    mergeClasses(calendarDropdownRootVariants()),
+  );
   protected readonly dropdownClasses = computed(() => mergeClasses(calendarDropdownVariants()));
   protected readonly captionLabelClasses = computed(() =>
-    mergeClasses(calendarCaptionLabelVariants({ layout: this.zCaptionLayout() === 'label' ? 'label' : 'dropdown' })),
+    mergeClasses(
+      calendarCaptionLabelVariants({
+        layout: this.zCaptionLayout() === "label" ? "label" : "dropdown",
+      }),
+    ),
   );
 
   protected readonly showMonthDropdown = computed(() => {
     const layout = this.zCaptionLayout();
-    return layout === 'dropdown' || layout === 'dropdown-months';
+    return layout === "dropdown" || layout === "dropdown-months";
   });
 
   protected readonly showYearDropdown = computed(() => {
     const layout = this.zCaptionLayout();
-    return layout === 'dropdown' || layout === 'dropdown-years';
+    return layout === "dropdown" || layout === "dropdown-years";
   });
 
   protected readonly availableYears = computed(() => {
@@ -192,7 +202,9 @@ export class ZardCalendarNavigationComponent {
   protected readonly selectedMonthIndex = computed(() => {
     const selectedMonth = Number.parseInt(this.currentMonth(), 10);
     const monthList = this.months();
-    return !Number.isNaN(selectedMonth) && monthList[selectedMonth] ? selectedMonth : new Date().getMonth();
+    return !Number.isNaN(selectedMonth) && monthList[selectedMonth]
+      ? selectedMonth
+      : new Date().getMonth();
   });
 
   protected readonly currentMonthName = computed(() => this.months()[this.selectedMonthIndex()]);
@@ -205,7 +217,9 @@ export class ZardCalendarNavigationComponent {
     return longMonths[month] ?? longMonths[new Date().getMonth()];
   });
 
-  protected readonly monthYearLabel = computed(() => `${this.longMonthName()} ${this.currentYear()}`);
+  protected readonly monthYearLabel = computed(
+    () => `${this.longMonthName()} ${this.currentYear()}`,
+  );
 
   protected readonly isPreviousDisabled = computed(() => {
     if (this.disabled()) {

@@ -7,12 +7,12 @@ import {
   input,
   type TemplateRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { ZardStringTemplateOutletDirective } from '@repo/ui/core/directives/string-template-outlet.directive';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardStringTemplateOutletDirective } from "@repo/ui/core/directives/string-template-outlet.directive";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 import {
   fieldContentVariants,
@@ -27,113 +27,113 @@ import {
   fieldVariants,
   type ZardFieldLegendVariants,
   type ZardFieldOrientationVariants,
-} from './field.variants';
+} from "./field.variants";
 
 @Component({
-  selector: 'z-field-set, fieldset[z-field-set]',
-  template: '<ng-content />',
+  selector: "z-field-set, fieldset[z-field-set]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-set',
-    '[class]': 'classes()',
+    "data-slot": "field-set",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldSet',
+  exportAs: "zFieldSet",
 })
 export class ZardFieldSetComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldSetVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-field-legend, legend[z-field-legend]',
-  template: '<ng-content />',
+  selector: "z-field-legend, legend[z-field-legend]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-legend',
-    '[attr.data-variant]': 'zVariant()',
-    '[class]': 'classes()',
+    "data-slot": "field-legend",
+    "[attr.data-variant]": "zVariant()",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldLegend',
+  exportAs: "zFieldLegend",
 })
 export class ZardFieldLegendComponent {
-  readonly zVariant = input<ZardFieldLegendVariants>('legend');
-  readonly class = input<ClassValue>('');
+  readonly zVariant = input<ZardFieldLegendVariants>("legend");
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldLegendVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-field-group, [z-field-group]',
-  template: '<ng-content />',
+  selector: "z-field-group, [z-field-group]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-group',
-    '[class]': 'classes()',
+    "data-slot": "field-group",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldGroup',
+  exportAs: "zFieldGroup",
 })
 export class ZardFieldGroupComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldGroupVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-field, [z-field]',
-  template: '<ng-content />',
+  selector: "z-field, [z-field]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'group',
-    'data-slot': 'field',
-    '[attr.data-orientation]': 'zOrientation()',
-    '[class]': 'classes()',
+    role: "group",
+    "data-slot": "field",
+    "[attr.data-orientation]": "zOrientation()",
+    "[class]": "classes()",
   },
-  exportAs: 'zField',
+  exportAs: "zField",
 })
 export class ZardFieldComponent {
-  readonly zOrientation = input<ZardFieldOrientationVariants>('vertical');
-  readonly class = input<ClassValue>('');
+  readonly zOrientation = input<ZardFieldOrientationVariants>("vertical");
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() =>
     mergeClasses(fieldVariants({ zOrientation: this.zOrientation() }), this.class()),
   );
 }
 
 @Component({
-  selector: 'z-field-content, [z-field-content]',
-  template: '<ng-content />',
+  selector: "z-field-content, [z-field-content]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-content',
-    '[class]': 'classes()',
+    "data-slot": "field-content",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldContent',
+  exportAs: "zFieldContent",
 })
 export class ZardFieldContentComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldContentVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-field-label, label[z-field-label]',
-  template: '<ng-content />',
+  selector: "z-field-label, label[z-field-label]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-label',
-    '[attr.for]': 'for() || null',
-    '[class]': 'classes()',
-    '(click)': 'onLabelClick()',
+    "data-slot": "field-label",
+    "[attr.for]": "for() || null",
+    "[class]": "classes()",
+    "(click)": "onLabelClick()",
   },
-  exportAs: 'zFieldLabel',
+  exportAs: "zFieldLabel",
 })
 export class ZardFieldLabelComponent {
   private readonly elementRef = inject(ElementRef);
 
-  readonly class = input<ClassValue>('');
-  readonly for = input('');
+  readonly class = input<ClassValue>("");
+  readonly for = input("");
   protected readonly classes = computed(() => mergeClasses(fieldLabelVariants(), this.class()));
 
   protected onLabelClick(): void {
@@ -141,7 +141,9 @@ export class ZardFieldLabelComponent {
       return;
     }
 
-    const target = this.elementRef.nativeElement.getRootNode()?.querySelector(`#${CSS.escape(this.for())}`);
+    const target = this.elementRef.nativeElement
+      .getRootNode()
+      ?.querySelector(`#${CSS.escape(this.for())}`);
     if (target && target !== this.elementRef.nativeElement) {
       target.focus();
     }
@@ -149,39 +151,41 @@ export class ZardFieldLabelComponent {
 }
 
 @Component({
-  selector: 'z-field-title, [z-field-title]',
-  template: '<ng-content />',
+  selector: "z-field-title, [z-field-title]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-label',
-    '[class]': 'classes()',
+    "data-slot": "field-label",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldTitle',
+  exportAs: "zFieldTitle",
 })
 export class ZardFieldTitleComponent {
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldTitleVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-field-description, p[z-field-description]',
-  template: '<ng-content />',
+  selector: "z-field-description, p[z-field-description]",
+  template: "<ng-content />",
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-description',
-    '[class]': 'classes()',
+    "data-slot": "field-description",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldDescription',
+  exportAs: "zFieldDescription",
 })
 export class ZardFieldDescriptionComponent {
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(fieldDescriptionVariants(), this.class()));
+  readonly class = input<ClassValue>("");
+  protected readonly classes = computed(() =>
+    mergeClasses(fieldDescriptionVariants(), this.class()),
+  );
 }
 
 @Component({
-  selector: 'z-field-separator',
+  selector: "z-field-separator",
   imports: [ZardStringTemplateOutletDirective],
   template: `
     <div class="bg-border absolute inset-0 top-1/2 h-px"></div>
@@ -198,15 +202,15 @@ export class ZardFieldDescriptionComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'field-separator',
-    '[attr.data-content]': '!!zContent()',
-    '[class]': 'classes()',
+    "data-slot": "field-separator",
+    "[attr.data-content]": "!!zContent()",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldSeparator',
+  exportAs: "zFieldSeparator",
 })
 export class ZardFieldSeparatorComponent {
-  readonly zContent = input<string | TemplateRef<void>>('');
-  readonly class = input<ClassValue>('');
+  readonly zContent = input<string | TemplateRef<void>>("");
+  readonly class = input<ClassValue>("");
   protected readonly classes = computed(() => mergeClasses(fieldSeparatorVariants(), this.class()));
 }
 
@@ -215,7 +219,7 @@ export interface ZardFieldErrorEntry {
 }
 
 @Component({
-  selector: 'z-field-error',
+  selector: "z-field-error",
   template: `
     @let errs = uniqueErrors();
     @if (errs.length === 1) {
@@ -235,15 +239,15 @@ export interface ZardFieldErrorEntry {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    role: 'alert',
-    'data-slot': 'field-error',
-    '[class]': 'classes()',
+    role: "alert",
+    "data-slot": "field-error",
+    "[class]": "classes()",
   },
-  exportAs: 'zFieldError',
+  exportAs: "zFieldError",
 })
 export class ZardFieldErrorComponent {
-  readonly zErrors = input<ReadonlyArray<ZardFieldErrorEntry | undefined>>([]);
-  readonly class = input<ClassValue>('');
+  readonly zErrors = input<readonly (ZardFieldErrorEntry | undefined)[]>([]);
+  readonly class = input<ClassValue>("");
 
   protected readonly uniqueErrors = computed(() => {
     const errs = this.zErrors();

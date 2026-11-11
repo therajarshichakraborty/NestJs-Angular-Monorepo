@@ -11,7 +11,7 @@ const environmentSchema = z.object({
     .string()
     .trim()
     .optional()
-    .transform((value) => (value ? value : undefined)),
+    .transform((value) => (value === "" ? undefined : value)),
   DATABASE_URL: z.url().default(DEFAULT_DATABASE_URL),
   RABBITMQ_URL: z.url().default(DEFAULT_RABBITMQ_URL),
 });

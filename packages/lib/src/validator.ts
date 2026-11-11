@@ -17,7 +17,12 @@ export const userRoleSchema = z.enum(["admin", "member"] as const satisfies read
 
 export const paginationQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(PAGINATION_DEFAULTS.PAGE),
-  limit: z.coerce.number().int().min(1).max(PAGINATION_DEFAULTS.MAXIMUM_LIMIT).default(PAGINATION_DEFAULTS.LIMIT),
+  limit: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(PAGINATION_DEFAULTS.MAXIMUM_LIMIT)
+    .default(PAGINATION_DEFAULTS.LIMIT),
 }) satisfies z.ZodType<PaginationQuery>;
 
 export const createUserSchema = z.object({
@@ -40,7 +45,10 @@ export function formatValidationIssues(error: z.ZodError): ApiErrorDetail[] {
   });
 }
 
-export function validate<TSchema extends z.ZodType>(schema: TSchema, input: unknown): z.output<TSchema> {
+export function validate<TSchema extends z.ZodType>(
+  schema: TSchema,
+  input: unknown,
+): z.output<TSchema> {
   const result = schema.safeParse(input);
 
   if (!result.success) {

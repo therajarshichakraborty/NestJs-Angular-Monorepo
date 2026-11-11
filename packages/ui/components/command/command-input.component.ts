@@ -9,18 +9,18 @@ import {
   signal,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideSearch } from '@ng-icons/lucide';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideSearch } from "@ng-icons/lucide";
 
-import { ZardCommand } from '@repo/ui/components/command/command.tokens';
-import { ZardInputComponent } from '@repo/ui/components/input/input.component';
-import { ZardInputGroupImports } from '@repo/ui/components/input-group/input-group.imports';
+import { ZardCommand } from "@repo/ui/components/command/command.tokens";
+import { ZardInputComponent } from "@repo/ui/components/input/input.component";
+import { ZardInputGroupImports } from "@repo/ui/components/input-group/input-group.imports";
 
 @Component({
-  selector: 'z-command-input',
+  selector: "z-command-input",
   imports: [NgIcon, ZardInputComponent, ...ZardInputGroupImports],
   template: `
     <div data-slot="command-input-wrapper" class="p-1 pb-0">
@@ -62,18 +62,20 @@ import { ZardInputGroupImports } from '@repo/ui/components/input-group/input-gro
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideSearch })],
-  exportAs: 'zCommandInput',
+  exportAs: "zCommandInput",
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommand, { optional: true });
   // `#searchInput` sits on an `input[z-input]` component, so read the element explicitly.
-  readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>('searchInput', { read: ElementRef });
+  readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>("searchInput", {
+    read: ElementRef,
+  });
 
-  readonly placeholder = input<string>('Type a command or search...');
+  readonly placeholder = input<string>("Type a command or search...");
 
   readonly valueChange = output<string>();
 
-  readonly searchTerm = signal('');
+  readonly searchTerm = signal("");
   readonly disabled = signal(false);
 
   protected onChange = (_: string) => {
@@ -97,8 +99,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      if (event.key !== 'Escape') {
+    if (["ArrowDown", "ArrowUp", "Enter", "Escape"].includes(event.key)) {
+      if (event.key !== "Escape") {
         event.preventDefault();
         event.stopPropagation();
       }
@@ -107,7 +109,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    const normalized = value ?? '';
+    const normalized = value ?? "";
     this.searchTerm.set(normalized);
     this.commandComponent?.onSearch(normalized);
   }

@@ -1,5 +1,5 @@
-import { Directionality } from '@angular/cdk/bidi';
-import { NgTemplateOutlet } from '@angular/common';
+import { Directionality } from "@angular/cdk/bidi";
+import { NgTemplateOutlet } from "@angular/common";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -14,22 +14,22 @@ import {
   type TemplateRef,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
 import {
   tabButtonVariants,
   tabContainerVariants,
   tabNavVariants,
   type ZardTabVariants,
-} from '@repo/ui/components/tabs/tabs.variants';
-import { ZardIdDirective } from '@repo/ui/core';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+} from "@repo/ui/components/tabs/tabs.variants";
+import { ZardIdDirective } from "@repo/ui/core";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
 @Component({
-  selector: 'z-tab',
+  selector: "z-tab",
   template: `
     <ng-template #content>
       <ng-content />
@@ -38,19 +38,19 @@ import { mergeClasses } from '@repo/ui/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'tab',
+    "data-slot": "tab",
   },
-  exportAs: 'zTab',
+  exportAs: "zTab",
 })
 export class ZardTabComponent {
   readonly label = input.required<string>();
   readonly zIcon = input<string | undefined>(undefined);
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('content');
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>("content");
 }
 
 @Component({
-  selector: 'z-tab-group',
+  selector: "z-tab-group",
   imports: [NgTemplateOutlet, NgIcon],
   template: `
     <nav
@@ -99,12 +99,12 @@ export class ZardTabComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'tab-group',
-    '[class]': 'containerClasses()',
-    '[attr.data-orientation]': 'zOrientation()',
+    "data-slot": "tab-group",
+    "[class]": "containerClasses()",
+    "[attr.data-orientation]": "zOrientation()",
   },
   hostDirectives: [ZardIdDirective],
-  exportAs: 'zTabGroup',
+  exportAs: "zTabGroup",
 })
 export class ZardTabGroupComponent {
   /** Scopes the tab and panel ids, which repeat for every group on the page when built from the index alone. */
@@ -137,10 +137,10 @@ export class ZardTabGroupComponent {
     tab: ZardTabComponent;
   }>();
 
-  readonly zVariant = input<ZardTabVariants['zVariant']>('default');
-  readonly zOrientation = input<ZardTabVariants['zOrientation']>('horizontal');
+  readonly zVariant = input<ZardTabVariants["zVariant"]>("default");
+  readonly zOrientation = input<ZardTabVariants["zOrientation"]>("horizontal");
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   protected setActiveTab(index: number) {
     const currentTab = this.tabs()[this.activeTabIndex()];
@@ -184,7 +184,9 @@ export class ZardTabGroupComponent {
     event.preventDefault();
     this.setActiveTab(target);
     const buttons =
-      (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>(':scope > button') ?? [];
+      (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>(
+        ":scope > button",
+      ) ?? [];
     buttons[target]?.focus();
   }
 
@@ -193,25 +195,25 @@ export class ZardTabGroupComponent {
     if (this.zDisabled()) {
       return undefined;
     }
-    const enabled = tabs.map((_, index) => index).filter(index => !tabs[index].zDisabled());
+    const enabled = tabs.map((_, index) => index).filter((index) => !tabs[index].zDisabled());
     if (enabled.length === 0) {
       return undefined;
     }
 
-    if (key === 'Home') {
+    if (key === "Home") {
       return enabled[0];
     }
-    if (key === 'End') {
+    if (key === "End") {
       return enabled[enabled.length - 1];
     }
 
-    const rtl = this.directionality?.value === 'rtl';
+    const rtl = this.directionality?.value === "rtl";
     let step = 0;
-    if (this.zOrientation() === 'vertical') {
-      step = key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0;
-    } else if (key === 'ArrowRight') {
+    if (this.zOrientation() === "vertical") {
+      step = key === "ArrowDown" ? 1 : key === "ArrowUp" ? -1 : 0;
+    } else if (key === "ArrowRight") {
       step = rtl ? -1 : 1;
-    } else if (key === 'ArrowLeft') {
+    } else if (key === "ArrowLeft") {
       step = rtl ? 1 : -1;
     }
     if (step === 0) {

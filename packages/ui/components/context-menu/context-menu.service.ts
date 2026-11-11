@@ -1,7 +1,16 @@
-import { type ElementRef, inject, Injectable, type TemplateRef, type ViewContainerRef } from '@angular/core';
+import {
+  type ElementRef,
+  inject,
+  Injectable,
+  type TemplateRef,
+  type ViewContainerRef,
+} from "@angular/core";
 
-import { ZardDropdownMenuContentComponent } from '@repo/ui/components/dropdown/dropdown-menu-content.component';
-import { ZardDropdownService, type ZardMenuOrigin } from '@repo/ui/components/dropdown/dropdown.service';
+import { ZardDropdownMenuContentComponent } from "@repo/ui/components/dropdown/dropdown-menu-content.component";
+import {
+  ZardDropdownService,
+  type ZardMenuOrigin,
+} from "@repo/ui/components/dropdown/dropdown.service";
 
 export interface ZardContextMenuOptions {
   /** Where the focus returns to once the menu closes. Defaults to whatever had it. */
@@ -31,7 +40,7 @@ export interface ZardContextMenuOptions {
  * The overlay is the dropdown's, so a menu opened here closes on the same terms as any other:
  * selecting an item, clicking outside, scrolling or `Escape`.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ZardContextMenuService {
   private readonly dropdownService = inject(ZardDropdownService);
 
@@ -43,14 +52,17 @@ export class ZardContextMenuService {
     menu: ZardDropdownMenuContentComponent | TemplateRef<void>,
     options?: ZardContextMenuOptions,
   ): void {
-    const template = menu instanceof ZardDropdownMenuContentComponent ? menu.contentTemplate() : menu;
+    const template =
+      menu instanceof ZardDropdownMenuContentComponent ? menu.contentTemplate() : menu;
     const viewContainerRef =
-      menu instanceof ZardDropdownMenuContentComponent ? menu.viewContainerRef : options?.viewContainerRef;
+      menu instanceof ZardDropdownMenuContentComponent
+        ? menu.viewContainerRef
+        : options?.viewContainerRef;
 
     if (!viewContainerRef) {
       throw new Error(
-        'ZardContextMenuService.create() needs a viewContainerRef when the menu is a TemplateRef. ' +
-          'Pass one in the options, or hand it a z-dropdown-menu-content instead.',
+        "ZardContextMenuService.create() needs a viewContainerRef when the menu is a TemplateRef. " +
+          "Pass one in the options, or hand it a z-dropdown-menu-content instead.",
       );
     }
 
@@ -67,5 +79,5 @@ export class ZardContextMenuService {
  * rather than `instanceof`: `MouseEvent` is not defined on the server.
  */
 function toOrigin(origin: MouseEvent | ZardMenuOrigin): ZardMenuOrigin {
-  return 'clientX' in origin ? { x: origin.clientX, y: origin.clientY } : origin;
+  return "clientX" in origin ? { x: origin.clientX, y: origin.clientY } : origin;
 }

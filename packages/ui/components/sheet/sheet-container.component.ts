@@ -4,7 +4,7 @@ import {
   type ComponentPortal,
   PortalModule,
   type TemplatePortal,
-} from '@angular/cdk/portal';
+} from "@angular/cdk/portal";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,24 +23,24 @@ import {
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import { NgIcon } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import { ZardButtonComponent } from '@repo/ui/components/button/button.component';
-import { noopFn } from '@repo/ui/utils/noop';
+import { ZardButtonComponent } from "@repo/ui/components/button/button.component";
+import { noopFn } from "@repo/ui/utils/noop";
 
-import { ZardSheetHost } from './sheet-host';
-import { SHEET_DURATION, ZardSheetPanelComponent } from './sheet-panel.component';
-import type { ZardSheetRef } from './sheet-ref';
+import { ZardSheetHost } from "./sheet-host";
+import { SHEET_DURATION, ZardSheetPanelComponent } from "./sheet-panel.component";
+import type { ZardSheetRef } from "./sheet-ref";
 import {
   ZardSheetDescriptionComponent,
   ZardSheetFooterComponent,
   ZardSheetHeaderComponent,
   ZardSheetTitleComponent,
-} from './sheet.component';
-import type { ZardSheetVariants } from './sheet.variants';
+} from "./sheet.component";
+import type { ZardSheetVariants } from "./sheet.variants";
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -63,8 +63,8 @@ export class ZardSheetOptions<T, U> {
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  zSide?: ZardSheetVariants['zSide'] = 'right';
-  zSize?: ZardSheetVariants['zSize'] = 'default';
+  zSide?: ZardSheetVariants["zSide"] = "right";
+  zSize?: ZardSheetVariants["zSize"] = "default";
   zTitle?: string | TemplateRef<void>;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
@@ -77,7 +77,7 @@ export class ZardSheetOptions<T, U> {
  * @internal Open sheets through the service; compose `z-sheet` for the declarative form.
  */
 @Component({
-  selector: 'z-sheet-container',
+  selector: "z-sheet-container",
   imports: [
     PortalModule,
     NgIcon,
@@ -142,7 +142,7 @@ export class ZardSheetOptions<T, U> {
                   <ng-icon [name]="config.zOkIcon" class="size-4!" />
                 }
               }
-              {{ config.zOkText ?? 'OK' }}
+              {{ config.zOkText ?? "OK" }}
             </button>
           }
 
@@ -161,7 +161,7 @@ export class ZardSheetOptions<T, U> {
                   <ng-icon [name]="config.zCancelIcon" class="size-4!" />
                 }
               }
-              {{ config.zCancelText ?? 'Cancel' }}
+              {{ config.zCancelText ?? "Cancel" }}
             </button>
           }
         </z-sheet-footer>
@@ -171,11 +171,13 @@ export class ZardSheetOptions<T, U> {
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardSheetContainerComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardSheetHost, useExisting: forwardRef(() => ZardSheetContainerComponent) }],
+  providers: [
+    { provide: ZardSheetHost, useExisting: forwardRef(() => ZardSheetContainerComponent) },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { style: 'display: contents' },
-  exportAs: 'zSheetContainer',
+  host: { style: "display: contents" },
+  exportAs: "zSheetContainer",
 })
 export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implements ZardSheetHost {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -192,9 +194,9 @@ export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implemen
   readonly titleId = signal<string | null>(null);
   readonly descriptionId = signal<string | null>(null);
 
-  protected readonly state = signal<'open' | 'closed'>('open');
+  protected readonly state = signal<"open" | "closed">("open");
   protected readonly duration = computed(() => this.config.zDuration ?? SHEET_DURATION);
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === "string");
 
   sheetRef?: ZardSheetRef<T>;
 
@@ -208,7 +210,7 @@ export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implemen
 
   /** Plays the exit transition. The ref disposes the overlay once it finishes. */
   leave(): void {
-    this.state.set('closed');
+    this.state.set("closed");
   }
 
   getNativeElement(): HTMLElement {
@@ -217,14 +219,14 @@ export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implemen
 
   attachComponentPortal<C>(portal: ComponentPortal<C>): ComponentRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
+      throw new Error("Attempting to attach modal content after content is already attached");
     }
     return this.portalOutlet().attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
+      throw new Error("Attempting to attach modal content after content is already attached");
     }
     return this.portalOutlet().attachTemplatePortal(portal);
   }

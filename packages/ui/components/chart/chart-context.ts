@@ -1,6 +1,6 @@
-import { InjectionToken, type Signal } from '@angular/core';
+import { InjectionToken, type Signal } from "@angular/core";
 
-import type { ZardChartLegendEntry } from './chart.types';
+import type { ZardChartLegendEntry } from "./chart.types";
 
 /**
  * The slice of `z-chart` its declarative children are allowed to touch.
@@ -16,4 +16,4 @@ export interface ZardChartHost {
   toggleSeries(name: string): void;
 }
 
-export const ZARD_CHART = new InjectionToken<ZardChartHost>('ZARD_CHART');
+export const ZARD_CHART = new InjectionToken<ZardChartHost>("ZARD_CHART");

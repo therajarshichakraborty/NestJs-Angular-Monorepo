@@ -1,16 +1,15 @@
 @layer ng-icon, theme, base, components, utilities;
-@import 'tailwindcss';
-@import '@repo/ui/core/css/zard.css';
-@import './typeset.css';
-@import './utilities.css';
-@import 'maplibre-gl/dist/maplibre-gl.css';
-@import '@repo/ui/components/map/map.css';
+@import "tailwindcss";
+@import "@repo/ui/core/css/zard.css";
+@import "./typeset.css";
+@import "./utilities.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
+@import "@repo/ui/components/map/map.css";
 @plugin "tailwindcss-animate";
 
 @source '../../../packages/ui';
 
 @custom-variant dark (&:is(.dark *));
-
 
 :root {
   --radius: 0.625rem;
@@ -83,10 +82,9 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-
 @theme inline {
-  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -124,7 +122,6 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
-
 
 @layer base {
   * {

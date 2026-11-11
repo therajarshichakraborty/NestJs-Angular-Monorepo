@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 14
+  },
+  "auditLog": "D:\\Rajarshi Chakraborty ( Arghya )\\Template\\nest-angular-monorepo\\logs\\warnings\\.api-audit.json",
+  "files": [
+    {
+      "date": 1794406441096,
+      "name": "D:\\Rajarshi Chakraborty ( Arghya )\\Template\\nest-angular-monorepo\\logs\\warnings\\api-2026-11-11.log",
+      "hash": "cffdcca886011f84aa2ad5b128f0776259fcdf682924e4c307d970233aecc507"
+    }
+  ],
+  "hashType": "sha256"
+}

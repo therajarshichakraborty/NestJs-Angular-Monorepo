@@ -1,6 +1,6 @@
-import { MapDrawComponent } from 'ng-mapcn/draw';
+import { MapDrawComponent } from "ng-mapcn/draw";
 
-import { ZardMapImports } from '@repo/ui/components/map/map.imports';
+import { ZardMapImports } from "@repo/ui/components/map/map.imports";
 
 /**
  * Everything to draw on a map: the map bundle plus `ng-map-draw`. Drawing is optional because it needs `terra-draw`

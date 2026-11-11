@@ -1,4 +1,4 @@
-import type { ZardDrawerPlacement } from './drawer.variants';
+import type { ZardDrawerPlacement } from "./drawer.variants";
 
 /** Pointer speed (px/ms) past which a flick dismisses the drawer regardless of distance. */
 export const DRAWER_VELOCITY_THRESHOLD = 0.4;
@@ -12,7 +12,7 @@ export const DRAWER_DURATION = 450;
 export type ZardDrawerSnapPoint = number | string;
 
 export function isVerticalPlacement(placement: ZardDrawerPlacement): boolean {
-  return placement === 'top' || placement === 'bottom';
+  return placement === "top" || placement === "bottom";
 }
 
 /**
@@ -20,7 +20,7 @@ export function isVerticalPlacement(placement: ZardDrawerPlacement): boolean {
  * *closes* it: a bottom drawer closes downwards (+1 on Y), a left one leftwards (-1 on X).
  */
 export function closingDirection(placement: ZardDrawerPlacement): 1 | -1 {
-  return placement === 'bottom' || placement === 'right' ? 1 : -1;
+  return placement === "bottom" || placement === "right" ? 1 : -1;
 }
 
 /**
@@ -29,8 +29,12 @@ export function closingDirection(placement: ZardDrawerPlacement): 1 | -1 {
  * `0–1` is read as a fraction of the viewport, anything above as pixels, and a
  * string keeps its CSS unit (`px`, `rem`, `em`, `%`, `vh`, `vw`).
  */
-export function resolveSnapPoint(point: ZardDrawerSnapPoint, viewportSize: number, rootFontSize = 16): number {
-  if (typeof point === 'number') {
+export function resolveSnapPoint(
+  point: ZardDrawerSnapPoint,
+  viewportSize: number,
+  rootFontSize = 16,
+): number {
+  if (typeof point === "number") {
     return point <= 1 ? point * viewportSize : point;
   }
 
@@ -39,10 +43,10 @@ export function resolveSnapPoint(point: ZardDrawerSnapPoint, viewportSize: numbe
     return 0;
   }
 
-  if (point.endsWith('rem') || point.endsWith('em')) {
+  if (point.endsWith("rem") || point.endsWith("em")) {
     return value * rootFontSize;
   }
-  if (point.endsWith('%') || point.endsWith('vh') || point.endsWith('vw')) {
+  if (point.endsWith("%") || point.endsWith("vh") || point.endsWith("vw")) {
     return (value / 100) * viewportSize;
   }
 
@@ -58,7 +62,7 @@ export function resolveSnapPoints(
   viewportSize: number,
   rootFontSize = 16,
 ): number[] {
-  return points.map(point => resolveSnapPoint(point, viewportSize, rootFontSize));
+  return points.map((point) => resolveSnapPoint(point, viewportSize, rootFontSize));
 }
 
 /** Index of the snap point closest to `size`. Returns -1 for an empty list. */
@@ -104,9 +108,11 @@ export function isScrollableAway(
     const style = getComputedStyle(node);
     const overflow = vertical ? style.overflowY : style.overflowX;
 
-    if (overflow === 'auto' || overflow === 'scroll') {
+    if (overflow === "auto" || overflow === "scroll") {
       const position = vertical ? node.scrollTop : node.scrollLeft;
-      const max = vertical ? node.scrollHeight - node.clientHeight : node.scrollWidth - node.clientWidth;
+      const max = vertical
+        ? node.scrollHeight - node.clientHeight
+        : node.scrollWidth - node.clientWidth;
 
       if (max > 0 && ((delta > 0 && position > 0) || (delta < 0 && position < max))) {
         return true;

@@ -10,18 +10,18 @@ import {
   output,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+} from "@angular/core";
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-import type { IconName } from '@ng-icons/core';
-import type { ClassValue } from 'clsx';
+import type { IconName } from "@ng-icons/core";
+import type { ClassValue } from "clsx";
 
-import { ZardCommandInputComponent } from '@repo/ui/components/command/command-input.component';
-import { ZardCommandOptionComponent } from '@repo/ui/components/command/command-option.component';
-import { commandVariants } from '@repo/ui/components/command/command.variants';
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { ZardCommandInputComponent } from "@repo/ui/components/command/command-input.component";
+import { ZardCommandOptionComponent } from "@repo/ui/components/command/command-option.component";
+import { commandVariants } from "@repo/ui/components/command/command.variants";
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { ZardCommand } from './command.tokens';
+import { ZardCommand } from "./command.tokens";
 
 export interface ZardCommandOption {
   value: unknown;
@@ -48,7 +48,7 @@ export interface ZardCommandConfig {
 }
 
 @Component({
-  selector: 'z-command',
+  selector: "z-command",
   imports: [FormsModule],
   template: `
     <div [class]="classes()">
@@ -75,26 +75,28 @@ export interface ZardCommandConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'command',
-    role: 'combobox',
-    'aria-haspopup': 'listbox',
-    '[attr.aria-expanded]': 'true',
-    '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
+    "data-slot": "command",
+    role: "combobox",
+    "aria-haspopup": "listbox",
+    "[attr.aria-expanded]": "true",
+    "(keydown.{arrowdown,arrowup,enter,escape}.prevent)": "onKeyDown($event)",
   },
-  exportAs: 'zCommand',
+  exportAs: "zCommand",
 })
 export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   private readonly commandInput = contentChild(ZardCommandInputComponent);
-  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, {
+    descendants: true,
+  });
   private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<ClassValue>("");
 
   readonly zCommandChange = output<ZardCommandOption>();
   readonly zCommandSelected = output<ZardCommandOption>();
 
   // Internal signals for search functionality
-  readonly searchTerm = signal('');
+  readonly searchTerm = signal("");
   readonly selectedIndex = signal(0);
 
   /**
@@ -128,7 +130,11 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    * Finds the next enabled option index in the given direction, wrapping
    * around. Returns -1 if there is no enabled option.
    */
-  private findEnabledIndex(from: number, direction: 1 | -1, options: readonly ZardCommandOptionComponent[]): number {
+  private findEnabledIndex(
+    from: number,
+    direction: 1 | -1,
+    options: readonly ZardCommandOptionComponent[],
+  ): number {
     const len = options.length;
     if (len === 0) {
       return -1;
@@ -144,15 +150,17 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   }
 
   protected readonly optionComponents = computed(() =>
-    this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
+    this.optionComponentsAsChildren().length
+      ? this.optionComponentsAsChildren()
+      : this.registeredOptionComponents(),
   );
 
   registerOption(option: ZardCommandOptionComponent) {
-    this.registeredOptionComponents.update(current => [...current, option]);
+    this.registeredOptionComponents.update((current) => [...current, option]);
   }
 
   unregisterOption(option: ZardCommandOptionComponent) {
-    this.registeredOptionComponents.update(current => current.filter(o => o !== option));
+    this.registeredOptionComponents.update((current) => current.filter((o) => o !== option));
   }
 
   // Signal to trigger updates when optionComponents change
@@ -175,9 +183,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
       return this.optionComponents();
     }
 
-    return this.optionComponents().filter(option => {
+    return this.optionComponents().filter((option) => {
       const label = option.zLabel().toLowerCase();
-      const command = option.zCommand()?.toLowerCase() ?? '';
+      const command = option.zCommand()?.toLowerCase() ?? "";
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
@@ -207,7 +215,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
       return `No results found for "${searchTerm}"`;
     }
 
-    return `${filteredCount} result${filteredCount === 1 ? '' : 's'} found for "${searchTerm}"`;
+    return `${filteredCount} result${filteredCount === 1 ? "" : "s"} found for "${searchTerm}"`;
   });
 
   private onChange = (_value: unknown) => {
@@ -231,7 +239,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    * Trigger an update to the filteredOptions computed signal
    */
   private triggerOptionsUpdate(): void {
-    this.optionsUpdateTrigger.update(value => value + 1);
+    this.optionsUpdateTrigger.update((value) => value + 1);
   }
 
   onSearch(searchTerm: string) {
@@ -273,7 +281,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
     const currentIndex = this.resolvedIndex();
 
     switch (key) {
-      case 'ArrowDown': {
+      case "ArrowDown": {
         const nextIndex = this.findEnabledIndex(currentIndex, 1, filteredOptions);
         if (nextIndex >= 0) {
           this.selectedIndex.set(nextIndex);
@@ -281,7 +289,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         }
         break;
       }
-      case 'ArrowUp': {
+      case "ArrowUp": {
         const prevIndex = this.findEnabledIndex(currentIndex, -1, filteredOptions);
         if (prevIndex >= 0) {
           this.selectedIndex.set(prevIndex);
@@ -289,7 +297,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         }
         break;
       }
-      case 'Enter':
+      case "Enter":
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -297,7 +305,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
           }
         }
         break;
-      case 'Escape':
+      case "Escape":
         this.selectedIndex.set(0);
         break;
     }

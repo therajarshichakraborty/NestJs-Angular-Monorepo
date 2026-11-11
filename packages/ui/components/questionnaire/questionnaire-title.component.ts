@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from "@angular/core";
 
-import type { ClassValue } from 'clsx';
+import type { ClassValue } from "clsx";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { questionnaireTitleVariants } from './questionnaire.variants';
+import { questionnaireTitleVariants } from "./questionnaire.variants";
 
 @Component({
-  selector: 'z-questionnaire-title',
+  selector: "z-questionnaire-title",
   template: `
     <legend>
       <ng-content />
@@ -16,12 +22,14 @@ import { questionnaireTitleVariants } from './questionnaire.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'questionnaire-title',
-    '[class]': 'classes()',
+    "data-slot": "questionnaire-title",
+    "[class]": "classes()",
   },
-  exportAs: 'zQuestionnaireTitle',
+  exportAs: "zQuestionnaireTitle",
 })
 export class ZardQuestionnaireTitleComponent {
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(questionnaireTitleVariants(), this.class()));
+  readonly class = input<ClassValue>("");
+  protected readonly classes = computed(() =>
+    mergeClasses(questionnaireTitleVariants(), this.class()),
+  );
 }

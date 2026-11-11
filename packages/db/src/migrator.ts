@@ -20,14 +20,20 @@ function createMigrator(database: Kysely<Database>): Migrator {
 function reportMigrationResults(resultSet: MigrationResultSet): void {
   for (const result of resultSet.results ?? []) {
     if (result.status === "Success") {
-      migrationLogger.info(`Migration "${result.migrationName}" ${result.direction.toLowerCase()} succeeded`);
+      migrationLogger.info(
+        `Migration "${result.migrationName}" ${result.direction.toLowerCase()} succeeded`,
+      );
     } else if (result.status === "Error") {
-      migrationLogger.error(`Migration "${result.migrationName}" ${result.direction.toLowerCase()} failed`);
+      migrationLogger.error(
+        `Migration "${result.migrationName}" ${result.direction.toLowerCase()} failed`,
+      );
     }
   }
 
   if (resultSet.error) {
-    throw resultSet.error;
+    throw resultSet.error instanceof Error
+      ? resultSet.error
+      : new Error("Database migration failed", { cause: resultSet.error });
   }
 }
 

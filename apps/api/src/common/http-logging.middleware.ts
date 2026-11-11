@@ -1,8 +1,8 @@
-import { randomUUID } from 'node:crypto';
+import { randomUUID } from "node:crypto";
 
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { REQUEST_ID_HEADER, logger } from '@repo/lib';
-import type { NextFunction, Request, Response } from 'express';
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { REQUEST_ID_HEADER, logger } from "@repo/lib";
+import type { NextFunction, Request, Response } from "express";
 
 @Injectable()
 export class HttpLoggingMiddleware implements NestMiddleware {
@@ -18,10 +18,10 @@ export class HttpLoggingMiddleware implements NestMiddleware {
       method: request.method,
       url: request.originalUrl,
       ipAddress: request.ip,
-      userAgent: request.header('user-agent'),
+      userAgent: request.header("user-agent"),
     });
 
-    response.on('finish', () => {
+    response.on("finish", () => {
       const elapsedNanoseconds = process.hrtime.bigint() - startedAt;
 
       logger.response({

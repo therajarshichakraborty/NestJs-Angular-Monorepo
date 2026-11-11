@@ -30,7 +30,11 @@ export const ERROR_CODES = {
   SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
 } as const satisfies Record<ErrorCode, ErrorCode>;
 
-export const ENVIRONMENTS = ["development", "test", "production"] as const satisfies readonly Environment[];
+export const ENVIRONMENTS = [
+  "development",
+  "test",
+  "production",
+] as const satisfies readonly Environment[];
 
 export const LOG_LEVELS = [
   "error",
@@ -48,7 +52,8 @@ export const PAGINATION_DEFAULTS = {
   MAXIMUM_LIMIT: 100,
 } as const;
 
-export const DEFAULT_DATABASE_URL = "postgres://postgres:postgres@localhost:5432/nestjs_angular_monorepo";
+export const DEFAULT_DATABASE_URL =
+  "postgres://postgres:postgres@localhost:5432/nestjs_angular_monorepo";
 
 export const DEFAULT_RABBITMQ_URL = "amqp://guest:guest@localhost:5672";
 

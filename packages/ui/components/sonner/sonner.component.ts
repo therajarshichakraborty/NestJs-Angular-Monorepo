@@ -1,4 +1,4 @@
-import { Directionality } from '@angular/cdk/bidi';
+import { Directionality } from "@angular/cdk/bidi";
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -11,35 +11,41 @@ import {
   input,
   NgZone,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleCheck, lucideInfo, lucideLoader2, lucideOctagonX, lucideTriangleAlert } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
-import { NgxSonnerToaster, toastState, type ToasterProps } from 'ngx-sonner';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import {
+  lucideCircleCheck,
+  lucideInfo,
+  lucideLoader2,
+  lucideOctagonX,
+  lucideTriangleAlert,
+} from "@ng-icons/lucide";
+import type { ClassValue } from "clsx";
+import { NgxSonnerToaster, toastState, type ToasterProps } from "ngx-sonner";
 
-import { mergeClasses } from '@repo/ui/utils/merge-classes';
+import { mergeClasses } from "@repo/ui/utils/merge-classes";
 
-import { sonnerVariants } from './sonner.variants';
+import { sonnerVariants } from "./sonner.variants";
 
 export type ZardSonnerPosition =
-  'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+  "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 
 const DEFAULT_STYLE: Record<string, string> = {
-  '--normal-bg': 'var(--popover)',
-  '--normal-text': 'var(--popover-foreground)',
-  '--normal-border': 'var(--border)',
-  '--border-radius': 'var(--radius)',
+  "--normal-bg": "var(--popover)",
+  "--normal-text": "var(--popover-foreground)",
+  "--normal-border": "var(--border)",
+  "--border-radius": "var(--radius)",
 };
 
-const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
+const DEFAULT_TOAST_OPTIONS: ToasterProps["toastOptions"] = {
   classes: {
-    toast: 'cn-toast',
+    toast: "cn-toast",
   },
 };
 
 @Component({
-  selector: 'z-sonner',
+  selector: "z-sonner",
   imports: [NgIcon, NgxSonnerToaster],
   template: `
     <ngx-sonner-toaster
@@ -86,24 +92,32 @@ const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideCircleCheck, lucideInfo, lucideLoader2, lucideOctagonX, lucideTriangleAlert })],
+  viewProviders: [
+    provideIcons({
+      lucideCircleCheck,
+      lucideInfo,
+      lucideLoader2,
+      lucideOctagonX,
+      lucideTriangleAlert,
+    }),
+  ],
   host: {
-    'data-slot': 'sonner',
+    "data-slot": "sonner",
   },
-  exportAs: 'zSonner',
+  exportAs: "zSonner",
 })
 export class ZardSonnerComponent {
-  readonly class = input<ClassValue>('');
-  readonly theme = input<'light' | 'dark' | 'system'>('system');
-  readonly position = input<ZardSonnerPosition>('top-center');
+  readonly class = input<ClassValue>("");
+  readonly theme = input<"light" | "dark" | "system">("system");
+  readonly position = input<ZardSonnerPosition>("top-center");
   readonly richColors = input<boolean>(false);
   readonly expand = input<boolean>(false);
   readonly duration = input<number>(4000);
   readonly visibleToasts = input<number>(3);
   readonly closeButton = input<boolean>(false);
-  readonly toastOptions = input<ToasterProps['toastOptions']>();
+  readonly toastOptions = input<ToasterProps["toastOptions"]>();
   readonly style = input<Record<string, string>>();
-  readonly dir = input<'ltr' | 'rtl' | 'auto'>('auto');
+  readonly dir = input<"ltr" | "rtl" | "auto">("auto");
   /**
    * Renders the toaster in the native top layer so toasts stay above CDK
    * overlays (dialog, drawer, sheet, ...), which also live in the top layer
@@ -114,14 +128,17 @@ export class ZardSonnerComponent {
   private readonly directionality = inject(Directionality, { optional: true });
 
   /** `auto` follows the CDK `Directionality` at the toaster's injection point (the `<html dir>` or a `Dir` subtree). */
-  protected readonly resolvedDir = computed<'ltr' | 'rtl' | 'auto'>(() => {
+  protected readonly resolvedDir = computed<"ltr" | "rtl" | "auto">(() => {
     const dir = this.dir();
-    return dir === 'auto' ? (this.directionality?.valueSignal() ?? 'auto') : dir;
+    return dir === "auto" ? (this.directionality?.valueSignal() ?? "auto") : dir;
   });
 
   protected readonly classes = computed(() => mergeClasses(sonnerVariants(), this.class()));
-  protected readonly resolvedStyle = computed(() => ({ ...DEFAULT_STYLE, ...(this.style() ?? {}) }));
-  protected readonly resolvedToastOptions = computed<ToasterProps['toastOptions']>(() => {
+  protected readonly resolvedStyle = computed(() => ({
+    ...DEFAULT_STYLE,
+    ...(this.style() ?? {}),
+  }));
+  protected readonly resolvedToastOptions = computed<ToasterProps["toastOptions"]>(() => {
     const provided = this.toastOptions();
     if (!provided) {
       return DEFAULT_TOAST_OPTIONS;
@@ -135,7 +152,7 @@ export class ZardSonnerComponent {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly zone = inject(NgZone);
-  private readonly supportsTopLayer = typeof this.host.showPopover === 'function';
+  private readonly supportsTopLayer = typeof this.host.showPopover === "function";
 
   constructor() {
     effect(() => {
@@ -155,25 +172,30 @@ export class ZardSonnerComponent {
       this.zone.runOutsideAngular(() => {
         // Any other element entering the top layer (a dialog opened while a
         // toast is visible) would be painted above the toaster.
-        this.host.ownerDocument.addEventListener('toggle', this.onDocumentToggle, true);
+        this.host.ownerDocument.addEventListener("toggle", this.onDocumentToggle, true);
       });
 
       inject(DestroyRef).onDestroy(() =>
-        this.host.ownerDocument.removeEventListener('toggle', this.onDocumentToggle, true),
+        this.host.ownerDocument.removeEventListener("toggle", this.onDocumentToggle, true),
       );
     }
   }
 
   private readonly onDocumentToggle = (event: Event) => {
-    const isOpening = (event as Event & { newState?: string }).newState === 'open';
+    const isOpening = (event as Event & { newState?: string }).newState === "open";
 
-    if (isOpening && event.target !== this.host && this.topLayer() && toastState.toasts().length > 0) {
+    if (
+      isOpening &&
+      event.target !== this.host &&
+      this.topLayer() &&
+      toastState.toasts().length > 0
+    ) {
       this.promote();
     }
   };
 
   private promote(): void {
-    this.host.setAttribute('popover', 'manual');
+    this.host.setAttribute("popover", "manual");
 
     // `showPopover()` on an already open popover is a no-op, so it has to be
     // closed first to be moved back to the front of the top layer.
@@ -189,12 +211,12 @@ export class ZardSonnerComponent {
       // Not connected to the document yet: drop the attribute so the toaster
       // keeps rendering in the normal flow instead of being hidden by the
       // closed-popover UA styles. The next toast promotes it again.
-      this.host.removeAttribute('popover');
+      this.host.removeAttribute("popover");
     }
   }
 
   private demote(): void {
-    if (!this.host.hasAttribute('popover')) {
+    if (!this.host.hasAttribute("popover")) {
       return;
     }
 
@@ -204,6 +226,6 @@ export class ZardSonnerComponent {
       // Already hidden or disconnected.
     }
 
-    this.host.removeAttribute('popover');
+    this.host.removeAttribute("popover");
   }
 }

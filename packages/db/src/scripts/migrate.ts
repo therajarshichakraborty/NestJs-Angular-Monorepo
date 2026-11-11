@@ -11,7 +11,9 @@ function readCommand(): MigrationCommand {
   const command = process.argv[2] ?? "latest";
 
   if (!SUPPORTED_COMMANDS.includes(command as MigrationCommand)) {
-    throw new Error(`Unknown migration command "${command}". Use one of: ${SUPPORTED_COMMANDS.join(", ")}`);
+    throw new Error(
+      `Unknown migration command "${command}". Use one of: ${SUPPORTED_COMMANDS.join(", ")}`,
+    );
   }
 
   return command as MigrationCommand;

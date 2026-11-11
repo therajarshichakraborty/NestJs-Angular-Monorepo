@@ -24,26 +24,46 @@ export class ApiError extends Error {
   }
 
   public static badRequest(message: string, details?: ApiErrorDetail[]): ApiError {
-    return new ApiError({ statusCode: HTTP_STATUS.BAD_REQUEST, code: ERROR_CODES.BAD_REQUEST, message, details });
+    return new ApiError({
+      statusCode: HTTP_STATUS.BAD_REQUEST,
+      code: ERROR_CODES.BAD_REQUEST,
+      message,
+      details,
+    });
   }
 
   public static unauthorized(message = "Authentication is required"): ApiError {
-    return new ApiError({ statusCode: HTTP_STATUS.UNAUTHORIZED, code: ERROR_CODES.UNAUTHORIZED, message });
+    return new ApiError({
+      statusCode: HTTP_STATUS.UNAUTHORIZED,
+      code: ERROR_CODES.UNAUTHORIZED,
+      message,
+    });
   }
 
   public static forbidden(message = "You do not have permission to perform this action"): ApiError {
-    return new ApiError({ statusCode: HTTP_STATUS.FORBIDDEN, code: ERROR_CODES.FORBIDDEN, message });
+    return new ApiError({
+      statusCode: HTTP_STATUS.FORBIDDEN,
+      code: ERROR_CODES.FORBIDDEN,
+      message,
+    });
   }
 
   public static notFound(message = "The requested resource was not found"): ApiError {
-    return new ApiError({ statusCode: HTTP_STATUS.NOT_FOUND, code: ERROR_CODES.NOT_FOUND, message });
+    return new ApiError({
+      statusCode: HTTP_STATUS.NOT_FOUND,
+      code: ERROR_CODES.NOT_FOUND,
+      message,
+    });
   }
 
   public static conflict(message: string): ApiError {
     return new ApiError({ statusCode: HTTP_STATUS.CONFLICT, code: ERROR_CODES.CONFLICT, message });
   }
 
-  public static validationFailed(details: ApiErrorDetail[], message = "Validation failed"): ApiError {
+  public static validationFailed(
+    details: ApiErrorDetail[],
+    message = "Validation failed",
+  ): ApiError {
     return new ApiError({
       statusCode: HTTP_STATUS.UNPROCESSABLE_ENTITY,
       code: ERROR_CODES.VALIDATION_FAILED,
@@ -53,7 +73,11 @@ export class ApiError extends Error {
   }
 
   public static tooManyRequests(message = "Too many requests, please try again later"): ApiError {
-    return new ApiError({ statusCode: HTTP_STATUS.TOO_MANY_REQUESTS, code: ERROR_CODES.TOO_MANY_REQUESTS, message });
+    return new ApiError({
+      statusCode: HTTP_STATUS.TOO_MANY_REQUESTS,
+      code: ERROR_CODES.TOO_MANY_REQUESTS,
+      message,
+    });
   }
 
   public static internal(message = "Something went wrong on our side", cause?: unknown): ApiError {

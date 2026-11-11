@@ -18,11 +18,17 @@ export class ApiResponse<TData> {
     this.timestamp = new Date().toISOString();
   }
 
-  public static ok<TData>(data: TData, message = "Request completed successfully"): ApiResponse<TData> {
+  public static ok<TData>(
+    data: TData,
+    message = "Request completed successfully",
+  ): ApiResponse<TData> {
     return new ApiResponse(HTTP_STATUS.OK, message, data);
   }
 
-  public static created<TData>(data: TData, message = "Resource created successfully"): ApiResponse<TData> {
+  public static created<TData>(
+    data: TData,
+    message = "Resource created successfully",
+  ): ApiResponse<TData> {
     return new ApiResponse(HTTP_STATUS.CREATED, message, data);
   }
 
@@ -50,7 +56,11 @@ export class ApiResponse<TData> {
   }
 }
 
-export function createPaginationMeta(page: number, limit: number, totalItems: number): PaginationMeta {
+export function createPaginationMeta(
+  page: number,
+  limit: number,
+  totalItems: number,
+): PaginationMeta {
   const totalPages = Math.max(1, Math.ceil(totalItems / limit));
 
   return {
